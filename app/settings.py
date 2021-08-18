@@ -1,6 +1,5 @@
 import os
 import datetime
-from json import loads
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -64,12 +63,8 @@ class DevelopmentConfig(BaseConfig):
         'SQLALCHEMY_DATABASE_URI',
         'sqlite:///' +
         os.path.join(basedir, '../tests/model/dev.db'))
-    # 绑定多个数据库
-    SQLALCHEMY_BINDS = loads(os.getenv('SQLALCHEMY_BINDS'))
     # redis数据库地址
     REDIS_URL = os.getenv('REDIS_URL', 'redis://@localhost:6379/0')
-    # rq的redis数据库地址
-    # RQ_REDIS_URL = REDIS_URL
 
 
 # 测试环境
@@ -91,9 +86,3 @@ config = {
     'testing': TestingConfig,
     'production': ProductionConfig
 }
-
-
-class Operations:
-    CONFIRM = 'confirm'
-    RESET_PASSWORD = 'reset-password'
-    CHANGE_EMAIL = 'change-email'

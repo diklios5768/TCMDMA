@@ -2,8 +2,7 @@ from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from app.models import db
-from app.settings import Operations
-
+from app.libs.operations import Operations
 
 # 用于生成一个token
 # expire_in是过期时间,默认3600秒
