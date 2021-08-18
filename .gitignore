@@ -1,0 +1,32 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+#python缓存
+__pycache__
+*.pyc
+
+#虚拟环境文件夹
+#virtual environment创建的
+venv
+#pipenv可能创建的文件夹
+.venv
+
+#本机环境变量
+.env
+
+#测试用的文件
+tests
+
+#缓存文件
+app/temp
+
+#日志文件
+app/logs
+
+#用户文件
+app/users

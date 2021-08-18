@@ -1,0 +1,86 @@
+# -*- encoding: utf-8 -*-
+"""
+@File Name      :   register.py    
+@Create Time    :   2021/7/15 10:04
+@Description    :   
+@Version        :   
+@License        :   
+@Author         :   diklios
+@Contact Email  :   diklios5768@gmail.com
+@Github         :   https://github.com/diklios5768
+@Blog           :   
+@Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
+"""
+__auth__ = 'diklios'
+
+from wtforms import StringField, BooleanField, SubmitField, IntegerField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Regexp
+from app.models.tcm.user import User
+from app.utils.wtf_handler.client import ClientForm, ExtraUsernameForm, VerifySecretForm, ExtraVerificationCodeForm
+from app.viewModels.common.verification import verify_verification_code
+
+
+# 用户名+密码
+class RegisterOnlyUsernameForm(VerifySecretForm):
+    account = StringField(validators=[DataRequired(), Length(min=4, max=20)])
+
+    def validate_account(self, value):
+        if User.query.filter_by(username=value.data).first():
+            raise ValidationError('用户名已经被注册')
+
+
+# 邮箱+密码+验证码
+class RegisterEmailForm(VerifySecretForm, ExtraVerificationCodeForm):
+    account = StringField(validators=[DataRequired(), Email(message='invalidate email')])
+
+    def validate_account(self, value):
+        if User.query.filter_by(email=value.data).first():
+            raise ValidationError('邮箱已经被注册')
+
+    def validate_verification_code(self, value):
+        verify_verification_code(account_type='email', account=self.account.data, verification_code=value.data,
+                                 use='register')
+
+
+# 邮箱+密码+验证码+用户名
+class RegisterEmailWithUsernameForm(VerifySecretForm):
+    account = StringField(validators=[DataRequired(), Length(min=4, max=20)])
+    email = StringField(validators=[DataRequired(), Email(message='invalidate email')])
+
+    def validate_account(self, value):
+        if User.query.filter_by(username=value.data).first():
+            raise ValidationError('用户名已经被注册')
+
+    def validate_email(self, value):
+        if User.query.filter_by(email=value.data).first():
+            raise ValidationError('邮箱已经被注册')
+
+
+# todo:手机区号要查询写入，需要再修改
+# 手机号+验证码
+class RegisterPhoneForm(ClientForm, ExtraVerificationCodeForm):
+    # phone_code= StringField(validators=[DataRequired(), Length(min=1, max=4)])
+    account = StringField(validators=[DataRequired(), Length(12)])
+
+    def validate_account(self, value):
+        if User.query.filter_by(phone=value.data).first():
+            raise ValidationError('手机号已经被注册')
+
+    def validate_verification_code(self, value):
+        verify_verification_code(account_type='phone', account=self.account.data, verification_code=value.data,
+                                 use='register')
+
+
+# 手机号+验证码+密码
+class RegisterPhoneWithSecretForm(RegisterPhoneForm, VerifySecretForm):
+    pass
+
+
+# 手机号+验证码+用户名
+class RegisterPhoneWithUsernameForm(RegisterPhoneForm, ExtraUsernameForm):
+    pass
+
+
+# 手机号+验证码+密码+用户名
+class RegisterPhoneWithSecretWithUsernameForm(RegisterPhoneWithSecretForm, ExtraUsernameForm):
+    pass

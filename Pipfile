@@ -1,0 +1,65 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+#flask扩展
+flask = { extras = ["async"], version = "*" }
+python-dotenv = "*"
+bcrypt = "*"
+cryptography = "*"
+flask-sqlalchemy = "*"
+sqlalchemy = "*"
+pymysql = "*"
+hashids = "*"
+flask-redis = "*"
+redis = "*"
+flask-migrate = "*"
+flask-whooshee = "*"
+flask-wtf = "*"
+wtforms = "*"
+flask-security-too = "*"
+flask-httpauth = "*"
+flask-login = "*"
+flask-cors = "*"
+flask-socketio = "*"
+flask-mail = "*"
+email-validator = "*"
+flask-rq2 = "*"
+celery = "*"
+flask-babel = "*"
+flask-moment = "*"
+#文件处理
+pdfplumber = "*"
+reportlab = "*"
+fpdf2 = "*"
+python-docx = "*"
+xlrd = "*"
+openpyxl = "*"
+#算法
+pypinyin = "*"
+efficient-apriori = "*"
+fpgrowth-py = "*"
+scikit-learn = "*"
+pandas = "*"
+networkx = "*"
+matplotlib = "*"
+tqdm = "*"
+baidu-aip = "*"
+gensim = "==3.8.3"
+node2vec = "==0.4.1"
+python-levenshtein = "*"
+eventlet = "*"
+python-louvain = "*"
+requests = "*"
+
+[dev-packages]
+faker = "*"
+watchdog = "*"
+pysnooper = "*"
+pylint = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.9"
