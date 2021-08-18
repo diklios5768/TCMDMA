@@ -74,46 +74,27 @@
         * 有一些包不需要vc++，但是也不在pypi官网上发布，就需要自己手动安装
         * `python setup.py install`
 
-## 项目配置和启动
-
-* 使用 `Pycharm`
-    * 在右上角叉叉的地方，选择edit configuration
-    * 如果IDE比较版本比较先进，可以添加 `flask server`，基本不需要配置
-    * 如果没有，就选择最简单的 python，将脚本路径配置为根目录下的 `wsgi.py`
-* 不使用IDE，使用终端
-    * 请注意先激活虚拟环境
-    * 确定终端进入根目录后，在终端执行 `python wsgi.py`
-    * 或者使用flask shell，在终端执行 `flask run`，如果提示找不到命令，请使用 `python -m flask run`
-        * flask shell 的具体命令可以输入 `flask --help` 进行查看
-* 如果需要部署，请查看`docs/development.md`的部署部分
-    * `guncorn --bind 0.0.0.0:8000 wsgi:app`
-* 环境变量
-    * 请先安装 `python-dotenv`
-        * `pipenv install python-dotenv`
-        * 如果 python-dotenv 已安装，那么运行 flask 会根据 .env 和 .flaskenv 中配置来设置环境变量
-        * 这样可以在每次打开终端后，避免手动设置 FLASK_APP 和其他类似使用环境变量进行配置的服务部署工作
-        * 命令行设置的变量会重载 .env 中的变量，.env 中的变量会重载 .flaskenv 中的变量
-    * `.env` 是存储包含敏感信息的私有环境变量，不提交到git仓库，请自行创建
-    * `.flaskenv` 是flask相关的公共环境变量，基本无需改动
-        * 解释
-            * FLASK_SKIP_DOTENV=1：是否启用python-dotenv，1为启用，0为不适用
-            * FLASK_APP=wsgi：入口文件
-            * FLASK_RUN_PORT=8000：端口
-            * FLASK_RUN_HOST=127.0.0.1：能够访问的ip
-            * FLASK_ENV=development：设置生产或者开发环境
-            * FLASK_DEBUG=1：是否开启调试模式
-        * 如果是生产环境，需要配置 `FLASK_RUN_HOST=0.0.0.0` 和 `FLASK_ENV=development`，后续会通过命令行参数的形式进行优化
-    * 注意
-        * 由于python-dotenv默认是gbk编码，所以在你设置为utf-8的情况下会报错
-            * 除非你更改文件编码，或者是在pycharm中更改全局编码，亦或是手动修改源码中的编码选项，否则有很多中文注释无法书写
-            * 但由于.env不上传，所以最好的方法就是自己更改单独修改这个文件的编码
-            * `重要更新`：2021.3.27更新的版本解决了utf-8的问题，安装后正常使用`utf-8`编码即可
-        * 如果是通过IDE进行项目启动配置，那么`FLASK_ENV` 和 `FLASK_DEBUG` 也需要通过IDE进行设置，因为IDE的环境变量是最后生效的
-    * 错误
-        * debug模式失效或者不能退出终端等等，重新安装环境可以解决问题，应该是卸载的时候出的问题，具体是哪个包影响的不是很确定
-        * `pipenv shell`无法启动，也是因为gbk的问题，除了改源码（百度可以搜到），还可以启动Windows的utf-8全局编码功能（百度），然后重启即可
-* 其他需要启动的
-    * redis数据库，并配置celery的环境变量
+## 项目启动
+* 先配置.env环境变量
+```dotenv
+# 示例
+# 存储包含敏感信息的环境变量，不提交到git仓库
+SECRET_KEY='35JN7GFaUFNeriObUj93bQpavYWsGPOp6I4BDoe-U6Q'
+SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
+# MySQL数据库URL
+# 格式为DATABASE_URL='mysql+pymysql://username:password@host/databasename'
+DATABASE_URL='mysql+pymysql://username:password@host/databasename'
+REDIS_URL = 'redis://@localhost:6379/0'
+# 邮件部分
+MAIL_SERVER='smtp.126.com'
+# MAIL_PORT=587
+MAIL_USERNAME=''
+MAIL_PASSWORD=''
+MAIL_DEFAULT_SENDER='diklios'
+```
+* 启动flask：`gunicorn -c gunicorn.py wsgi:wsgi_app`
+* 其他需要启动的程序
+    * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
     * mysql数据库，并配置环境变量
     * celery
         * 在`app/utils/celery_handler/config.py`中配置环境变量
@@ -175,3 +156,4 @@
     * 更改了celery启动命令
 * 更新时间：2021-08-18
     * 增加了项目目的和算法部分
+    * 更新了生产环境启动说明，去除掉了开发版说明

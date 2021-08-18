@@ -1,10 +1,9 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
-#flask扩展
 flask = { extras = ["async"], version = "*" }
 python-dotenv = "*"
 bcrypt = "*"
@@ -30,14 +29,12 @@ flask-rq2 = "*"
 celery = "*"
 flask-babel = "*"
 flask-moment = "*"
-#文件处理
 pdfplumber = "*"
 reportlab = "*"
 fpdf2 = "*"
 python-docx = "*"
 xlrd = "*"
 openpyxl = "*"
-#算法
 pypinyin = "*"
 efficient-apriori = "*"
 fpgrowth-py = "*"
@@ -62,4 +59,4 @@ pylint = "*"
 pytest = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"

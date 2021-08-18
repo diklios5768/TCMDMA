@@ -40,24 +40,3 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(fu
 file_log_handler.setFormatter(formatter)
 # 日志等级的设置
 file_log_handler.setLevel(logging.DEBUG)
-
-# # 创建日志记录对象
-# logger = logging.getLogger()
-# # 默认日志等级的设置
-# logging.basicConfig(level=logging.DEBUG)
-# # 等级： DEBUG < INFO < WARNING < ERROR < CRITICAL
-# # DEBUG ： 最详细的日志信息，主要的应用场景问题的诊断，只限于开发人员使用的，用来在开发过程中进行调试
-# # INFO ： 详细程度仅次于debug模式，主要来记录关键节点的信息，确定程序是否正常如预期完成，一般的使用场景是重要的业务处理已经结束，我们通过这些INFO级别的日志信息，可以很快的了解应用正在做什么。
-# # WARNING ： 当某些不被期望的事情发生的时候，需要记录的信息，比如磁盘即将存满，注意当前的程序一依旧可以正常运行，不报错。也就是说发生这个级别的问题时，处理过程可以继续，但必须要对这个问题给予额外的关注。
-# # ERROR ： 出现严重问题，导致某些功能不能正常运行记录信息
-# # CRITICAL： 系统即将崩溃或者已经崩溃
-# logger.setLevel(logging.DEBUG)
-# # 为全局的日志工具对象添加日志记录器
-# logger.addHandler(file_log_handler)
-#
-# # Logging使用
-# logger.info("this is info")
-# logger.debug("this is debug")
-# logger.warning("this is warning")
-# logging.error("this is error")
-# logger.critical("this is critical")
