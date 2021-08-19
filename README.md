@@ -98,6 +98,7 @@ MAIL_DEFAULT_SENDER='diklios'
 * 启动pipenv虚拟环境(千万注意.env文件中不要有中文注释)：`pipenv shell`
 * 启动MySQL并初始化
     * 记得需要配置环境变量
+        * 提醒：如果密码中含有特殊字符，请手动配置`app/setting.py`文件，使用URL编码进行处理
     * 在终端初始化数据库表：`flask db-init`
     * 初始化表数据：`flask data-init`
 * 启动flask
@@ -107,6 +108,7 @@ MAIL_DEFAULT_SENDER='diklios'
     * windows环境下
         * 先安装waitress：`pipenv install waitress`
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
+        * 永久启动：使用nssm一类的工具
 * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
 * celery
     * 在`app/utils/celery_handler/config.py`中配置环境变量
