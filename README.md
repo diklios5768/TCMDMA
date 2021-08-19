@@ -109,6 +109,7 @@ MAIL_DEFAULT_SENDER='diklios'
         * 先安装waitress：`pipenv install waitress`
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
         * 永久启动：使用nssm一类的工具
+            * 如：`nssm install tcmdma "C:\Users\Administrator\.virtualenvs\TCMDMA-xHTHL4l7\Scripts\python.exe" "C:\Users\Administrator\TCMDMA\waitress_server.py"`
 * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
 * celery
     * 在`app/utils/celery_handler/config.py`中配置环境变量
