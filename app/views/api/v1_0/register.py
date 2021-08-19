@@ -35,7 +35,9 @@ def __register_by_email():
 
 
 def __register_by_username_email():
+    print("gg")
     form = RegisterEmailWithUsernameForm().validate_for_api()
+    print("aa")
     return register_user_by_email(form.email.data, form.secret.data, form.account.data)
 
 
@@ -48,6 +50,7 @@ def __register_by_phone():
 def register():
     print(request.get_json())
     form = ClientForm().validate_for_api()
+    print("ds")
     promise = {
         ClientTypeEnum.USER_NAME: __register_by_username,
         ClientTypeEnum.USER_EMAIL: __register_by_email,
@@ -55,4 +58,5 @@ def register():
         ClientTypeEnum.USER_PHONE: __register_by_phone
     }
     promise[ClientTypeEnum(form.type.data)]()
+    print("a")
     return Success()

@@ -2,6 +2,7 @@ import os
 import datetime
 from dotenv import load_dotenv
 from urllib import parse
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 load_dotenv(verbose=True)
@@ -78,7 +79,7 @@ class TestingConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     # 如果密码中含有特殊字符需要使用URL编码
-    # SQLALCHEMY_DATABASE_URI='mysql+pymysql//root:'+parse.quote_plus('password')+'@localhost:3306/database_name'
+    # SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:'+parse.quote_plus('password')+'@localhost:3306/database_name'
 
 
 # 导出环境设置

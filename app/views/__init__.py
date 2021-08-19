@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template,current_app,jsonify
 
 from app.views.api import api_bp
 
