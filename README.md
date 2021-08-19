@@ -72,12 +72,14 @@
             * 不想操作的建议直接更新最新版本的pycharm
     * 源码编译方法
         * 有一些包不需要vc++，但是也不在pypi官网上发布，就需要自己手动安装
-        * `python setup.py install`
+        * 先进入下载下来的包的文件夹：`python setup.py install`
 
 ## 项目启动
+
 * 先配置.env环境变量
+
 ```dotenv
-# 示例
+# 示例，在真实的生产环境中请不要加中文注释，因为pipenv的gbk问题至今未解决
 # 存储包含敏感信息的环境变量，不提交到git仓库
 SECRET_KEY='35JN7GFaUFNeriObUj93bQpavYWsGPOp6I4BDoe-U6Q'
 SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
@@ -92,14 +94,24 @@ MAIL_USERNAME=''
 MAIL_PASSWORD=''
 MAIL_DEFAULT_SENDER='diklios'
 ```
-* 启动flask：`gunicorn -c gunicorn.py wsgi:wsgi_app`
-* 其他需要启动的程序
-    * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
-    * mysql数据库，并配置环境变量
-    * celery
-        * 在`app/utils/celery_handler/config.py`中配置环境变量
-        * 启动：`celery -A wsgi:celery worker -l INFO`
-            * Windows需要使用：`celery -A wsgi:celery worker -l INFO -P threads`
+
+* 启动pipenv虚拟环境(千万注意.env文件中不要有中文注释)：`pipenv shell`
+* 启动MySQL并初始化
+    * 记得需要配置环境变量
+    * 在终端初始化数据库表：`flask db-init`
+    * 初始化表数据：`flask data-init`
+* 启动flask
+    * 类Unix环境下
+        * 先安装gunicorn：`pipenv install gunicorn`
+        * 启动：`gunicorn -c gunicorn.py wsgi:wsgi_app`
+    * windows环境下
+        * 先安装waitress：`pipenv install waitress`
+        * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
+* redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
+* celery
+    * 在`app/utils/celery_handler/config.py`中配置环境变量
+    * 启动：`celery -A wsgi:celery worker -l INFO`
+        * Windows需要使用：`celery -A wsgi:celery worker -l INFO -P threads`
 
 ## 版本变动
 
@@ -133,7 +145,7 @@ MAIL_DEFAULT_SENDER='diklios'
 * docker部署
 * celery定期清除
     * 验证码，缓存文件，保存的无效token
-    
+
 ## 开发团队介绍
 
 * 南京中医药大学人工智能与信息技术学院医学信息工程专业创新工作室

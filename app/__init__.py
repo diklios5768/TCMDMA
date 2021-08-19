@@ -9,10 +9,9 @@ from .settings import config
 from .logging import file_log_handler
 # 数据库相关处理
 from .models import db, migrate
-from .models.tcm.fake import init_fake
 from .models.tcm.production import init_production_data
 from .models.create_db import init_db, drop_db, recreate_db
-from .views import sun_bp
+from .views import tcm_bp
 from .utils.mail_handler import mail
 from .libs.error import APIException
 from .libs.error_exception import ServerError
@@ -58,7 +57,7 @@ def register_extensions(app):
 
 # 注册路由
 def register_blueprints(app):
-    app.register_blueprint(sun_bp, url_prefix='/sun')
+    app.register_blueprint(tcm_bp, url_prefix='/')
 
 
 # 注册命令
@@ -87,18 +86,9 @@ def register_commands(app):
             init_db(bind)
             click.echo('Initialized database')
 
-    # 生成假数据
-    @app.cli.command()
-    @click.option('--count', default=20,
-                  help='Quantity of user,default is 20.')
-    def sun_db_fake(count):
-        click.echo("Generating fake data...")
-        init_fake(count)
-        click.echo("Generate end")
-
     # 生成生产数据
     @app.cli.command()
-    def sun_db_init():
+    def data_init():
         init_production_data()
 
 

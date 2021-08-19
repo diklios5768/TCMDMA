@@ -50,13 +50,7 @@ python-levenshtein = "*"
 eventlet = "*"
 python-louvain = "*"
 requests = "*"
-
-[dev-packages]
-faker = "*"
-watchdog = "*"
-pysnooper = "*"
-pylint = "*"
-pytest = "*"
+waitress = "*"
 
 [requires]
 python_version = "3.8"
