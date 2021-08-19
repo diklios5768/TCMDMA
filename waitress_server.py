@@ -17,4 +17,4 @@ from waitress import serve
 from wsgi import wsgi_app
 
 if __name__ == '__main__':
-    serve(wsgi_app, listen='*:8080')
+    serve(wsgi_app, listen='*:8000')
