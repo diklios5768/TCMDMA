@@ -100,7 +100,7 @@ def is_token_valid():
     return Success(msg='Token is valid')
 
 
-@login_bp.get('/get_new_access_token')
+@login_bp.get('/get_new_access_token/')
 def get_new_access_token():
     refresh_token = request.cookies.get('refresh_token',None)
     if refresh_token is not None:
