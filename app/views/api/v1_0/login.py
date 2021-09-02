@@ -37,7 +37,6 @@ def __login_by_username():
 def __login_by_email():
     form = LoginEmailForm().validate_for_api()
     return verify_user('email', form.account.data, form.secret.data)
-    pass
 
 
 def __login_by_email_with_verification_code():

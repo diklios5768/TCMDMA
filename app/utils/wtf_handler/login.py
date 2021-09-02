@@ -26,7 +26,7 @@ class LoginUsernameForm(RememberForm):
     secret = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_*&$#@]{6,22}$')])
 
     def validate_account(self, value):
-        if not User.query.filter_by(username=value.data).first_or_404():
+        if not User.query.filter_by(username=value.data).first():
             raise ValidationError('没有这个账号')
 
 
@@ -36,14 +36,14 @@ class LoginEmailForm(RememberForm):
     secret = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_*&$#@]{6,22}$')])
 
     def validate_account(self, value):
-        if not User.query.filter_by(email=value.data).first_or_404():
+        if not User.query.filter_by(email=value.data).first():
             raise ValidationError('没有这个账号')
 
 
 # 邮箱+验证码
 class LoginEmailUseVerificationCodeForm(RememberForm, ExtraVerificationCodeForm):
     def validate_account(self, value):
-        if not User.query.filter_by(email=value.data).first_or_404():
+        if not User.query.filter_by(email=value.data).first():
             raise ValidationError('没有这个账号')
 
     def validate_verification_code(self, value):
@@ -59,14 +59,14 @@ class LoginPhoneForm(RememberForm):
     secret = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_*&$#@]{6,22}$')])
 
     def validate_account(self, value):
-        if not User.query.filter_by(phone=value.data).first_or_404():
+        if not User.query.filter_by(phone=value.data).first():
             raise ValidationError('没有这个账号')
 
 
 # 手机号+验证码
 class LoginPhoneUseVerificationCodeForm(RememberForm, ExtraVerificationCodeForm):
     def validate_account(self, value):
-        if not User.query.filter_by(phone=value.data).first_or_404():
+        if not User.query.filter_by(phone=value.data).first():
             raise ValidationError('没有这个账号')
 
     def validate_verification_code(self, value):

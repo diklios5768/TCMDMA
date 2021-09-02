@@ -29,13 +29,13 @@ def verify_user(verify_type, account, password=None):
         raise ParameterException()
     if password is not None:
         if not user.validate_password(password):
-            raise AuthFailed()
+            raise AuthFailed(msg='password error', chinese_msg='密码错误')
         else:
             with db.auto_commit():
                 user.touch()
             return get_user_info(user)
     else:
-        raise AuthFailed(msg='password is null')
+        raise AuthFailed(msg='password is null', chinese_msg='密码为空')
 
 
 def get_user_info(user: User):
