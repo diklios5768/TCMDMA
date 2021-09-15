@@ -15,13 +15,14 @@ __auth__ = 'diklios'
 
 import os
 from datetime import datetime
-from flask import Blueprint, request, send_from_directory, send_file, g
+from flask import Blueprint, request, send_from_directory, send_file, g, current_app
 from app.libs.error_exception import Success, ParameterException, ServerError
 from app.models.tcm.user import User
 from app.utils.file_handler import make_dir, create_user_upload_dir_path
 from app.utils.file_handler.text_handler import texts_to_single_col_table_data_integral_process
 from app.utils.file_handler.table_handler import read_table_to_dataset_data, ant_design_table_limit
 from app.utils.token_auth import auth
+from app.utils.path import decrypt_file_path, divide_dir_file
 from app.settings import basedir
 
 file_bp = Blueprint('file', __name__)
@@ -41,9 +42,17 @@ def send_multiple_file_example():
                                as_attachment=True)
 
 
-@file_bp.get('/<path:file_path>')
-def send_file_from_server(file_path):
-    return send_file(path_or_file=file_path, download_name=os.path.basename(file_path), as_attachment=True)
+@file_bp.get('/get_file_by_path/<path:file_path>')
+def send_file_by_path_from_server(file_path):
+    return send_file(path_or_file=os.path.join(os.getcwd(), file_path), download_name=os.path.basename(file_path),
+                     as_attachment=True)
+
+
+@file_bp.get('/get_file_by_str/<string:encode_str>')
+def send_file_by_str_from_server(encode_str):
+    file_path = decrypt_file_path(encode_str)
+    file_dir, filename = divide_dir_file(file_path)
+    send_from_directory(directory=file_dir, path=filename, as_attachment=True)
 
 
 @file_bp.post('/read_file_data')

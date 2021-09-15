@@ -7,7 +7,7 @@ from reportlab.lib.units import cm, inch
 from reportlab.lib import colors
 from app.utils.file_handler.pdf_handler.style import table_of_content_title, toc_title, toc_h1, toc_h2, toc_h3, \
     picture_table_center, title, h1, h2, h3, normal, main_body, \
-    table_body,red_main_body, main_body_list
+    table_body, red_main_body, main_body_list
 from app.settings import basedir
 
 
@@ -23,10 +23,10 @@ def generate_toc(story):
     # 目录标题
     table_content_title = Paragraph('<b>目录</b>', table_of_content_title)
     # 创建目录
-    toc = TableOfContents()
+    toc = TableOfContents(dotsMinLevel=0)
     # 设置目录样式
     toc.levelStyles = [
-        # toc_title,
+        toc_title,
         toc_h1,
         toc_h2,
         toc_h3
@@ -73,7 +73,7 @@ def generate_main_body_list(story, content):
 def generate_normal_table(story, data, table_name=None, table_num=1):
     col_num = len(data[0])
     data = [[Paragraph(str(cell), table_body) for cell in row] for row in data]
-    table = Table(data, colWidths=14.64 * cm / col_num , style=TableStyle([
+    table = Table(data, colWidths=14.64 * cm / col_num, style=TableStyle([
         # 所有边框设置为黑色
         ('FONTNAME', (0, 0), (-1, -1), 'simsun'),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),

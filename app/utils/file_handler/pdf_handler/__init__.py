@@ -42,3 +42,7 @@ def generate_report_file(file_path, stories: list = []):
     my_story = generate_report_story(stories)
     generate_pdf_file(file_path, story=my_story)
     return True
+
+
+if __name__ == '__main__':
+    generate_test_pdf_file('test.pdf')

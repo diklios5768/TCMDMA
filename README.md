@@ -110,7 +110,8 @@ MAIL_DEFAULT_SENDER='diklios'
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
             * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
         * 永久启动：使用nssm一类的工具
-            * 如，添加服务：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
+            *
+            如，添加服务：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
             * 启动服务：`nssm start tcmdma`
 * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
 * celery
@@ -138,15 +139,24 @@ MAIL_DEFAULT_SENDER='diklios'
         * backboning
         * 最大团
         * 洋葱皮
+* v1.1:2021-09-15
+    * 优化了平台名称，页脚
+    * 优化邮箱发送内容，更改发送邮箱和名称
+    * 删除遗留的项目修改弹窗中的无用部分
+    * 修改算法名称，增加算法介绍
+    * 优化项目卡片展示
+    * 修复项目查询功能
+    * 改进PDF封面显示和目录标题
+    * 增加分享和下载报告的功能
+    * 优化新建分析中选择方法展示效果
 
 ## 后续优化改进
 
-* 验证码
-    * 手机和邮箱验证码
+* 预计v2.0实现
+    * 验证码：手机和邮箱验证码
+    * 管理员界面，管理员功能
 * 手动禁用的token存redis里面，优化token验证机制
 * 后续可能使用`apiflask`重新封装一下
-* cos对象存储
-* 管理员界面，管理员功能
 * docker部署
 * celery定期清除
     * 验证码，缓存文件，保存的无效token
@@ -174,3 +184,5 @@ MAIL_DEFAULT_SENDER='diklios'
 * 更新时间：2021-08-18
     * 增加了项目目的和算法部分
     * 更新了生产环境启动说明，去除掉了开发版说明
+* 更新时间：2021-09-15
+    * 增加了v1.1版本更新说明

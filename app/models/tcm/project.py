@@ -20,12 +20,16 @@ class Project(Base):
     type = Column(String(40), default='')
     # 本项目默认设置
     default_settings = Column(JSON, default=project_default_settings)
+    # 项目设置
+    settings = Column(JSON, default={})
     # 星标
     star = Column(Boolean, default=False)
     # 是否完成
     finished = Column(Boolean, default=False)
     # 完成进度
     finished_rate = Column(Float, default=0)
+    # 其他结果
+    other_result = Column(JSON, default={})
     analyses = relationship('Analysis', backref=backref('project'), cascade="all, delete")
 
     fields = ['id', 'name', 'description', 'finished']

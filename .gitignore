@@ -10,6 +10,9 @@ gen
 __pycache__
 *.pyc
 
+#visual studio code设置文件夹
+.vscode
+
 #虚拟环境文件夹
 #virtual environment创建的
 venv

@@ -62,7 +62,6 @@ def init_pdf(font_list=[{'name': 'hei_ti', 'file_path': SYSTEM_TTFONTS + r'simhe
     """
     # 设置纸张
     pdf = PDF()
-    pdf.set_doc_option('core_fonts_encoding', 'latin-1')
     # 添加中文字体
     for font in font_list:
         pdf.add_font(font['name'], '', font['file_path'], uni=True)

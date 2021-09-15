@@ -13,12 +13,14 @@
 """
 __auth__ = 'diklios'
 
+from datetime import datetime
+from flask import render_template
 from app.libs.lists import analysis_status
 from app.models import db
 from app.models.tcm.project import Project
 from app.utils.time import generate_datetime_str
 from app.utils.file_handler.pdf_handler import generate_report_file
-from app.utils.file_handler.zip_handler import zip_files, zip_dir
+from app.utils.file_handler.zip_handler import zip_dir
 from app.utils.celery_handler.mail import send_files_mail_sync
 
 
@@ -86,8 +88,13 @@ def handle_project_completed(project, user_project_files_dir):
         zip_file_name = generate_datetime_str() + project.name + '项目完整分析结果数据.zip'
         zip_file_path = user_project_files_dir + '../' + zip_file_name
         zip_dir(zip_file_path, user_project_files_dir)
+        with db.auto_commit():
+            other_result = {'pdf_file_path': pdf_file_path, 'pdf_download_path': pdf_file_path,
+                            'zip_file_path': zip_file_path, 'zip_download_path': zip_file_path}
+            project.other_result = other_result
         # 发送邮件
-        send_files_mail_sync.delay(subject=project.name + "项目分析报告", to=[project.user.email], body='以下是您的分析报告',
-                                   html='<p>以下是您的分析报告</p>',
+        send_files_mail_sync.delay(subject=project.name + "项目分析报告", to=[project.user.email],
+                                   body=render_template('mail/report.txt', username=project.user.username, datatime=str(
+                                       datetime.utcnow().strftime("%Y年%m月%d日"))),
                                    files=[{'path': zip_file_path, 'name': zip_file_name,
                                            'content_type': 'application/zip'}])

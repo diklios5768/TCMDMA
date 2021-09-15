@@ -24,9 +24,9 @@ class MyDocTemplate(BaseDocTemplate):
         if flowable.__class__.__name__ == 'Paragraph':
             text = flowable.getPlainText()
             style = flowable.style.name
-            # if style == 'title':
-            #     level = 0
-            if style == 'Heading1':
+            if style == 'title':
+                level = 0
+            elif style == 'Heading1':
                 level = 1
             elif style == 'Heading2':
                 level = 2

@@ -12,7 +12,7 @@ def text_mail(subject: str = None, to: str = None, body: str = None):
         # 接受人，接收一个数组，可以是多个接收者
         recipients=to or ['1061995104@qq.com'],
         # 正文
-        body=body or 'Test text',
+        body=body or None,
     )
     mail.send(message)
 
@@ -25,9 +25,9 @@ def html_mail(subject: str = None, to: str = None, body: str = None, html: str =
         # 接受人，接收一个数组，可以是多个接收者
         recipients=to or ['1061995104@qq.com'],
         # 正文
-        body=body or 'Test html',
+        body=body or None,
         # 网页形式的正文
-        html=html or '<h1>Just Test HTML</h1>'
+        html=html or None
     )
     mail.send(message)
 
@@ -47,9 +47,9 @@ def files_mail(subject: str = None, to: str = None, body: str = None, html: str 
         # 接受人，接收一个数组，可以是多个接收者
         recipients=to or ['1061995104@qq.com'],
         # 正文
-        body=body or 'Test PDF',
+        body=body or None,
         # 网页形式的正文
-        html=html or '<h1>Just Test PDF</h1>'
+        html=html or None
     )
     if files is None:
         return False

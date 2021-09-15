@@ -16,13 +16,13 @@ __auth__ = 'diklios'
 from datetime import datetime
 from flask import Blueprint, current_app, jsonify, request, g
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_exception import Success,LoginSuccess,AuthFailed
+from app.libs.error_exception import Success, LoginSuccess, AuthFailed
 from app.models.tcm.user import User
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.login import LoginUsernameForm, LoginEmailForm, LoginPhoneForm, \
     LoginEmailUseVerificationCodeForm, LoginPhoneUseVerificationCodeForm
 from app.utils.token_auth import generate_auth_token, get_token_info, disable_auth_token
-from app.utils.token_auth import auth,auth_token
+from app.utils.token_auth import auth, auth_token
 from app.viewModels.tcm.login import verify_user
 from app.viewModels import database_read_by_id_single
 
@@ -101,7 +101,7 @@ def is_token_valid():
 
 @login_bp.get('/get_new_access_token/')
 def get_new_access_token():
-    refresh_token = request.cookies.get('refresh_token',None)
+    refresh_token = request.cookies.get('refresh_token', None)
     if refresh_token is not None:
         user_info = get_token_info(refresh_token)
         access_token = generate_auth_token(user_info['uid'], user_info['client_type'], user_info['scopes'])
@@ -122,4 +122,3 @@ def logout():
     res = jsonify({'success': True, 'msg': 'logout success'})
     res.delete_cookie('refresh_token')
     return res
-

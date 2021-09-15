@@ -1,5 +1,5 @@
 import os
-from app.settings import basedir
+from flask import current_app
 from app.utils.time import generate_datetime_str
 
 
@@ -16,11 +16,13 @@ def make_dir(make_dir_path):
 
 
 def create_user_upload_dir_path(uid, username):
-    return basedir + '/users/upload/' + str(uid) + '-' + username + '/'
+    # return os.path.join(current_app.config.get('USER_UPLOAD_DIR'), str(uid) + '-' + username + '/')
+    return './app/users/upload/' + str(uid) + '-' + username + '/'
 
 
 def create_user_data_dir_path(uid, username):
-    return basedir + '/users/data/' + str(uid) + '-' + username + '/'
+    # return os.path.join(current_app.config.get('USER_DATA_DIR'), + str(uid) + '-' + username + '/')
+    return './app/users/data/' + str(uid) + '-' + username + '/'
 
 
 def create_user_project_dir_path(user_data_files_dir, project):

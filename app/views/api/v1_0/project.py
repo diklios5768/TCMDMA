@@ -61,8 +61,12 @@ def get_all_projects():
             status = analysis.analysis_status
             if 'fail' in status or 'error' in status:
                 failed_analyses.append(analysis.method)
-        failed_analyses_method = ','.join(failed_analyses)
+        if failed_analyses:
+            failed_analyses_method = ','.join(failed_analyses)
+        else:
+            failed_analyses_method = '无'
         project_row["failed_analyses_method"] = failed_analyses_method
+        project_row['pdf_download_path'] = project.other_result.get('pdf_download_path', '')
         rows.append(project_row)
     rows.reverse()
     return ReadSuccess(data={"projects": rows, "projects_count": projects_count})
@@ -95,6 +99,7 @@ def get_all_projects_with_differentiate():
             rate = project.finished_rate
             running_project_row['rate'] = int(rate * 100)
             running_projects.append(running_project_row)
+
     finished_projects.reverse()
     running_projects.reverse()
     return ReadSuccess(
@@ -116,9 +121,9 @@ def get_project_by_params():
     user_info = g.user_info
     params_dict = request.get_json()
     params_dict['owner_id'] = user_info.uid
-    if params_dict.get('name', '') == '':
-        params_dict.pop('name')
-    if params_dict.get('finished', 'all') == 'all':
+    print(params_dict)
+    finished=params_dict.get('finished', 'all')
+    if  finished== 'all':
         params_dict.pop('finished')
     filters_by = params_ready(params_dict)
     projects = database_read_by_params(Project, filters_by=filters_by)
@@ -132,8 +137,12 @@ def get_project_by_params():
             status = analysis.analysis_status
             if 'fail' in status or 'error' in status:
                 failed_analyses.append(analysis.method)
-        failed_analyses_method = ','.join(failed_analyses)
+        if failed_analyses:
+            failed_analyses_method = ','.join(failed_analyses)
+        else:
+            failed_analyses_method = '无'
         project_row['failed_analyses_method'] = failed_analyses_method
+        project_row['pdf_download_path'] = project.other_result.get('pdf_download_path', '')
         project_rows.append(project_row)
     project_rows.reverse()
     return ReadSuccess(data=project_rows)
@@ -232,7 +241,9 @@ def get_project_analyses(project_id):
             pass
         else:
             analysis_main_result_data = analysis.main_result_data
-            analysis_main_result_data['method'] = analysis.method
+            method = Method.query.filter_by(name=analysis.method).first_or_404()
+            analysis_main_result_data['method'] = method.name
+            analysis_main_result_data['chinese_name'] = method.chinese_name
             analyses_main_data.append(analysis_main_result_data)
     return Success(data=analyses_main_data, msg='read analyses success', chinese_msg='读取分析结果成功')
 

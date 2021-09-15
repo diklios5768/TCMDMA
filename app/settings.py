@@ -1,7 +1,6 @@
 import os
 import datetime
 from dotenv import load_dotenv
-from urllib import parse
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -39,7 +38,7 @@ class BaseConfig(object):
     # 邮箱的用户名和密码
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    # 默认发件人，发送邮件不设置的时候就用户这个
+    # 默认发件人，发送邮件不设置的时候就用这个
     MAIL_DEFAULT_SENDER = (os.getenv('MAIL_DEFAULT_SENDER'), MAIL_USERNAME)
     # 设置TOKEN过期时间
     REFRESH_TOKEN_EXPIRATION = os.getenv(
@@ -54,6 +53,10 @@ class BaseConfig(object):
     SESSION_COOKIE_HTTPONLY = os.getenv('SESSION_COOKIE_HTTPONLY', True)
     # hashids的盐，如果环境变量中没设置，默认使用secret_key
     HASHIDS_SALT = os.getenv('HASHIDS_SALT', SECRET_KEY)
+    # 用户文件夹设置
+    USER_DIR = os.path.join(basedir, 'users')
+    USER_DATA_DIR = os.path.join(basedir, 'users/data')
+    USER_UPLOAD_DIR = os.path.join(basedir, 'users/upload')
 
 
 # 开发环境

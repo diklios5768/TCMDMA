@@ -81,7 +81,7 @@ def cover_page_footer(canvas, doc):
     image = Image(basedir + r'/utils/file_handler/pdf_handler/reference/cover_page.png', 268, 270)
     image.drawOn(canvas, doc.leftMargin + 2.5 * cm, doc.bottomMargin + 5 * cm)
 
-    footer_chinese = Paragraph('南京中医药大学信息技术学院医学信息创新工作室', cover_page_footer_chinese)
+    footer_chinese = Paragraph('南京中医药大学医学信息创新工作室', cover_page_footer_chinese)
     footer_chinese_w, footer_chinese_h = footer_chinese.wrap(doc.width, doc.bottomMargin)
     footer_chinese.drawOn(canvas, doc.leftMargin, doc.bottomMargin + 1 * cm + footer_chinese_h)
     canvas.line(
