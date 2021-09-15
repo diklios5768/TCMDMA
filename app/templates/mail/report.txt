@@ -5,4 +5,4 @@
 
                                                 xMiner项目组
                               南京中医药大学医学信息创新工作室
-                                         {{ datatime |safe }}
+                                         {{ datetime |safe }}

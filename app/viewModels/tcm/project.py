@@ -13,6 +13,7 @@
 """
 __auth__ = 'diklios'
 
+import locale
 from datetime import datetime
 from flask import render_template
 from app.libs.lists import analysis_status
@@ -22,6 +23,9 @@ from app.utils.time import generate_datetime_str
 from app.utils.file_handler.pdf_handler import generate_report_file
 from app.utils.file_handler.zip_handler import zip_dir
 from app.utils.celery_handler.mail import send_files_mail_sync
+
+locale.setlocale(locale.LC_ALL, 'en')
+locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 
 def find_project(data):
@@ -94,7 +98,7 @@ def handle_project_completed(project, user_project_files_dir):
             project.other_result = other_result
         # 发送邮件
         send_files_mail_sync.delay(subject=project.name + "项目分析报告", to=[project.user.email],
-                                   body=render_template('mail/report.txt', username=project.user.username, datatime=str(
-                                       datetime.utcnow().strftime("%Y年%m月%d日"))),
+                                   body=render_template('mail/report.txt', username=project.user.username,
+                                                        datetime=str(datetime.utcnow().strftime("%Y年%m月%d日"))),
                                    files=[{'path': zip_file_path, 'name': zip_file_name,
                                            'content_type': 'application/zip'}])

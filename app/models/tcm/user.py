@@ -62,14 +62,14 @@ def init_user():
         # 管理员
         role_admin = Role.query.filter_by(id=2).first_or_404()
         admin_user = User()
-        admin_user.set_attrs({'username': 'admin', 'email': 'xminer2021@126.com'})
+        admin_user.set_attrs({'username': 'admin'})
         admin_user.set_password('admin')
         admin_user.roles.append(role_admin)
         db.session.add(admin_user)
         # 超级管理员
         role_super_admin = Role.query.filter_by(id=3).first_or_404()
         super_admin_user = User()
-        super_admin_user.set_attrs({'username': 'super admin', 'email': 'xminer2021@126.com'})
+        super_admin_user.set_attrs({'username': 'super admin'})
         super_admin_user.set_password('super admin')
         super_admin_user.roles.append(role_super_admin)
         db.session.add(super_admin_user)
