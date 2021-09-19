@@ -46,7 +46,7 @@ def new_analysis(self, project_id, user_project_files_dir, analysis_id, method, 
         with db.auto_commit():
             analysis.analysis_status = 'analysing'
         main_result_data = analysis_promise[method](main_data, parameters, user_project_analysis_files_dir)
-        print(main_result_data)
+        # print(main_result_data)
     except Exception as e:
         with db.auto_commit():
             analysis.analysis_status = 'analysis fail'

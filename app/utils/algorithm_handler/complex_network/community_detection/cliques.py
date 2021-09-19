@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   cliques.py    
+@File Name      :   cliques.py
 @Create Time    :   2021/8/3 17:58
-@Description    :   
-@Version        :   
-@License        :   
+@Description    :
+@Version        :
+@License        :
 @Author         :   diklios
 @Contact Email  :   diklios5768@gmail.com
 @Github         :   https://github.com/diklios5768
-@Blog           :   
+@Blog           :
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 """
 __auth__ = 'diklios'
@@ -17,13 +17,28 @@ import networkx as nx
 from app.libs.lists import colors, colors_length
 from app.utils.algorithm_handler.common import rows_to_graph_with_weight, rows_to_graph
 from app.utils.algorithm_handler.complex_network.image import generate_image_with_differentiate
+from app.utils.file_handler.table_handler import read_table_to_dataset_data
 
 
 # find_cliques_recursive()是同一算法的递归版本
 # 要获得所有最大群体的列表，请使用 list(find_cliques(G))
 def find_cliques(graph):
     result = nx.find_cliques(graph)
-    return [clique for clique in result]
+    cliques = [clique for clique in result]
+    sorted_cliques = sorted(cliques, key=lambda item: -len(item))
+    max_cliques = [sorted_cliques[0]]
+    for index, value in enumerate(sorted_cliques):
+        if len(sorted_cliques[index + 1]) < len(sorted_cliques[index]):
+            break
+        else:
+            max_cliques.append(sorted_cliques[index + 1])
+    return max_cliques[:30]
+
+
+def cliques_limit_graph(graph, limit_cliques):
+    limit_cliques_nodes = list(set([node for clique in limit_cliques for node in clique]))
+    limit_graph = graph.subgraph(limit_cliques_nodes)
+    return limit_graph
 
 
 def handle_find_cliques_result_show(graph, cliques, params, user_project_analysis_files_dir, limits={}):
@@ -84,18 +99,20 @@ def handle_find_cliques_result_show(graph, cliques, params, user_project_analysi
     pdf_images['main_image_file_path'] = image_files_path['main_image_file_path']
     for (index, sub_image) in enumerate(pdf_images['sub_images']):
         sub_image['sub_image_file_path'] = image_files_path['sub_images_file_path'][index]
-    pdf_stories = [{'content_type': 'title', 'content': 'cliques社团发现分析结果'},
+    pdf_stories = [{'content_type': 'title', 'content': '最大子网分析结果'},
                    {'content_type': 'h1', 'content': '参数设置'},
                    {'content_type': 'body',
                     'content': '本次的参数设置为：附带权重' if params['weight'] == True else '本次的参数设置为：不附带权重'},
                    {'content_type': 'h1', 'content': '分析结果'},
                    {'content_type': 'h2', 'content': '社团划分结果'},
-                   {'content_type': 'three_line_table', 'content': pdf_tables[0], 'table_name': '社团发现结果表'},
-                   {'content_type': 'h2', 'content': '网络图展示'},
-                   {'content_type': 'image', 'image_file_path': pdf_images['main_image_file_path'],
-                    'image_name': pdf_images['main_image_name'], 'width': 400, 'height': 300},
-                   {'content_type': 'h2', 'content': '网络图子图展示'},
-                   ]
+                   {'content_type': 'three_line_table', 'content': pdf_tables[0], 'table_name': '社团发现结果表'}]
+    if len(cliques) == 30:
+        pdf_stories.append({'content_type': 'attention', 'content': '注意：由于最大子网结果太多，只列出前30个最大子网'})
+    pdf_stories.extend([{'content_type': 'h2', 'content': '网络图展示'},
+                        {'content_type': 'image', 'image_file_path': pdf_images['main_image_file_path'],
+                         'image_name': pdf_images['main_image_name'], 'width': 400, 'height': 300},
+                        {'content_type': 'h2', 'content': '网络图子图展示'},
+                        ])
     for sub_image in pdf_images['sub_images']:
         pdf_stories.append({'content_type': 'image', 'image_file_path': sub_image['sub_image_file_path'],
                             'image_name': sub_image['name'], 'width': 400, 'height': 300})
@@ -117,14 +134,21 @@ def handle_find_cliques(data, params, user_project_analysis_files_dir):
     else:
         graph = rows_to_graph(rows)
     cliques = find_cliques(graph)
-    return handle_find_cliques_result_show(graph, cliques, params, user_project_analysis_files_dir)
+    limit_graph = cliques_limit_graph(graph, cliques)
+    return handle_find_cliques_result_show(limit_graph, cliques, params, user_project_analysis_files_dir)
 
 
 if __name__ == '__main__':
-    handle_find_cliques([['蛇舌草,半枝莲,龙葵,石打穿,狗舌草,莪术,山慈菇,漏芦,肿节风,猫爪草,泽漆,土鳖虫,桃仁,蟾皮,砂仁'],
-                         ['败酱草,椿根白皮,墓头回,生薏苡仁,冬瓜子,苦参,泽泻,红藤,仙鹤草,失笑散,太子参,枸杞'],
-                         ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根,鸡血藤,泽漆,椿根白皮,夜交藤'],
-                         ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,石斛,仙鹤草,生薏苡仁'],
-                         ['法半夏,莱菔子,石斛,党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根']],
+    # handle_find_cliques([['蛇舌草,半枝莲,龙葵,石打穿,狗舌草,莪术,山慈菇,漏芦,肿节风,猫爪草,泽漆,土鳖虫,桃仁,蟾皮,砂仁'],
+    #                      ['败酱草,椿根白皮,墓头回,生薏苡仁,冬瓜子,苦参,泽泻,红藤,仙鹤草,失笑散,太子参,枸杞'],
+    #                      ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根,鸡血藤,泽漆,椿根白皮,夜交藤'],
+    #                      ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,石斛,仙鹤草,生薏苡仁'],
+    #                      ['法半夏,莱菔子,石斛,党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根']],
+    #                     params={'weight': True},
+    #                     user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+    table = read_table_to_dataset_data(
+        'D:\\Coding\\Python\\TCMDMA\\app\\users\\upload\\1-test\\2021-09-15-12-50-31--test.txt', has_header=False)
+    # print(table)
+    handle_find_cliques(table['table_data'],
                         params={'weight': True},
-                        user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+                        user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-test\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')

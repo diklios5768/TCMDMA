@@ -54,8 +54,8 @@ class Method(Base):
     chinese_name = Column(String(100), unique=True)
     default_parameters = Column(JSON, default=[])
     simple_description = Column(String(100), default='无')
-    detail = Column(String(400), default='无')
-    description_image = Column(String(100), default='无')
+    detail = Column(String(2000), default='无')
+    description_image = Column(String(200), default='无')
     limits = Column(JSON, default={})
 
     fields = ['id', 'name', 'chinese_name', 'default_parameters', 'simple_description', 'detail', 'description_image']
@@ -63,3 +63,10 @@ class Method(Base):
 
 def init_method():
     database_operation_batch(analysis_methods, Method, operation_type='add')
+
+
+def update_method():
+    update_methods = []
+    for index, method in enumerate(analysis_methods):
+        update_methods.append({"id": index + 1, "update_data": method})
+    database_operation_batch(update_methods, Method, operation_type='update')

@@ -14,10 +14,14 @@
 __auth__ = 'diklios'
 
 from .user import init_role, init_user
-from .analysis import init_method
+from .analysis import init_method,update_method
 
 
 def init_production_data():
     init_role()
     init_user()
     init_method()
+
+
+def update_production_data():
+    update_method()

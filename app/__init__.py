@@ -9,7 +9,7 @@ from .settings import config
 from .logging import file_log_handler
 # 数据库相关处理
 from .models import db, migrate
-from .models.tcm.production import init_production_data
+from .models.tcm.production import init_production_data,update_production_data
 from .models.create_db import init_db, drop_db, recreate_db
 from .views import tcm_bp
 from .utils.mail_handler import mail
@@ -90,6 +90,10 @@ def register_commands(app):
     @app.cli.command()
     def data_init():
         init_production_data()
+
+    @app.cli.command()
+    def data_update():
+        update_production_data()
 
 
 # 注册上下文

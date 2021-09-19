@@ -42,7 +42,8 @@ def to_ant_design_table_format(table_data, has_header=True):
         table_width = col_len
         for i in range(col_len):
             columns.append(
-                {"title": '列'+str(i + 1), "dataIndex": str(i + 1), "key": str(i + 1), "copyable": True, "ellipsis": True,
+                {"title": '列' + str(i + 1), "dataIndex": str(i + 1), "key": str(i + 1), "copyable": True,
+                 "ellipsis": True,
                  "tip": "内容过长会自动收缩"})
     print(columns)
     for (row_index, row_value) in enumerate(table_body):
@@ -71,10 +72,9 @@ def ant_design_table_limit(has_header, table_data, file_path, limit: int = None)
 
 
 def read_table_to_dataset_data(file_path: str, has_header: bool, limit: int = None):
-    print(file_path)
     filename = os.path.basename(file_path)
     if filename.endswith('.txt'):
-        with open(file_path, 'r') as file_open:
+        with open(file_path, 'r', encoding='utf8') as file_open:
             file_read = file_open.read()
             table_data = texts_to_single_col_table_data_integral_process(file_read)
     elif filename.endswith('.xls'):

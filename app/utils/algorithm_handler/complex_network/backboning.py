@@ -455,7 +455,7 @@ def handle_find_backbone_result_show(graph, backbone_result, params, user_projec
     pdf_image['image_file_path'] = generate_image_from_graph(graph, pdf_image['image_name'],
                                                              user_project_analysis_files_dir)
     pdf_stories = [
-        {'content_type': 'title', 'content': 'louvain社团发现分析结果'},
+        {'content_type': 'title', 'content': '骨干网络发现分析结果'},
         {'content_type': 'h1', 'content': '参数设置'},
         {'content_type': 'body',
          'content': '本次的参数设置为：阈值：' + str(params['threshold']) + '附带权重' if params[

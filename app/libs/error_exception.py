@@ -197,7 +197,7 @@ class ServerError(APIException):
     code = 500
     error_code = 1500
     msg = 'sorry,we made a mistake'
-    chinese_msg = '服务器错误'
+    chinese_msg = '服务器发生错误'
 
 
 # 数据库提交错误

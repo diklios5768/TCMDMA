@@ -128,7 +128,7 @@ def handle_homogeneous_result_show(item_sets, rules, params: dict = {}, user_pro
         image_file_path = generate_image(pdf_image['image_name'], pdf_image['data'], user_project_analysis_files_dir)
         pdf_image['image_file_path'] = image_file_path
 
-    pdf_stories = [{'content_type': 'title', 'content': '同质关联分析结果'},
+    pdf_stories = [{'content_type': 'title', 'content': '关联分析结果'},
                    {'content_type': 'h1', 'content': '参数设置'},
                    {'content_type': 'body', 'content': '本次的参数设置为：最小支持度' + str(params['min_support']) + '，最小置信度' + str(
                        params['min_confidence'])},

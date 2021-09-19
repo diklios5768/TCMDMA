@@ -24,6 +24,7 @@ from app.utils.file_handler.pdf_handler import generate_report_file
 from app.utils.file_handler.zip_handler import zip_dir
 from app.utils.celery_handler.mail import send_files_mail_sync
 
+# 解决Value error: embedded null byte的问题
 locale.setlocale(locale.LC_ALL, 'en')
 locale.setlocale(locale.LC_CTYPE, 'chinese')
 
