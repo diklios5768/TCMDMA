@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, SmallInteger,Float
+from sqlalchemy import Column, Integer, String, SmallInteger, Float
 from sqlalchemy.orm import reconstructor
 from app.libs.error_exception import ParameterException
 from app.models import db
@@ -52,21 +52,21 @@ class Base(db.Model):
 
     # 直接重新设置fields，可以用列表，也可以传入多个参数
     def set_fields(self, new_filed_list: list, *new_fields):
-        for field in new_fields:
-            new_filed_list.append(field)
-        self.fields = new_filed_list
+        self.fields = [*new_filed_list, *new_fields]
         return self
 
     # 从现在的fields中需要被移除的字段
     def hide_fields(self, *hide_keys):
         for key in hide_keys:
-            self.fields.remove(key)
+            if key in self.fields:
+                self.fields.remove(key)
         return self
 
     # 再次在fields中添加字段
     def append_fields(self, *append_keys):
         for key in append_keys:
             self.fields.append(key)
+        self.fields = list(set([*self.fields, *append_keys]))
         return self
 
     # 获得所有实例化的属性，转化为字典，尽量不使用，而是在具体的模型中定义keys函数

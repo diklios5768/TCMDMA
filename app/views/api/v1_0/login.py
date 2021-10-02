@@ -89,8 +89,7 @@ def login():
 def is_login():
     user_info = g.user_info
     user = database_read_by_id_single(class_id=user_info.uid, database_class=User)
-    data = dict(user)
-    return Success(data=data)
+    return Success(data=dict(user))
 
 
 @login_bp.get('/is_token_valid')

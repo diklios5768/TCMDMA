@@ -87,13 +87,20 @@ def register_commands(app):
             click.echo('Initialized database')
 
     # 生成生产数据
+    # 生成数据
     @app.cli.command()
-    def data_init():
-        init_production_data()
+    @click.option('--env', prompt='input environment', help='Choose environment to run init data function.')
+    def data_init(env):
+        if env in ['production', 'prod', 'p']:
+            init_production_data()
+        click.echo('data init success')
 
     @app.cli.command()
-    def data_update():
-        update_production_data()
+    @click.option('--env', prompt='input environment', help='Choose environment.')
+    def data_update(env):
+        if env in ['production', 'prod', 'p']:
+            update_production_data()
+        click.echo('data update success')
 
 
 # 注册上下文
