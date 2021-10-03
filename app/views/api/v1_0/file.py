@@ -96,7 +96,7 @@ def read_text_data():
         if make_dir(user_upload_files_dir):
             file_path = user_upload_files_dir + str(
                 datetime.utcnow().strftime("%Y-%m-%d-%H-%M-%S")) + '--' + 'new_text.txt'
-            with open(file_path, 'w')as f:
+            with open(file_path, 'w', encoding='utf8')as f:
                 f.write(text)
         table_data = texts_to_single_col_table_data_integral_process(text)
         # print(table_data)
