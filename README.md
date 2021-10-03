@@ -25,6 +25,8 @@
 ## 安装虚拟环境
 
 * 选择 `pipenv` 进行安装
+    * 先安装`pipenv`:`pip install pipenv`
+    * 根据系统中使用的python版本的不同，请先修改`Pipfile`文件中最后一行python的版本
     * 使用IDE
         * 设置->项目->python解释器->在三个点点处点击添加->在左边选择使用 pipenv *新建虚拟环境*
         * pipenv会自动选择根目录下的pipenv和pipenv.lock下载需要的库
@@ -186,3 +188,5 @@ MAIL_DEFAULT_SENDER='diklios'
     * 更新了生产环境启动说明，去除掉了开发版说明
 * 更新时间：2021-09-15
     * 增加了v1.1版本更新说明
+* 更新时间：2021-10-03
+    * 增加了pipenv安装时候的需要注意python版本的提示
