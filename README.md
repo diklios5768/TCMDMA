@@ -111,7 +111,7 @@ MAIL_DEFAULT_SENDER='diklios'
             * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
         * 永久启动：使用nssm一类的工具
             *
-            如，添加服务：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
+          如，添加服务：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
             * 启动服务：`nssm start tcmdma`
 * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
 * celery
