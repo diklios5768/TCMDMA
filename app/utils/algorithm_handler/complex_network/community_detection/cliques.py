@@ -27,11 +27,21 @@ def find_cliques(graph):
     cliques = [clique for clique in result]
     sorted_cliques = sorted(cliques, key=lambda item: -len(item))
     max_cliques = [sorted_cliques[0]]
-    for index, value in enumerate(sorted_cliques):
-        if len(sorted_cliques[index + 1]) < len(sorted_cliques[index]):
-            break
-        else:
-            max_cliques.append(sorted_cliques[index + 1])
+    cliques_num = len(sorted_cliques)
+    if cliques_num == 1:
+        return sorted_cliques
+    elif 1 < cliques_num <= 30:
+        for index in range(cliques_num-1):
+            if len(sorted_cliques[index + 1]) < len(sorted_cliques[index]):
+                break
+            else:
+                max_cliques.append(sorted_cliques[index + 1])
+    else:
+        for index in range(30):
+            if len(sorted_cliques[index + 1]) < len(sorted_cliques[index]):
+                break
+            else:
+                max_cliques.append(sorted_cliques[index + 1])
     return max_cliques[:30]
 
 
@@ -137,18 +147,21 @@ def handle_find_cliques(data, params, user_project_analysis_files_dir):
     limit_graph = cliques_limit_graph(graph, cliques)
     return handle_find_cliques_result_show(limit_graph, cliques, params, user_project_analysis_files_dir)
 
+# if __name__ == '__main__':
+#     handle_find_cliques([['蛇舌草,半枝莲,龙葵,石打穿,狗舌草,莪术,山慈菇,漏芦,肿节风,猫爪草,泽漆,土鳖虫,桃仁,蟾皮,砂仁'],
+#                          ['败酱草,椿根白皮,墓头回,生薏苡仁,冬瓜子,苦参,泽泻,红藤,仙鹤草,失笑散,太子参,枸杞'],
+#                          ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根,鸡血藤,泽漆,椿根白皮,夜交藤'],
+#                          ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,石斛,仙鹤草,生薏苡仁'],
+#                          ['法半夏,莱菔子,石斛,党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根']],
+#                         params={'weight': True},
+#                         user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+#     handle_find_cliques([['1']],
+#                         params={'weight': True},
+#                         user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-test\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
 
-if __name__ == '__main__':
-    # handle_find_cliques([['蛇舌草,半枝莲,龙葵,石打穿,狗舌草,莪术,山慈菇,漏芦,肿节风,猫爪草,泽漆,土鳖虫,桃仁,蟾皮,砂仁'],
-    #                      ['败酱草,椿根白皮,墓头回,生薏苡仁,冬瓜子,苦参,泽泻,红藤,仙鹤草,失笑散,太子参,枸杞'],
-    #                      ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根,鸡血藤,泽漆,椿根白皮,夜交藤'],
-    #                      ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,石斛,仙鹤草,生薏苡仁'],
-    #                      ['法半夏,莱菔子,石斛,党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根']],
+    # table = read_table_to_dataset_data(
+    #     'D:\\Coding\\Python\\TCMDMA\\app\\users\\upload\\1-test\\2021-09-15-12-50-31--test.txt', has_header=False)
+    # # print(table)
+    # handle_find_cliques(table['table_data'],
     #                     params={'weight': True},
-    #                     user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
-    table = read_table_to_dataset_data(
-        'D:\\Coding\\Python\\TCMDMA\\app\\users\\upload\\1-test\\2021-09-15-12-50-31--test.txt', has_header=False)
-    # print(table)
-    handle_find_cliques(table['table_data'],
-                        params={'weight': True},
-                        user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-test\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+    #                     user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-test\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
