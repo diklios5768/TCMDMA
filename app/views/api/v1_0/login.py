@@ -79,7 +79,7 @@ def login():
     # cookie不设置expires的话过期时间是游览器会话结束
     # max_age单位是秒，从现在开始计算
     # expires单位是时间戳，可以使用datetime创建，如果设置的是数字，则从1970年1月1号开始算
-    res.set_cookie(key='refresh_token', value=refresh_token, httponly=True,
+    res.set_cookie(key='refresh_token', value=refresh_token, httponly=True, secure=False,
                    expires=datetime.utcnow().timestamp() + refresh_token_expiration)
     return res
 

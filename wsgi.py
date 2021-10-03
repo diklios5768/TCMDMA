@@ -14,5 +14,5 @@ celery = register_celery(wsgi_app, celery)
 
 # 加上if判断可以保证在生产环境下不会启动flask自带的服务器
 if __name__ == '__main__':
-    print(wsgi_app.config['SQLALCHEMY_DATABASE_URI'])
-    wsgi_app.run()
+    # 多进程或多线程只能选择一个，不能同时开启
+    wsgi_app.run(host='0.0.0.0',threaded=True)
