@@ -81,25 +81,51 @@ def handle_project_completed(project, user_project_files_dir):
     rate = project_complete_rate(project)
     # 如果方法全部完成，则进行收尾处理
     if rate == 1:
-        # 生成PDF报告
-        pdf_file_name = generate_datetime_str() + project.name + '项目分析报告.pdf'
-        pdf_file_path = user_project_files_dir + pdf_file_name
-        pdf_stories = []
-        for each_analysis in project.analyses:
-            # attention:注意这里使用列表合并的方法
-            pdf_stories.extend(each_analysis.main_result_data.get('pdf_stories', []))
-        generate_report_file(pdf_file_path, pdf_stories)
-        # 打包整个文件夹
-        zip_file_name = generate_datetime_str() + project.name + '项目完整分析结果数据.zip'
-        zip_file_path = user_project_files_dir + '../' + zip_file_name
-        zip_dir(zip_file_path, user_project_files_dir)
-        with db.auto_commit():
-            other_result = {'pdf_file_path': pdf_file_path, 'pdf_download_path': pdf_file_path,
-                            'zip_file_path': zip_file_path, 'zip_download_path': zip_file_path}
-            project.other_result = other_result
-        # 发送邮件
-        send_files_mail_sync.delay(subject=project.name + "项目分析报告", to=[project.user.email],
-                                   body=render_template('mail/report.txt', username=project.user.username,
-                                                        datetime=str(datetime.utcnow().strftime("%Y年%m月%d日"))),
-                                   files=[{'path': zip_file_path, 'name': zip_file_name,
-                                           'content_type': 'application/zip'}])
+        try:
+            # 生成PDF报告
+            with db.auto_commit():
+                project.remarks = 'generating PDF'
+            pdf_file_name = generate_datetime_str() + project.name + '项目分析报告.pdf'
+            pdf_file_path = user_project_files_dir + pdf_file_name
+            pdf_stories = []
+            for each_analysis in project.analyses:
+                # attention:注意这里使用列表合并的方法
+                pdf_stories.extend(each_analysis.main_result_data.get('pdf_stories', []))
+            generate_report_file(pdf_file_path, pdf_stories)
+            with db.auto_commit():
+                project.remarks = 'generate PDF file success'
+        except Exception as e:
+            print(e)
+            with db.auto_commit():
+                project.remarks = str(e)
+        try:
+            # 打包整个文件夹
+            with db.auto_commit():
+                project.remarks = 'zipping files'
+            zip_file_name = generate_datetime_str() + project.name + '项目完整分析结果数据.zip'
+            zip_file_path = user_project_files_dir + '../' + zip_file_name
+            zip_dir(zip_file_path, user_project_files_dir)
+            with db.auto_commit():
+                other_result = {'pdf_file_path': pdf_file_path, 'pdf_download_path': pdf_file_path,
+                                'zip_file_path': zip_file_path, 'zip_download_path': zip_file_path}
+                project.other_result = other_result
+                project.remarks = 'zip files success'
+        except Exception as e:
+            print(e)
+            with db.auto_commit():
+                project.remarks = str(e)
+        try:
+            # 发送邮件
+            with db.auto_commit():
+                project.remarks = 'sending email with zip file'
+            send_files_mail_sync.delay(subject=project.name + "项目分析报告", to=[project.user.email],
+                                       body=render_template('mail/report.txt', username=project.user.username,
+                                                            datetime=str(datetime.utcnow().strftime("%Y年%m月%d日"))),
+                                       files=[{'path': zip_file_path, 'name': zip_file_name,
+                                               'content_type': 'application/zip'}])
+            with db.auto_commit():
+                project.remarks = 'send email success'
+        except Exception as e:
+            print(e)
+            with db.auto_commit():
+                project.remarks = str(e)

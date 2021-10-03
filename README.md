@@ -103,6 +103,7 @@ MAIL_DEFAULT_SENDER='diklios'
         * 提醒：如果密码中含有特殊字符，请手动配置`app/setting.py`文件，使用URL编码进行处理
     * 在终端初始化数据库表：`flask db-init`
     * 初始化表数据：`flask data-init`
+        * 输入`p`或者`production`代表生产环境
 * 启动flask
     * 类Unix环境下
         * 先安装gunicorn：`pipenv install gunicorn`
