@@ -9,7 +9,8 @@ from .settings import config
 from .logging import file_log_handler
 # 数据库相关处理
 from .models import db, migrate
-from .models.tcm.production import init_production_data,update_production_data
+from .models.tcm.production import init_production_data, update_production_data
+from .models.tcm.development import init_development_data, update_development_data
 from .models.create_db import init_db, drop_db, recreate_db
 from .views import tcm_bp
 from .utils.mail_handler import mail
@@ -93,14 +94,20 @@ def register_commands(app):
     def data_init(env):
         if env in ['production', 'prod', 'p']:
             init_production_data()
-        click.echo('data init success')
+            click.echo('production data init success')
+        elif env in ['development', 'dev', 'd']:
+            init_development_data()
+            click.echo('development data init success')
 
     @app.cli.command()
     @click.option('--env', prompt='input environment', help='Choose environment.')
     def data_update(env):
         if env in ['production', 'prod', 'p']:
             update_production_data()
-        click.echo('data update success')
+            click.echo('production data update success')
+        elif env in ['development', 'dev', 'd']:
+            update_development_data()
+            click.echo('development data update success')
 
 
 # 注册上下文
@@ -239,5 +246,4 @@ def register_errors(app):
 
 # 日志系统配置
 def register_logging(app):
-
     app.logger.addHandler(file_log_handler)

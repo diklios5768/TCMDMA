@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   production.py    
-@Create Time    :   2021/8/17 11:44
+@File Name      :   development.py    
+@Create Time    :   2021/10/8 17:17
 @Description    :   
 @Version        :   
 @License        :   
@@ -17,11 +17,11 @@ from .user import init_role, init_user
 from .analysis import init_method, update_method
 
 
-def init_production_data():
+def init_development_data():
     init_role()
     init_user()
     init_method()
 
 
-def update_production_data():
+def update_development_data():
     update_method()
