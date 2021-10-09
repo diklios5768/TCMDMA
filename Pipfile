@@ -49,7 +49,7 @@ python-louvain = "*"
 waitress = "*"
 eventlet = "*"
 gevent = "*"
-gunicorn = "*"
+#gunicorn = "*"
 
 [dev-packages]
 faker = "*"
