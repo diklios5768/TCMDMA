@@ -99,6 +99,7 @@ def register_commands(app):
             init_development_data()
             click.echo('development data init success')
 
+    # 开发数据
     @app.cli.command()
     @click.option('--env', prompt='input environment', help='Choose environment.')
     def data_update(env):

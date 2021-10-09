@@ -5,9 +5,9 @@ from flask_moment import Moment
 from flask_cors import CORS
 from flask_babel import Babel
 
-socket_io = SocketIO()
-whooshee = Whooshee()
-moment = Moment()
+# socket_io = SocketIO()
+# whooshee = Whooshee()
+# moment = Moment()
 cors = CORS()
 # 后端国际化
-babel = Babel()
+# babel = Babel()

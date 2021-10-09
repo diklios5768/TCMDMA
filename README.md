@@ -86,8 +86,8 @@
 SECRET_KEY='35JN7GFaUFNeriObUj93bQpavYWsGPOp6I4BDoe-U6Q'
 SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
 # MySQL数据库URL
-# 格式为DATABASE_URL='mysql+pymysql://username:password@host/databasename'
-DATABASE_URL='mysql+pymysql://username:password@host/databasename'
+# 格式为 SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
+SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
 REDIS_URL = 'redis://@localhost:6379/0'
 # 邮件部分
 MAIL_SERVER='smtp.126.com'
@@ -104,6 +104,7 @@ MAIL_DEFAULT_SENDER='diklios'
     * 在终端初始化数据库表：`flask db-init`
     * 初始化表数据：`flask data-init`
         * 输入`p`或者`production`代表生产环境
+        * 输入`d`或者`development`代表开发环境
 * 启动flask
     * 类Unix环境下
         * 先安装gunicorn：`pipenv install gunicorn`
