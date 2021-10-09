@@ -46,9 +46,9 @@ networkx = "*"
 matplotlib = "*"
 python-louvain = "*"
 # server
-waitress = "*"
 eventlet = "*"
 gevent = "*"
+#waitress = "*"
 #gunicorn = "*"
 
 [dev-packages]

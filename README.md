@@ -106,6 +106,7 @@ MAIL_DEFAULT_SENDER='diklios'
         * 输入`p`或者`production`代表生产环境
         * 输入`d`或者`development`代表开发环境
 * 启动flask
+    * 注意，`Pipfile`中也提供了相应的包，可以根据系统取消相应的注释再重新安装环境
     * 类Unix环境下
         * 先安装gunicorn：`pipenv install gunicorn`
         * 启动：`gunicorn -c gunicorn.py wsgi:wsgi_app`
