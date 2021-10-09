@@ -48,6 +48,8 @@ python-louvain = "*"
 # server
 waitress = "*"
 eventlet = "*"
+gevent = "*"
+gunicorn = "*"
 
 [dev-packages]
 faker = "*"
