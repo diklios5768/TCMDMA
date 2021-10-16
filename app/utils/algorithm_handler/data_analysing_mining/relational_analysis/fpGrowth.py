@@ -2,6 +2,7 @@
 from fpgrowth_py import fpgrowth
 
 
-def fp_growth_analysis(data, min_sup_ratio, min_conf):
-    freq_item_set, rules = fpgrowth(data, minSupRatio=min_sup_ratio, minConf=min_conf)
+# todo:将频繁项集和关联规则改造一下格式，暂时还不能适应现在的结果处理方式
+def fp_growth_analysis(data, min_support, min_confidence):
+    freq_item_set, rules = fpgrowth(data, minSupRatio=min_support, minConf=min_confidence)
     return freq_item_set, rules

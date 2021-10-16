@@ -44,6 +44,8 @@ def new_analysis(self, project_id, user_project_files_dir, analysis_id, method, 
     try:
         with db.auto_commit():
             analysis.analysis_status = 'analysing'
+            analysis.other_result_data['parameters']=parameters
+            analysis.other_result_data["analysis_file_dir"] = user_project_analysis_files_dir
         main_result_data = analysis_promise[method](main_data, parameters, user_project_analysis_files_dir)
         # print(main_result_data)
     except Exception as e:
@@ -76,7 +78,6 @@ def new_analysis(self, project_id, user_project_files_dir, analysis_id, method, 
     # 得到分析结果并提交
     with db.auto_commit():
         analysis.main_result_data = main_result_data
-        analysis.other_result_data = {"analysis_file_dir": user_project_analysis_files_dir}
         analysis.analysis_status = 'all completed'
     handle_project_completed(project, user_project_files_dir)
     return True

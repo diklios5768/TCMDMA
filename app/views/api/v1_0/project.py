@@ -335,7 +335,7 @@ def add_project_with_dataset_and_analysis():
 
 @project_bp.get('/<int:project_id>/stop')
 def stop_project_analyses_by_id(project_id):
-    project = Project.query.filter_by(project_id=project_id).first_or_404()
+    project = Project.query.filter_by(id=project_id).first_or_404()
     for analysis in project.analyses:
         celery_task_id = analysis.other_result_data['celery_task_id']
         celery_control.revoke(task_id=celery_task_id, terminate=True)
