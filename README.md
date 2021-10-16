@@ -97,6 +97,10 @@ MAIL_SERVER='smtp.126.com'
 MAIL_USERNAME=''
 MAIL_PASSWORD=''
 MAIL_DEFAULT_SENDER='diklios'
+# 配置域名和https
+HTTPS=0
+HTTP2=0
+DOMAIN_NAME='localhost:5000'
 ```
 
 * 启动pipenv虚拟环境(千万注意.env文件中不要有中文注释)：`pipenv shell`
