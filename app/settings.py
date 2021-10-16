@@ -84,6 +84,7 @@ class TestingConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     # 如果密码中含有特殊字符需要使用URL编码
+    # from urllib import parse
     # SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:'+parse.quote_plus('password')+'@localhost:3306/database_name'
 
 

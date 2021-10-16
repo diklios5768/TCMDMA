@@ -96,7 +96,7 @@ MAIL_SERVER='smtp.126.com'
 # MAIL_PORT=587
 MAIL_USERNAME=''
 MAIL_PASSWORD=''
-MAIL_DEFAULT_SENDER='diklios'
+MAIL_DEFAULT_SENDER='NJUCM MedInfo'
 # 配置域名和https
 HTTPS=0
 HTTP2=0
@@ -124,10 +124,10 @@ DOMAIN_NAME='localhost:5000'
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
             * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
         * 永久启动：使用nssm一类的工具
-            * 注意设置一些参数，如项目启动文件夹
-            * 添加服务，如：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
-            * 启动服务：`nssm start tcmdma`
-* redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
+            * 注意设置一些参数，最重要的项目启动文件夹和开机自启动
+            * 添加服务，如：`nssm install xminer "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "waitress_server.py"`
+            * 启动服务：`nssm start xminer`
+* redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置），一般来说默认端口即可
 * celery
     * 在`app/utils/celery_handler/config.py`中配置环境变量
     * 启动：`celery -A wsgi:celery worker -l INFO`
