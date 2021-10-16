@@ -1,6 +1,6 @@
 import os
 from flask import current_app
-from app.utils.time import generate_datetime_str
+from app.utils.time import generate_datetime_str_now
 
 
 # 没有就创建这个文件夹，有就返回True
@@ -26,4 +26,4 @@ def create_user_data_dir_path(uid, username):
 
 
 def create_user_project_dir_path(user_data_files_dir, project):
-    return user_data_files_dir + generate_datetime_str() + str(project.id) + '-' + project.name + '/'
+    return user_data_files_dir + generate_datetime_str_now() + '--' + str(project.id) + '-' + project.name + '/'

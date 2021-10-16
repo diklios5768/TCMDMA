@@ -30,9 +30,11 @@ class BaseScope:
     # 用于排除模块内的一些api，减少配置的代码
     # attention:forbidden_apis必须要和allow_modules一起搭配使用
     forbidden_apis = []
+    # 用于禁止一些在模块中的模块
+    forbidden_modules = []
 
     # 可以使用__add__()重载+运算符
-    # attention:相加就类似于数学上的并集
+    # attention:相加就类似于数学上的并集，即AUB
     def add(self, other):
         self.allow_apis += other.allow_apis
         self.allow_apis = list(set(self.allow_apis))
@@ -56,6 +58,26 @@ class BaseScope:
                 self_forbidden_apis_copy.remove(i)
         new_forbidden_apis = self_forbidden_apis_copy + other_forbidden_apis_copy
         self.forbidden_apis = list(set(new_forbidden_apis))
+        self_forbidden_modules_copy = self.forbidden_modules
+        other_forbidden_modules_copy = other.forbidden_modules
+        for i in other.forbidden_modules:
+            find = False
+            for j in self.allow_modules:
+                if i.startswith(j):
+                    find = True
+                    break
+            if find:
+                other_forbidden_modules_copy.remove(i)
+        for i in self.forbidden_modules:
+            find = False
+            for j in other.allow_modules:
+                if i.startswith(j):
+                    find = True
+                    break
+            if find:
+                self_forbidden_modules_copy.remove(i)
+        new_forbidden_modules = self_forbidden_modules_copy + other_forbidden_modules_copy
+        self.forbidden_apis = list(set(new_forbidden_modules))
         self.allow_modules += other.allow_modules
         self.allow_modules = list(set(self.allow_modules))
 
@@ -67,13 +89,23 @@ class BaseScope:
         self.forbidden_apis = list(set(self.forbidden_apis))
         self.allow_modules += other.allow_modules
         self.allow_modules = list(set(self.allow_modules))
+        self.forbidden_modules += other.forbidden_modules
+        self.forbidden_modules = list(set(self.forbidden_modules))
         return self
 
 
 class UserScope(BaseScope):
-    allow_apis = []
+    allow_apis = ['sun.api.v1_0.user.update_self_password']
     allow_modules = ['sun.api.v1_0.login', 'sun.api.v1_0.file', 'sun.api.v1_0.dataset', 'sun.api.v1_0.project',
                      'sun.api.v1_0.analysis']
+    forbidden_apis = [
+        'sun.api.v1_0.user.get_project_by_params_by_admin',
+        'sun.api.v1_0.project.true_delete_project',
+        'sun.api.v1_0.project.true_delete_project_batch',
+        'sun.api.v1_0.user.get_dataset_by_params_by_admin',
+        'sun.api.v1_0.dataset.true_delete_dataset',
+        'sun.api.v1_0.dataset.true_delete_dataset_batch',
+    ]
 
     def __init__(self):
         pass
@@ -82,6 +114,19 @@ class UserScope(BaseScope):
 class AdminScope(BaseScope):
     allow_apis = []
     allow_modules = ['sun.api.v1_0']
+    forbidden_apis = [
+        'sun.api.v1_0.user.true_delete_user',
+        'sun.api.v1_0.user.true_delete_user_batch',
+        'sun.api.v1_0.user.update_user_by_id',
+        'sun.api.v1_0.project.true_delete_project',
+        'sun.api.v1_0.project.true_delete_project_batch',
+        'sun.api.v1_0.dataset.true_delete_dataset',
+        'sun.api.v1_0.dataset.true_delete_dataset_batch',
+    ]
+    forbidden_modules = [
+        'sun.api.v1_0.secret',
+        'sun.api.v1_0.bound',
+    ]
 
     def __init__(self):
         super().__init__(self)
@@ -89,6 +134,7 @@ class AdminScope(BaseScope):
 
 class SuperAdminScope(BaseScope):
     allow_apis = []
+    allow_modules = ['sun.api.v1_0']
 
     def __init__(self):
         super().__init__(self)
@@ -105,6 +151,9 @@ def is_in_scope(scopes, endpoint):
         # 先判断URL是否被禁止了
         if endpoint in scope.forbidden_apis:
             return False
+        for i in scope.forbidden_modules:
+            if endpoint.startswith(i):
+                return False
         if endpoint in scope.allow_apis:
             return True
         for i in scope.allow_modules:

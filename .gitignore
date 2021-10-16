@@ -33,3 +33,11 @@ app/logs
 
 #用户文件
 app/users
+
+#数据库源文件
+app/models/*/source
+app/models/source
+
+#可能的NodeJS环境
+node_modules
+*/node_modules

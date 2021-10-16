@@ -9,7 +9,7 @@ from app.utils.algorithm_handler.complex_network.community_detection.onion_layer
 from app.utils.algorithm_handler.complex_network.backboning import handle_find_backbone
 from app.utils.celery_handler import celery
 from app.utils.file_handler.table_handler.csv import generate_csv_file
-from app.utils.time import generate_datetime_str
+from app.utils.time import generate_datetime_str_now
 
 """
 函数参数：需要分析的数据,方法参数字典，分析文件夹
@@ -32,8 +32,7 @@ def new_analysis(self, project_id, user_project_files_dir, analysis_id, method, 
     user_project_analysis_files_dir = user_project_files_dir + str(analysis.id) + '-' + str(analysis.method) + '方法分析结果/'
     # 先把任务ID存到数据库中，并初始化
     with db.auto_commit():
-        # analysis.other_result_data = {"task_id": self.id}
-        analysis.other_result_data = {}
+        analysis.other_result_data = {'celery_task_id': self.request.id}
         analysis.analysis_status = 'wait to start'
     # 确认有这个方法
     if method not in analysis_promise.keys():
@@ -60,7 +59,7 @@ def new_analysis(self, project_id, user_project_files_dir, analysis_id, method, 
         # 用csv文件代替Excel文件
         tables_data = main_result_data['excel_sheets_data']
         for table_data in tables_data:
-            csv_file_name = generate_datetime_str() + str(analysis.id) + '-' + method + '-' + table_data[
+            csv_file_name = generate_datetime_str_now() + '--' + str(analysis.id) + '-' + method + '-' + table_data[
                 'name'] + '分析报告.csv'
             generate_csv_file(filename=csv_file_name, table_data=table_data['data'],
                               file_dir=user_project_analysis_files_dir)

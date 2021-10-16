@@ -14,12 +14,12 @@
 __auth__ = 'diklios'
 
 from flask import Blueprint, request, g
-from app.libs.error_exception import ReadSuccess, CreateSuccess, UpdateSuccess
+from app.libs.error_exception import ReadSuccess, CreateSuccess, UpdateSuccess,TrueDeleteSuccess
 from app.utils.token_auth import auth
 from app.utils.file_handler.table_handler import read_table_to_dataset_data
 from app.models.tcm.dataset import Dataset
 from app.viewModels import database_add_single, database_update_single, database_remove_single, database_recover_single, \
-    database_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
+    database_delete_single,database_true_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
     database_read_by_pagination
 from app.viewModels.common.params import params_ready
 
@@ -111,7 +111,7 @@ def add_dataset():
 
 
 # 更新部分信息
-@dataset_bp.patch('/<int:dataset_id>')
+@dataset_bp.put('/<int:dataset_id>')
 @auth.login_required
 def update_dataset_by_id(dataset_id):
     update_data = request.get_json()
@@ -162,3 +162,28 @@ def delete_dataset_by_id_batch():
     dataset_id_list = request.get_json().get('idList')
     database_operation_batch(dataset_id_list, Dataset, operation_type='delete')
     return UpdateSuccess(msg='batch delete success', chinese_msg='批量删除成功')
+
+
+@dataset_bp.post('/admin_params')
+def get_dataset_by_params_by_admin():
+    params_dict = request.get_json()
+    datasets = database_read_by_params(Dataset, filters_by=params_dict)
+    dataset_rows = [dict(dataset) for dataset in datasets]
+    dataset_rows.reverse()
+    return ReadSuccess(data=dataset_rows)
+
+
+# attention:真删除必须是超级管理员才能用，普通管理员无此权限
+@dataset_bp.delete('/true_delete/<int:dataset_id>')
+@auth.login_required
+def true_delete_dataset(dataset_id):
+    database_true_delete_single(dataset_id, Dataset)
+    return TrueDeleteSuccess()
+
+
+@dataset_bp.delete('/true_delete/batch')
+@auth.login_required
+def true_delete_dataset_batch():
+    dataset_id_list = request.get_json()
+    database_operation_batch(dataset_id_list, Dataset, operation_type='delete')
+    return TrueDeleteSuccess(msg='batch true delete success', chinese_msg='批量真删除成功')

@@ -13,11 +13,11 @@ class BaseUser(Base):
     # phone_code_id = Column(ForeignKey('international_telephone_country_code.id'), nullable=True)
     phone = Column(String(12), unique=True, nullable=True)
     # 名
-    first_name = Column(String(255), nullable=True,default='')
+    first_name = Column(String(255), nullable=True, default='')
     # 姓
-    last_name = Column(String(255), nullable=True,default='')
+    last_name = Column(String(255), nullable=True, default='')
     # 别名
-    nickname = Column(String(24), nullable=True,default='')
+    nickname = Column(String(24), nullable=True, default='')
     gender = Column(Enum('male', 'female', '男', '女'), default='male', nullable=True)
     age = Column(SmallInteger, nullable=True)
     # 通过认证
@@ -49,3 +49,4 @@ class BaseRole(Base):
     __abstract__ = True
     name = Column(String(50), unique=True)
     description = Column(String(255), default='')
+    access_level = Column(SmallInteger, default=1)

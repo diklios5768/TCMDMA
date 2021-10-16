@@ -53,12 +53,16 @@ class Method(Base):
     name = Column(String(50), unique=True)
     chinese_name = Column(String(100), unique=True)
     default_parameters = Column(JSON, default=[])
+    parameters_introduction = Column(JSON, default=[])
     simple_description = Column(String(100), default='无')
-    detail = Column(String(2000), default='无')
+    detail = Column(JSON, default=[])
     description_image = Column(String(200), default='无')
     limits = Column(JSON, default={})
 
-    fields = ['id', 'name', 'chinese_name', 'default_parameters', 'simple_description', 'detail', 'description_image']
+    fields = [
+        'id', 'name', 'chinese_name', 'default_parameters', 'parameters_introduction', 'simple_description', 'detail',
+        'description_image'
+    ]
 
 
 def init_method():

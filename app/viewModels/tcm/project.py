@@ -19,7 +19,7 @@ from flask import render_template
 from app.libs.lists import analysis_status
 from app.models import db
 from app.models.tcm.project import Project
-from app.utils.time import generate_datetime_str
+from app.utils.time import generate_datetime_str_now
 from app.utils.file_handler.pdf_handler import generate_report_file
 from app.utils.file_handler.zip_handler import zip_dir
 from app.utils.celery_handler.mail import send_files_mail_sync
@@ -65,7 +65,7 @@ def project_complete_rate(project):
     count = 0
     for analysis in analyses:
         status = analysis.analysis_status
-        if status == 'all completed' or 'fail' in status or 'error' in status:
+        if status == 'all completed' or 'fail' in status or 'error' in status or 'stop' in status:
             count += 1
         else:
             count += round((analysis_status.index(status) + 1) / len(analysis_status), 3)
@@ -85,7 +85,7 @@ def handle_project_completed(project, user_project_files_dir):
             # 生成PDF报告
             with db.auto_commit():
                 project.remarks = 'generating PDF'
-            pdf_file_name = generate_datetime_str() + project.name + '项目分析报告.pdf'
+            pdf_file_name = generate_datetime_str_now() + '--' + project.name + '项目分析报告.pdf'
             pdf_file_path = user_project_files_dir + pdf_file_name
             pdf_stories = []
             for each_analysis in project.analyses:
@@ -102,7 +102,7 @@ def handle_project_completed(project, user_project_files_dir):
             # 打包整个文件夹
             with db.auto_commit():
                 project.remarks = 'zipping files'
-            zip_file_name = generate_datetime_str() + project.name + '项目完整分析结果数据.zip'
+            zip_file_name = generate_datetime_str_now() + '--' + project.name + '项目完整分析结果数据.zip'
             zip_file_path = user_project_files_dir + '../' + zip_file_name
             zip_dir(zip_file_path, user_project_files_dir)
             with db.auto_commit():

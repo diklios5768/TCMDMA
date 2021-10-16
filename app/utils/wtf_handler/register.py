@@ -22,7 +22,8 @@ from app.viewModels.common.verification import verify_verification_code
 
 # 用户名+密码
 class RegisterOnlyUsernameForm(VerifySecretForm):
-    account = StringField(validators=[DataRequired(), Length(min=4, max=20)])
+    account = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_]{8,20}$', message='用户名不合法，只能包含英文字母、数字和下划线'),
+                                      Length(min=4, max=20, message='用户名长度不正确')])
 
     def validate_account(self, value):
         if User.query.filter_by(username=value.data).first():
@@ -44,7 +45,8 @@ class RegisterEmailForm(VerifySecretForm, ExtraVerificationCodeForm):
 
 # 邮箱+密码+验证码+用户名
 class RegisterEmailWithUsernameForm(VerifySecretForm):
-    account = StringField(validators=[DataRequired(), Length(min=4, max=20)])
+    account = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_]{8,20}$', message='用户名不合法，只能包含英文字母、数字和下划线'),
+                                      Length(min=4, max=20, message='用户名长度不正确')])
     email = StringField(validators=[DataRequired(), Email(message='invalidate email')])
 
     def validate_account(self, value):
@@ -60,7 +62,8 @@ class RegisterEmailWithUsernameForm(VerifySecretForm):
 # 手机号+验证码
 class RegisterPhoneForm(ClientForm, ExtraVerificationCodeForm):
     # phone_code= StringField(validators=[DataRequired(), Length(min=1, max=4)])
-    account = StringField(validators=[DataRequired(), Length(12)])
+    account = StringField(
+        validators=[DataRequired(), Regexp(r'^[0-9]{8,13}$', message='用户名不合法，只能包含英文字母、数字和下划线'), Length(8, 13)])
 
     def validate_account(self, value):
         if User.query.filter_by(phone=value.data).first():

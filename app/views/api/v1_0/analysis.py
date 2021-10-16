@@ -1,12 +1,12 @@
-import os, json
-from io import BytesIO
+# import os, json
+# from io import BytesIO
 # from threading import Lock
-from zipfile import ZipFile
+# from zipfile import ZipFile
 
 from flask import jsonify, request, send_from_directory, send_file, Blueprint
 # from flask_socketio import emit, join_room, send
 # from app.extensions import socket_io
-from app.settings import basedir
+# from app.settings import basedir
 from app.libs.error_exception import ReadSuccess
 from app.models.tcm.analysis import Analysis, Method
 from app.viewModels import database_add_single, database_remove_single, database_recover_single, database_delete_single, \

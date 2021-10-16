@@ -82,7 +82,7 @@ def handle_onion_layers_result_show(graph, partition, params, user_project_analy
     pdf_images['main_image_file_path'] = image_files_path['main_image_file_path']
     for (index, sub_image) in enumerate(pdf_images['sub_images']):
         sub_image['sub_image_file_path'] = image_files_path['sub_images_file_path'][index]
-    pdf_stories = [{'content_type': 'title', 'content': 'onion_layers社团发现分析结果'},
+    pdf_stories = [{'content_type': 'title', 'content': '社团发现分析结果'},
                    {'content_type': 'h1', 'content': '参数设置'},
                    {'content_type': 'body',
                     'content': '本次的参数设置为：附带权重' if params['weight'] == True else '本次的参数设置为：不附带权重'},

@@ -49,8 +49,8 @@ class TrueDeleteSuccess(Success):
     # attention:code=204的话，即使后端返回了数据，前端也一样不会接受到，因为规范规定了204就是什么都没有，所以可以改为202
     code = 202
     error_code = 13
-    msg = 'remove success'
-    chinese_msg = '删除成功'
+    msg = 'true delete success'
+    chinese_msg = '真删除成功'
 
 
 class RegisterSuccess(Success):
@@ -182,6 +182,12 @@ class TokenDisabled(AuthFailed):
     error_code = 1313
     msg = 'token is disabled'
     chinese_msg = 'token 失效'
+
+
+class LinkError(AuthFailed):
+    error_code = 1314
+    msg = 'link not exist or verify failed(invalid)'
+    chinese_msg = '链接失效或者验证失败（非法）'
 
 
 class Forbidden(APIException):

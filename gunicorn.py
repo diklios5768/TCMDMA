@@ -1,5 +1,9 @@
-from app.settings import basedir
 import multiprocessing
+import gevent
+from gevent import monkey
+from app.settings import basedir
+
+monkey.patch_all()
 
 # 绑定ip和端口号
 bind = '0.0.0.0:8000'
@@ -11,9 +15,8 @@ workers = multiprocessing.cpu_count() * 2 + 1
 threads = 3
 # 处理请求的工作线程数，使用指定数量的线程运行每个worker。为正整数，默认为1。
 worker_connections = 2000
-# 设置pid文件的文件名，如果不设置将不会创建pid文件
-# pidfile = '/home/chenxinming/项目名/script/gunicorn.pid'
-
+# 进程守护True为开启后台模式，这里需要注意刚开始挂起最好使用False 看看脚本有没有反馈
+daemon = True
 # 设置超时时间120s，默认为30s。按自己的需求进行设置timeout = 120
 timeout = 120
 # 超时重启
@@ -58,6 +61,8 @@ loglevel = 'info'
 # {Variable}e	环境变量
 
 access_log_format = '%(t)s %(p)s %(h)s "%(r)s" %(s)s %(L)s %(b)s %(f)s" "%(a)s"'
+# 设置pid文件的文件名，如果不设置将不会创建pid文件
+pidfile = "/logs/gunicorn.pid"
 # 要写入的访问日志目录
 accesslog = basedir + "/logs/gunicorn_access.log"
 # 要写入错误日志的文件目录

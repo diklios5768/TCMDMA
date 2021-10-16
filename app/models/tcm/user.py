@@ -40,13 +40,13 @@ class UserLog(BaseLog):
 def init_role():
     with db.auto_commit():
         user = Role()
-        user.set_attrs({'name': '普通用户'})
+        user.set_attrs({'name': '普通用户', 'access_level': 1})
         db.session.add(user)
         admin = Role()
-        admin.set_attrs({'name': '管理员'})
+        admin.set_attrs({'name': '管理员', 'access_level': 2})
         db.session.add(admin)
         super_admin = Role()
-        super_admin.set_attrs({'name': '超级管理员'})
+        super_admin.set_attrs({'name': '超级管理员', 'access_level': 3})
         db.session.add(super_admin)
 
 
@@ -55,21 +55,21 @@ def init_user():
         # 测试用户
         role_user = Role.query.filter_by(id=1).first_or_404()
         user = User()
-        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com'})
+        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com', 'status': 1})
         user.set_password('test1234')
         user.roles.append(role_user)
         db.session.add(user)
         # 管理员
         role_admin = Role.query.filter_by(id=2).first_or_404()
         admin_user = User()
-        admin_user.set_attrs({'username': 'admin'})
+        admin_user.set_attrs({'username': 'admin', 'status': 1})
         admin_user.set_password('admin')
         admin_user.roles.append(role_admin)
         db.session.add(admin_user)
         # 超级管理员
         role_super_admin = Role.query.filter_by(id=3).first_or_404()
         super_admin_user = User()
-        super_admin_user.set_attrs({'username': 'super admin'})
+        super_admin_user.set_attrs({'username': 'super admin', 'status': 1})
         super_admin_user.set_password('super admin')
         super_admin_user.roles.append(role_super_admin)
         db.session.add(super_admin_user)

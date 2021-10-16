@@ -13,13 +13,16 @@
 """
 __auth__ = 'diklios'
 
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_exception import Success
+from app.libs.error_exception import Success, LinkError
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
     RegisterEmailWithUsernameForm
-from app.viewModels.tcm.register import register_user_by_email, register_user_by_phone, register_user_by_username
+from app.viewModels.tcm.register import (
+    register_user_by_email, register_user_by_phone, register_user_by_username,
+    confirm_register_link
+)
 
 register_bp = Blueprint('register', __name__)
 
@@ -56,3 +59,23 @@ def register():
     }
     promise[ClientTypeEnum(form.type.data)]()
     return Success()
+
+
+@register_bp.post('/verify_by_email')
+def verify_by_email_by_post():
+    data = request.get_json()
+    register_link = data.get('register_link', '')
+    secret_key = current_app.config['CRYPTOGRAPHY_SECRET_KEY']
+    if confirm_register_link(register_link, secret_key):
+        return Success(msg='verify success', chinese_msg='验证成功')
+    else:
+        return LinkError(msg='link invalid', chinese_msg='链接非法或过期')
+
+
+@register_bp.get('/verify_by_email/<string:register_link>')
+def verify_by_email(register_link):
+    secret_key = current_app.config['CRYPTOGRAPHY_SECRET_KEY']
+    if confirm_register_link(register_link, secret_key):
+        return Success(msg='verify success', chinese_msg='验证成功')
+    else:
+        return LinkError(msg='link invalid', chinese_msg='链接非法或过期')

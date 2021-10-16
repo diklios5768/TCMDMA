@@ -83,7 +83,9 @@
 ```dotenv
 # 示例，在真实的生产环境中请不要加中文注释，因为pipenv的gbk问题至今未解决
 # 存储包含敏感信息的环境变量，不提交到git仓库
+# 注意：secret key需要使用特定的方法生成，具体见app/settings文件中的注释
 SECRET_KEY='35JN7GFaUFNeriObUj93bQpavYWsGPOp6I4BDoe-U6Q'
+CRYPTOGRAPHY_SECRET_KEY='hCfDE7XTwY8DAgkmVT9H8fYdWHXyM_Nqo468OCCU9HY='
 SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
 # MySQL数据库URL
 # 格式为 SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
@@ -110,13 +112,16 @@ MAIL_DEFAULT_SENDER='diklios'
     * 类Unix环境下
         * 先安装gunicorn：`pipenv install gunicorn`
         * 启动：`gunicorn -c gunicorn.py wsgi:wsgi_app`
+        * 使用`-D`参数可以以守护进程形式来运行Gunicorn进程，其实就是将这个服务放到后台去运行。
+        * 查看端口占用情况：`netstat -ntulp |grep 8000`
+        * 删除进程：`kill pid`
     * windows环境下
         * 先安装waitress：`pipenv install waitress`
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
             * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
         * 永久启动：使用nssm一类的工具
-            *
-          如，添加服务：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
+            * 注意设置一些参数，如项目启动文件夹
+            * 添加服务，如：`nssm install tcmdma "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "C:/Users/Administrator/TCMDMA/waitress_server.py"`
             * 启动服务：`nssm start tcmdma`
 * redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置）
 * celery
@@ -159,6 +164,29 @@ MAIL_DEFAULT_SENDER='diklios'
     * 修复关联分析默认值太小导致分析太慢的问题
     * 优化快速生成数据库的命令
     * 增加和完善快速导入和更新数据的命令
+* v1.3:2021-10-9
+    * 优化包导入，去除不必要的包
+    * 去除不必要的文件
+    * 完善前端页面中项目描述和方法部分超出卡片的问题
+    * 完善前端页面中表格显示行序号的问题，并优化说明部分
+    * 修复数据集名称不输入但是会跳转的问题
+    * 修复方法介绍页面，文字太多导致的卡片高度不一问题
+    * 增加帮助页面锚点定位方法
+    * 增加默认选择第一个算法
+    * 增加全选和取消全选按钮
+    * 增加帮助页面的算法参数设置介绍，并修改相应的后端
+    * 网络图展示界面方法名称修复
+* v1.4:2021-10-16
+    * 增加加密和解密字符串工具
+    * 增加给用户发邮件验证通过功能
+    * 优化gunicorn配置文件
+    * 增加和更新大量管理员页面需要的接口部分
+    * 增加停止项目分析接口
+    * 增加更改密码接口
+    * 增加用户权限等级
+    * 增加和优化时间处理函数
+    * 优化表单验证用户名部分逻辑
+    * 更新部分.gitignore文件
     
 ## 后续优化改进
 

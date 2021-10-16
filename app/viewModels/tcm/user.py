@@ -1,8 +1,12 @@
+from datetime import datetime
+
 from app.models.tcm.user import User
+from app.utils.file_handler.text_handler.encrypt import encrypt_by_cryptography, decrypt_by_cryptography
+from app.utils.time import generate_datetime_timestamp_now
 
 
 def find_user(data):
-    users=None
+    users = None
     find_type = data.get('type', 'all')
     # 查看某个用户
     if find_type == 'user_name':
@@ -31,3 +35,40 @@ def find_user(data):
     else:
         users_dict = [dict(user)]
     return {'rows': users_dict, 'code': 1, 'msg': '查询成功'}
+
+
+# 获取用户最高权限
+def count_user_access_level(user_id):
+    user = User.query.filter_by(id=user_id).first_or_404()
+    user_access_level = 1
+    for role in user.roles:
+        if role.access_level > user_access_level:
+            user_access_level = role.access_level
+    return user_access_level
+
+
+# 以下是用户用的链接
+# 生成链接
+def generate_user_link(user_id, secret_key, use='register'):
+    datetime_now = generate_datetime_timestamp_now()
+    link_str = str(datetime_now) + '--' + str(user_id) + '--' + str(use)
+    encrypt_link = encrypt_by_cryptography(link_str, secret_key)
+    return encrypt_link
+
+
+# 解析链接
+def analyse_user_link(encrypt_link, secret_key):
+    decrypt_link = decrypt_by_cryptography(encrypt_link, secret_key)
+    return decrypt_link.split('--')
+
+
+# 确认链接有效
+def confirm_user_link(datetime_use, use, confirm_use):
+    # 用途是否正确
+    if use != confirm_use:
+        return False
+    # 时间是否过期
+    datetime_now = datetime.utcnow().timestamp()
+    if float(datetime_use) + 1200 >= datetime_now:
+        return False
+    return True

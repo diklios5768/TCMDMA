@@ -1,17 +1,20 @@
 from flask import jsonify, request, Blueprint, g
-from app.libs.error_exception import Success, ReadSuccess, CreateSuccess, UpdateSuccess, ParameterException, AuthFailed, \
+from app.libs.error_exception import Success, ReadSuccess, CreateSuccess, UpdateSuccess, TrueDeleteSuccess, \
+    ParameterException, AuthFailed, \
     ServerError
+from app.models import db
 from app.models.tcm.user import User
 from app.models.tcm.project import Project
 from app.models.tcm.dataset import Dataset
 from app.models.tcm.analysis import Analysis, Method
 from app.viewModels import database_add_single, database_update_single, database_remove_single, database_recover_single, \
     database_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
-    database_read_by_pagination
+    database_read_by_pagination, database_true_delete_single
 from app.viewModels.common.params import params_ready
 from app.viewModels.tcm.project import find_project
 from app.utils.token_auth import auth
 from app.utils.algorithm_handler import new_analysis
+from app.utils.celery_handler import celery_control
 from app.utils.file_handler import make_dir, create_user_data_dir_path, create_user_project_dir_path
 from app.utils.file_handler.table_handler import read_table_to_dataset_data
 
@@ -122,8 +125,8 @@ def get_project_by_params():
     params_dict = request.get_json()
     params_dict['owner_id'] = user_info.uid
     print(params_dict)
-    finished=params_dict.get('finished', 'all')
-    if  finished== 'all':
+    finished = params_dict.get('finished', 'all')
+    if finished == 'all':
         params_dict.pop('finished')
     filters_by = params_ready(params_dict)
     projects = database_read_by_params(Project, filters_by=filters_by)
@@ -265,7 +268,7 @@ def add_project_with_dataset_and_analysis():
     uid = user_info.uid
     user = User.query.filter_by(id=uid).first_or_404()
     data = request.get_json()
-    print(data)
+    # print(data)
     project_data = data.get('project_data', None)
     if project_data is None:
         return ParameterException()
@@ -292,7 +295,6 @@ def add_project_with_dataset_and_analysis():
         dataset_row['data'] = data
         dataset_row['raw_files_path'] = [file_path]
         dataset = database_add_single(dataset_row, Dataset)
-        print(dataset.id)
     elif dataset_upload_method == 'exist':
         dataset_id = dataset_data.get('datasetID', None)
         if dataset_id is not None:
@@ -324,15 +326,26 @@ def add_project_with_dataset_and_analysis():
                 analysis_dict_data['parameters'] = params
             analysis = database_add_single(analysis_dict_data, Analysis)
             # 调用算法
-            new_analysis.delay(project.id, user_project_files_dir,
-                               analysis.id, method['name'],
-                               dataset.data['table_data'],
-                               analysis.parameters)
+            task = new_analysis.delay(project.id, user_project_files_dir,
+                                      analysis.id, method['name'],
+                                      dataset.data['table_data'],
+                                      analysis.parameters)
     return CreateSuccess(msg='project create success,please wait completed', chinese_msg='项目创建成功，请等待分析完成')
 
 
+@project_bp.get('/<int:project_id>/stop')
+def stop_project_analyses_by_id(project_id):
+    project = Project.query.filter_by(project_id=project_id).first_or_404()
+    for analysis in project.analyses:
+        celery_task_id = analysis.other_result_data['celery_task_id']
+        celery_control.revoke(task_id=celery_task_id, terminate=True)
+        with db.auto_commit():
+            analysis.analysis_status='analysis stop'
+    return Success(msg='stop project success', chinese_msg='停止算法运行成功')
+
+
 # 更新部分信息
-@project_bp.patch('/<int:project_id>')
+@project_bp.put('/<int:project_id>')
 @auth.login_required
 def update_project_by_id(project_id):
     update_data = request.get_json()
@@ -384,21 +397,31 @@ def delete_project_by_id_batch():
     database_operation_batch(project_id_list, Project, operation_type='delete')
     return UpdateSuccess(msg='batch delete success', chinese_msg='批量删除成功')
 
-# # attention:更新完整的信息，一般是管理员使用，必须是put方法
-# @project_bp.put('/<int:project_id>')
-# @auth.login_required
-# def update_project_full(project_id):
-#     pass
-#
-#
-# # attention:真删除也必须是管理员才能用
-# @project_bp.delete('/true_delete/<int:project_id>')
-# @auth.login_required
-# def true_delete_project(project_id):
-#     pass
-#
-#
-# @project_bp.delete('/true_delete')
-# @auth.login_required
-# def true_delete_project_batch():
-#     pass
+
+@project_bp.post('/admin_params')
+def get_project_by_params_by_admin():
+    params_dict = request.get_json()
+    finished = params_dict.get('finished', 'all')
+    if finished == 'all':
+        params_dict.pop('finished')
+    filters_by = params_ready(params_dict)
+    projects = database_read_by_params(Project, filters_by=filters_by)
+    project_rows = [dict(project) for project in projects]
+    project_rows.reverse()
+    return ReadSuccess(data=project_rows)
+
+
+# attention:真删除必须是超级管理员才能用，普通管理员无此权限
+@project_bp.delete('/true_delete/<int:project_id>')
+@auth.login_required
+def true_delete_project(project_id):
+    database_true_delete_single(project_id, Project)
+    return TrueDeleteSuccess()
+
+
+@project_bp.delete('/true_delete/batch')
+@auth.login_required
+def true_delete_project_batch():
+    project_id_list = request.get_json()
+    database_operation_batch(project_id_list, Project, operation_type='delete')
+    return TrueDeleteSuccess(msg='batch true delete success', chinese_msg='批量真删除成功')

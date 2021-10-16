@@ -81,7 +81,7 @@ def read_file_data():
         return ServerError()
 
 
-# 虽然实际上这并不是文件处理，但是基本是在一个form中使用的，所以放在这个模块中
+# 现在读取文本也存为文本文件
 @file_bp.post('/read_text_data')
 @auth.login_required
 def read_text_data():

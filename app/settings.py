@@ -13,6 +13,8 @@ class BaseConfig(object):
     # Generate a nice key using secrets.token_urlsafe()
     # 使用secrets.token_urlsafe()生成一个漂亮的密钥
     SECRET_KEY = os.getenv('SECRET_KEY')
+    # 需要使用cryptography.fernet。Fernet.generate_key()生成
+    CRYPTOGRAPHY_SECRET_KEY=os.getenv('CRYPTOGRAPHY_SECRET_KEY')
     # Bcrypt is set as default SECURITY_PASSWORD_HASH, which requires a salt
     # Bcrypt被设置为默认的SECURITY_PASSWORD_HASH，这需要一个salt
     # Generate a good salt using: secrets.SystemRandom().getrandbits(128)

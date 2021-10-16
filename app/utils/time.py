@@ -16,5 +16,17 @@ __auth__ = 'diklios'
 from datetime import datetime
 
 
-def generate_datetime_str():
-    return str(datetime.utcnow().strftime("%Y-%m-%d-%H-%M-%S")) + '--'
+def generate_datetime_str_now(str_format='%Y-%m-%d-%H-%M-%S'):
+    return str(datetime.utcnow().strftime(str_format))
+
+
+def generate_datetime_timestamp_now():
+    return datetime.utcnow().timestamp()
+
+
+def generate_datetime_str_from_timestamp(timestamp, str_format='%Y-%m-%d-%H-%M-%S'):
+    return str(datetime.fromtimestamp(float(timestamp)).strftime(str_format))
+
+
+def generate_datetime_timestamp_from_str(datetime_str, str_format='%Y-%m-%d-%H-%M-%S'):
+    return datetime.strptime(datetime_str, str_format).timestamp()

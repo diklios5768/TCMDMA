@@ -107,10 +107,11 @@ class Base(db.Model):
         self.remarks = remarks
         self.modify_time = datetime.utcnow().timestamp()
 
-    def set_attrs(self, attrs_dict):
+    def set_attrs(self, attrs_dict, **kwargs):
         """
         根据传回的参数修改属性值，但是id不能修改
         """
+        attrs_dict = {**attrs_dict, **kwargs}
         for key, value in attrs_dict.items():
             if hasattr(self, key) and key != "id" and key != 'password':
                 setattr(self, key, value)

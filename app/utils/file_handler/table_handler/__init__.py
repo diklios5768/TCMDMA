@@ -20,7 +20,7 @@ def read_table(file_path_or_stream, file_type='csv', method='path', row_limit: i
 def to_ant_design_table_format(table_data, has_header=True):
     if table_data is None or table_data == []:
         raise ParameterException(msg='data is none', chinese_msg='上传的数据都是空字符')
-    columns = []
+    columns = [{"title": '序号', "dataIndex": 'index', "key": 'index', "width": 100}]
     data_source = []
     table_width = 0
     if has_header:
@@ -45,11 +45,10 @@ def to_ant_design_table_format(table_data, has_header=True):
                 {"title": '列' + str(i + 1), "dataIndex": str(i + 1), "key": str(i + 1), "copyable": True,
                  "ellipsis": True,
                  "tip": "内容过长会自动收缩"})
-    print(columns)
     for (row_index, row_value) in enumerate(table_body):
-        row_dict = {"key": row_index}
+        row_dict = {"key": row_index, 'index': row_index + 1}
         for (col_index, col_value) in enumerate(row_value):
-            row_dict[columns[col_index]['dataIndex']] = str(col_value)
+            row_dict[columns[col_index + 1]['dataIndex']] = str(col_value)
         data_source.append(row_dict)
     return columns, data_source, table_width
 
@@ -59,10 +58,12 @@ def ant_design_table_limit(has_header, table_data, file_path, limit: int = None)
         columns, data_source, table_width = to_ant_design_table_format(table_data, has_header=has_header)
     else:
         raise ParameterException()
+    data_source_len = len(data_source)
     data = {"table_data": table_data, "columns": columns, "file_path": file_path,
-            "table_width": table_width, "has_header": has_header}
+            "table_width": table_width, "has_header": has_header, "count": data_source_len}
+
     if limit is not None:
-        if len(data_source) >= limit:
+        if data_source_len >= limit:
             data["data_source"] = data_source[0:limit]
         else:
             data["data_source"] = data_source
