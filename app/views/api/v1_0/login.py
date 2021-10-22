@@ -89,7 +89,13 @@ def login():
 def is_login():
     user_info = g.user_info
     user = database_read_by_id_single(class_id=user_info.uid, database_class=User)
-    return Success(data=dict(user))
+    current_user = dict(user)
+    # 暂时不直接返回权限等级，方便使用
+    current_user['admin'] = False
+    for role in user.roles:
+        if role.access_level >= 80:
+            current_user['admin'] = True
+    return Success(data=current_user)
 
 
 @login_bp.get('/is_token_valid')

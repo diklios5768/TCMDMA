@@ -14,11 +14,14 @@
 __auth__ = 'diklios'
 
 from flask import Blueprint, request, current_app
+
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_exception import Success, LinkError
+from app.libs.error_exception import Success, ParameterException, LinkError
+from app.utils.file_handler.text_handler.verification_code import verify_verification_code
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
     RegisterEmailWithUsernameForm
+from app.viewModels.common.verification import send_verification_code_full
 from app.viewModels.tcm.register import (
     register_user_by_email, register_user_by_phone, register_user_by_username,
     confirm_register_link
@@ -59,6 +62,29 @@ def register():
     }
     promise[ClientTypeEnum(form.type.data)]()
     return Success()
+
+
+@register_bp.post('/get_email_register_verification_code')
+def get_register_verification_code():
+    data = request.get_json()
+    email = data.get('email', '')
+    if email:
+        send_verification_code_full(email, 'register')
+        return Success(msg='send success', chinese_msg='验证码发送成功，请查看邮箱')
+    else:
+        return ParameterException(msg='no email', chinese_msg='没有邮箱，无法发送验证码')
+
+
+@register_bp.post('/verify_email_register_verification_code')
+def email_register_verification_code():
+    data = request.get_json()
+    email = data.get('email', '')
+    code = data.get('verification_code', '')
+    if email and code:
+        verify_verification_code(code, email, 'register')
+        return Success(msg='send success', chinese_msg='验证码发送成功，请查看邮箱')
+    else:
+        return ParameterException(msg='no email', chinese_msg='没有邮箱或验证码，验证失败')
 
 
 @register_bp.post('/verify_by_email')

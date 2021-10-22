@@ -22,7 +22,8 @@ from app.utils.file_handler import make_dir, create_user_upload_dir_path
 from app.utils.file_handler.text_handler import texts_to_single_col_table_data_integral_process
 from app.utils.file_handler.table_handler import read_table_to_dataset_data, ant_design_table_limit
 from app.utils.token_auth import auth
-from app.utils.path import decrypt_file_path, divide_dir_file
+from app.utils.path import divide_dir_file
+from app.utils.file_handler.text_handler.encrypt import decrypt_by_cryptography
 from app.settings import basedir
 
 file_bp = Blueprint('file', __name__)
@@ -49,8 +50,8 @@ def send_file_by_path_from_server(file_path):
 
 
 @file_bp.get('/get_file_by_str/<string:encode_str>')
-def send_file_by_str_from_server(encode_str):
-    file_path = decrypt_file_path(encode_str)
+def send_file_by_str_from_server(encrypt_str):
+    file_path = decrypt_by_cryptography(encrypt_str, current_app.config['CRYPTOGRAPHY_SECRET_KEY'])
     file_dir, filename = divide_dir_file(file_path)
     send_from_directory(directory=file_dir, path=filename, as_attachment=True)
 

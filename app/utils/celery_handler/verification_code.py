@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   path.py    
-@Create Time    :   2021/9/14 19:08
+@File Name      :   verification_code.py    
+@Create Time    :   2021/10/22 19:45
 @Description    :   
 @Version        :   
 @License        :   
@@ -13,8 +13,12 @@
 """
 __auth__ = 'diklios'
 
-import os
+from app.utils.celery_handler import celery
+
+from app.utils.file_handler.text_handler.verification_code import delete_verification_code
 
 
-def divide_dir_file(file_path):
-    return os.path.dirname(file_path), os.path.basename(file_path)
+@celery.task(shared=False)
+def delete_verification_code_sync(code):
+    delete_verification_code(code)
+    return True

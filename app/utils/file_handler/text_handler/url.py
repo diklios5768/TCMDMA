@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   path.py    
-@Create Time    :   2021/9/14 19:08
+@File Name      :   url.py    
+@Create Time    :   2021/10/22 16:44
 @Description    :   
 @Version        :   
 @License        :   
@@ -13,8 +13,13 @@
 """
 __auth__ = 'diklios'
 
-import os
+from urllib.parse import quote, unquote
 
 
-def divide_dir_file(file_path):
-    return os.path.dirname(file_path), os.path.basename(file_path)
+# 将中文转换为URL编码格式
+def encode_to_url(url):
+    return quote(url)
+
+
+def decode_url(url_encoded):
+    return unquote(url_encoded)

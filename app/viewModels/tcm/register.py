@@ -19,7 +19,7 @@ from app.models import db
 from app.models.tcm.user import User, Role
 from app.viewModels.tcm.user import generate_user_link, analyse_user_link, confirm_user_link
 from app.utils.random import random_content
-# from app.utils.mail_handler.login_register import send_register_confirm_email
+
 
 
 # 注册
@@ -60,6 +60,9 @@ def generate_register_link_with_domain(user_id):
     return full_register_link
 
 
+
+
+
 # 用用户名和密码注册，两种都是必须
 def register_user_by_username(username, password):
     role_user = Role.query.filter_by(id=1).first_or_404()
@@ -76,13 +79,12 @@ def register_user_by_email(email, password, username=None):
     role_user = Role.query.filter_by(id=1).first_or_404()
     with db.auto_commit():
         user = User()
-        user.set_attrs({'email': email})
+        user.set_attrs({'email': email, 'active': True, 'confirm': True})
         user.set_password(password)
         if username is not None:
             user.set_attrs({'username': username})
         user.roles.append(role_user)
         db.session.add(user)
-    # send_register_confirm_email(generate_register_link_with_domain(user.id), user.email)
 
 
 # 手机注册可以只使用验证码，密码不是必须，给出默认随机密码当做当前密码，只能通过手机验证码修改

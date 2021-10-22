@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, SmallInteger, Float
+from sqlalchemy import Column, Integer, String, SmallInteger, Float,JSON
 from sqlalchemy.orm import reconstructor
 from app.libs.error_exception import ParameterException
 from app.models import db
@@ -21,6 +21,7 @@ class Base(db.Model):
     # 如果其他的需要自增，可以使用BigInteger().with_variant(Integer, "sqlite")
     id = Column(Integer, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
     remarks = Column(String(1024), nullable=True, default='')
+    json_remarks=Column(JSON,nullable=True,default={})
     # 使用datetime.utcnow()保证迁移服务器后使用的时间还是一致的
     # 时间存储的时候推荐使用时间戳，因为时间格式多种多样，而时间戳是通用的数字
     create_time = Column(Float, nullable=True, default=datetime.utcnow().timestamp())

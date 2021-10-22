@@ -43,10 +43,10 @@ def init_role():
         user.set_attrs({'name': '普通用户', 'access_level': 1})
         db.session.add(user)
         admin = Role()
-        admin.set_attrs({'name': '管理员', 'access_level': 2})
+        admin.set_attrs({'name': '管理员', 'access_level': 80})
         db.session.add(admin)
         super_admin = Role()
-        super_admin.set_attrs({'name': '超级管理员', 'access_level': 3})
+        super_admin.set_attrs({'name': '超级管理员', 'access_level': 100})
         db.session.add(super_admin)
 
 

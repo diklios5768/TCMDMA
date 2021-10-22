@@ -1,6 +1,7 @@
 import random
 from sqlalchemy import Column, Integer, BigInteger, String, JSON, Enum, ForeignKey
 from app.libs.lists import analysis_methods
+from app.models import db
 from app.models.base import Base
 from app.viewModels.tcm.project import find_project
 from app.viewModels.tcm.dataset import find_dataset
@@ -70,7 +71,12 @@ def init_method():
 
 
 def update_method():
-    update_methods = []
-    for index, method in enumerate(analysis_methods):
-        update_methods.append({"id": index + 1, "update_data": method})
-    database_operation_batch(update_methods, Method, operation_type='update')
+    with db.auto_commit():
+        for index, method_data in enumerate(analysis_methods):
+            method = Method.query.filter_by(id=index).first()
+            if method:
+                method.set_attrs(method_data)
+            else:
+                method = Method()
+                method.set_attrs(method_data)
+                db.session.add(method)

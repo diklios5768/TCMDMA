@@ -24,6 +24,7 @@
 
 ## 安装虚拟环境
 
+* 请提前装好python3
 * 选择 `pipenv` 进行安装
     * 先安装`pipenv`:`pip install pipenv`
     * **根据系统中使用的python版本的不同，请先修改`Pipfile`文件中最后一行python的版本**
@@ -78,7 +79,24 @@
 
 ## 项目启动
 
-* 先配置.env环境变量
+### 安装数据库（只提供思路，具体百度）
+
+* MySQL
+    * Windows
+        * 直接下载安装包安装
+        * scoop
+        * docker+wsl2
+    * Linux
+        * 根据版本使用相应的包管理工具
+        * 尽量不要使用centos（尤其是7之前）了，不支持了
+        * 如果实在不会安装使用宝塔面板
+* redis
+    * Windows
+        * 由于官方不支持，所以得用微软提供的windows版本，注意版本号最高是3
+        * scoop：同样是Linux版本
+        * docker+wsl2：推荐，这个是Linux版本
+    * Linux：同装MySQL的方法
+* 配置.env环境变量
 
 ```dotenv
 # 示例，在真实的生产环境中请不要加中文注释，因为pipenv的gbk问题至今未解决
@@ -90,7 +108,8 @@ SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
 # MySQL数据库URL
 # 格式为 SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
 SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
-REDIS_URL = 'redis://@localhost:6379/0'
+# redis数据库URL
+REDIS_URL = 'redis://@localhost:6379/2'
 # 邮件部分
 MAIL_SERVER='smtp.126.com'
 # MAIL_PORT=587
@@ -105,7 +124,7 @@ DOMAIN_NAME='localhost:5000'
 
 * 启动pipenv虚拟环境(千万注意.env文件中不要有中文注释)：`pipenv shell`
 * 启动MySQL并初始化
-    * 记得需要配置环境变量
+    * **记得需要配置环境变量**
         * 提醒：如果密码中含有特殊字符，请手动配置`app/setting.py`文件，使用URL编码进行处理
     * 在终端初始化数据库表：`flask db-init`
     * 初始化表数据：`flask data-init`
@@ -125,10 +144,13 @@ DOMAIN_NAME='localhost:5000'
             * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
         * 永久启动：使用nssm一类的工具
             * 注意设置一些参数，最重要的项目启动文件夹和开机自启动
-            * 添加服务，如：`nssm install xminer "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "waitress_server.py"`
+            *
+          添加服务，如：`nssm install xminer "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "waitress_server.py"`
             * 启动服务：`nssm start xminer`
-* redis数据库，并配置celery的环境变量（注意是celery的环境变量，在app/utils/celery_handler/config.py中配置），一般来说默认端口即可
-* celery
+* 启动redis数据库
+    * 配置celery的环境变量，在app/utils/celery_handler/config.py中配置，一般来说默认0、1端口即可
+    * 配置验证码和token用的环境变量，暂定使用2端口，和celery的端口区分开
+* 启动celery
     * 在`app/utils/celery_handler/config.py`中配置环境变量
     * 启动：`celery -A wsgi:celery worker -l INFO`
         * Windows需要使用：`celery -A wsgi:celery worker -l INFO -P threads`
@@ -182,26 +204,63 @@ DOMAIN_NAME='localhost:5000'
     * 网络图展示界面方法名称修复
 * v1.4:2021-10-16
     * 增加加密和解密字符串工具
-    * 增加给用户发邮件验证通过功能
+    * 增加给用户发邮件验证通过的模板、和验证接口
     * 优化gunicorn配置文件
     * 增加和更新大量管理员页面需要的接口部分
     * 增加停止项目分析接口
     * 增加更改密码接口
     * 增加用户权限等级
-    * 增加和优化时间处理函数
-    * 优化表单验证用户名部分逻辑
-    * 更新部分.gitignore文件
-    
+    * 增加和优化时间处理工具函数
+    * 优化后端表单验证用户名部分逻辑
+    * 更新.gitignore文件内容
+* v1.5:2021-10-22
+    * 登录时返回的用户信息增加是否是管理员
+    * 更新权限等级定义和相应的初始化数据库数据函数
+    * 优化方法更新函数，兼容新方法的加入
+    * 增加链接解析错误提示
+    * 数据库基类增加json_remarks字段
+    * 增加中文转url编码的工具方法
+    * 更改解析加密字符获得文件的方法
+    * 增加测试文件夹、测试数据、测试数据库、测试用文件
+    * 在app中增加并注册redis数据库
+    * 增加验证码功能：生成、发邮件、验证、过期删除
+    * 增加注册和验证验证码相应接口
+
 ## 后续优化改进
 
+### 后端优化计划
+
 * 预计v2.0实现
-    * 验证码：手机和邮箱验证码
-    * 管理员界面，管理员功能
+    * 用户注册改为默认活跃、未通过，并修改登录验证机制，没有通过和是否被禁用的账户不能登录
+    * 管理员界面，管理员功能：用户管理（仅修改邮箱、密码、通过、删除）、用户数据集管理（仅查看、删除）、项目管理（仅查看、删除）
 * 手动禁用的token存redis里面，优化token验证机制
-* 后续可能使用`apiflask`重新封装一下
+* celery
+    * celery定期清除
+        * 验证码
+        * 无效token
+    * 停止算法运行
+    * 重跑算法（注意删除之前的文件）
+    * 超过1小时的算法自动停止
+* 有空把api里面的sun全部换成tcm
+* 增加和定义新的客户端类型
+
+### 前端优化计划
+
+* 增加邮箱验证码进行验证的功能
+* 根据后端能够登录增加用户能否登录的验证
+* 由于开发失误，可以将getInitState方法进行判断优化，并在组件中使用refresh方法代替现在的一大长段重复代码
+* 修改邮箱、手机和密码的功能
+
+### 被搁置的计划（接手的人有兴趣做一下）
+
+* 超级管理员api添加、scope设置和界面
+* 手机验证码（暂时不需要，用的话阿里的即可，但是要钱，而且要修改一下验证码的生成、查询、验证方式，区分邮件和手机验证码）
 * docker部署
-* celery定期清除
-    * 验证码，缓存文件，保存的无效token
+* 使用`apiflask`重新封装（也不一定，现在是flask2.0了，不少功能都有了）
+* 使用ASGI
+* 单元测试（浩大的工程）
+* 前端MockJS测试（因为是前后端一起开发，直接代理就可以了）
+* NGINX反向代理和gzip压缩
 
 ## 开发团队介绍
 
@@ -230,3 +289,9 @@ DOMAIN_NAME='localhost:5000'
     * 增加了v1.1版本更新说明
 * 更新时间：2021-10-03
     * 增加了pipenv安装时候的需要注意python版本的提示
+* 更新时间：2021-10-22
+    * 增加开发文档
+    * 增加code文档
+    * 增加安装数据库的说明
+    * 完善开发计划内容
+    * 优化完善v1.5及之前版本的开发内容

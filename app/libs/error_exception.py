@@ -184,18 +184,18 @@ class TokenDisabled(AuthFailed):
     chinese_msg = 'token 失效'
 
 
-class LinkError(AuthFailed):
-    error_code = 1314
-    msg = 'link not exist or verify failed(invalid)'
-    chinese_msg = '链接失效或者验证失败（非法）'
-
-
 class Forbidden(APIException):
     # 禁止访问，并非账号密码错误之类的
     code = 403
     error_code = 1314
     msg = 'forbidden,not in scope'
     chinese_msg = '权限不足'
+
+
+class LinkError(AuthFailed):
+    error_code = 1315
+    msg = 'link not exist or verify failed(invalid)'
+    chinese_msg = '链接失效或者验证失败（非法）'
 
 
 # 服务器错误

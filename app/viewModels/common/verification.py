@@ -20,6 +20,10 @@ from app.libs.error_exception import SendEmailSuccess, SendPhoneSuccess, NotFoun
 from app.models import db
 from app.models.common.verification import EmailVerification, PhoneVerification
 from app.utils.random import random_content
+from app.utils.time import generate_celery_delay_time
+from app.utils.file_handler.text_handler.verification_code import generate_verification_code
+from app.utils.celery_handler.mail import send_verification_code_mail_sync
+from app.utils.celery_handler.verification_code import delete_verification_code_sync
 
 
 def search_verification(account_type, account, verification_code):
@@ -90,3 +94,15 @@ def disable_verification_code(account_type, account, verification_code):
     with db.auto_commit():
         verification = search_verification(account_type, account, verification_code)
         verification.valid = False
+
+
+# 使用redis数据库管理验证码
+# 发送验证码完整流程
+def send_verification_code_full(email, use):
+    code = generate_verification_code(email, use)
+    send_verification_code_mail_sync.delay(code, email)
+    try:
+        delete_verification_code_sync.apply_async(args=(code,), eta=generate_celery_delay_time(
+            current_app.config['VERIFICATION_TIME']))
+    except Exception as e:
+        print(str(e))

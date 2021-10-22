@@ -13,7 +13,7 @@
 """
 __auth__ = 'diklios'
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def generate_datetime_str_now(str_format='%Y-%m-%d-%H-%M-%S'):
@@ -30,3 +30,7 @@ def generate_datetime_str_from_timestamp(timestamp, str_format='%Y-%m-%d-%H-%M-%
 
 def generate_datetime_timestamp_from_str(datetime_str, str_format='%Y-%m-%d-%H-%M-%S'):
     return datetime.strptime(datetime_str, str_format).timestamp()
+
+
+def generate_celery_delay_time(seconds):
+    return datetime.utcnow() + timedelta(seconds=seconds)

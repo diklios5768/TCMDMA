@@ -25,4 +25,3 @@ class ClientTypeEnum(Enum):
     # Google
     # Microsoft
     # Facebook
-    pass

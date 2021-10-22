@@ -8,7 +8,7 @@ from . import mail
 #         return False
 #     message = Message(
 #         subject='Email Confirm',
-#         recipients=to,
+#         recipients=[to],
 #         body=render_template('mail/register_token.txt', token=token),
 #         html=render_template('mail/register_token.html', token=token)
 #     )
@@ -19,8 +19,8 @@ def send_register_confirm_email(register_link, to=None):
     if not to:
         return False
     message = Message(
-        subject='Email Confirm',
-        recipients=to,
+        subject='注册验证',
+        recipients=[to],
         body=render_template('mail/register.txt', register_link=register_link),
         html=render_template('mail/register.html', register_link=register_link)
     )
@@ -29,7 +29,7 @@ def send_register_confirm_email(register_link, to=None):
 # def send_reset_password_token_email(user, token, to=None):
 #     message = Message(
 #         subject='Reset password',
-#         recipients=to or user.email,
+#         recipients=[to] or [user.email],
 #         body=render_template('mail/reset_password_token.txt', token=token, user=user),
 #         html=render_template('mail/reset_password_token.html', token=token, user=user)
 #     )
@@ -39,8 +39,20 @@ def send_register_confirm_email(register_link, to=None):
 # def send_reset_password_confirm_email(user, token, to=None):
 #     message = Message(
 #         subject='Reset password',
-#         recipients=to or user.email,
+#         recipients=[to] or [user.email],
 #         body=render_template('mail/reset_password.txt', token=token, user=user),
 #         html=render_template('mail/reset_password.html', token=token, user=user)
 #     )
 #     mail.send(message)
+
+
+def send_verification_code_mail(verification_code, to=None):
+    if not to:
+        return False
+    message = Message(
+        subject='验证码',
+        recipients=[to],
+        body=render_template('mail/verification_code.txt', verification_code=verification_code),
+        html=render_template('mail/verification_code.html', verification_code=verification_code)
+    )
+    mail.send(message)

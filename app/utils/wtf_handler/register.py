@@ -13,11 +13,10 @@
 """
 __auth__ = 'diklios'
 
-from wtforms import StringField, BooleanField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Regexp
+from wtforms import StringField
+from wtforms.validators import DataRequired, Email, Length, ValidationError, Regexp
 from app.models.tcm.user import User
 from app.utils.wtf_handler.client import ClientForm, ExtraUsernameForm, VerifySecretForm, ExtraVerificationCodeForm
-from app.viewModels.common.verification import verify_verification_code
 
 
 # 用户名+密码
@@ -30,20 +29,21 @@ class RegisterOnlyUsernameForm(VerifySecretForm):
             raise ValidationError('用户名已经被注册')
 
 
-# 邮箱+密码+验证码
-class RegisterEmailForm(VerifySecretForm, ExtraVerificationCodeForm):
+# 邮箱+密码
+class RegisterEmailForm(VerifySecretForm):
     account = StringField(validators=[DataRequired(), Email(message='invalidate email')])
 
     def validate_account(self, value):
         if User.query.filter_by(email=value.data).first():
             raise ValidationError('邮箱已经被注册')
 
-    def validate_verification_code(self, value):
-        verify_verification_code(account_type='email', account=self.account.data, verification_code=value.data,
-                                 use='register')
+
+# 邮箱+密码+验证码
+class RegisterEmailWithSecretForm(RegisterEmailForm, ExtraVerificationCodeForm):
+    pass
 
 
-# 邮箱+密码+验证码+用户名
+# 邮箱+密码+用户名
 class RegisterEmailWithUsernameForm(VerifySecretForm):
     account = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_]{8,20}$', message='用户名不合法，只能包含英文字母、数字和下划线'),
                                       Length(min=4, max=20, message='用户名长度不正确')])
@@ -58,6 +58,11 @@ class RegisterEmailWithUsernameForm(VerifySecretForm):
             raise ValidationError('邮箱已经被注册')
 
 
+# 邮箱+密码+验证码+用户名
+class RegisterEmailWithUsernameWithSecretForm(RegisterEmailWithUsernameForm, ExtraVerificationCodeForm):
+    pass
+
+
 # todo:手机区号要查询写入，需要再修改
 # 手机号+验证码
 class RegisterPhoneForm(ClientForm, ExtraVerificationCodeForm):
@@ -68,10 +73,6 @@ class RegisterPhoneForm(ClientForm, ExtraVerificationCodeForm):
     def validate_account(self, value):
         if User.query.filter_by(phone=value.data).first():
             raise ValidationError('手机号已经被注册')
-
-    def validate_verification_code(self, value):
-        verify_verification_code(account_type='phone', account=self.account.data, verification_code=value.data,
-                                 use='register')
 
 
 # 手机号+验证码+密码

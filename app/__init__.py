@@ -8,7 +8,7 @@ from .extensions import cors
 from .settings import config
 from .logging import file_log_handler
 # 数据库相关处理
-from .models import db, migrate
+from .models import db, migrate,redis
 from .models.tcm.production import init_production_data, update_production_data
 from .models.tcm.development import init_development_data, update_development_data
 from .models.create_db import init_db, drop_db, recreate_db
@@ -52,7 +52,11 @@ def register_extensions(app):
     db.init_app(app)
     # 数据库迁移
     migrate.init_app(app, db)
+    # 注册redis数据库
+    redis.init_app(app)
+    # 注册邮件配置
     mail.init_app(app)
+    # 跨域
     cors.init_app(app, supports_credentials=True)
 
 

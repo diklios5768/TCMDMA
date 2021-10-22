@@ -8,4 +8,5 @@ db = SQLAlchemy(query_class=Query)
 
 # 数据库迁移
 migrate = Migrate()
-redis = FlaskRedis()
+# 加上decode_responses=True使得取出来的str不会变成bytes类型
+redis = FlaskRedis(decode_responses=True)
