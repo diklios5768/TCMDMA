@@ -1,10 +1,15 @@
-from flask_redis import FlaskRedis
 from flask_migrate import Migrate
+from flask_redis import FlaskRedis
+
 from app.models.refactor.query import Query
 from app.models.refactor.sqlalchemy import SQLAlchemy
 
 # 创建数据库操作变量
-db = SQLAlchemy(query_class=Query)
+db = SQLAlchemy(
+    query_class=Query,
+    # 是否显示SQL查询语句
+    # engine_options={'echo': True}
+)
 
 # 数据库迁移
 migrate = Migrate()

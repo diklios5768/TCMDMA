@@ -23,7 +23,7 @@ from app.viewModels.common.verification import verify_verification_code
 # 用户名+密码
 class LoginUsernameForm(RememberForm):
     account = StringField(validators=[DataRequired(), Length(min=4, max=20)])
-    secret = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_*&$#@]{6,22}$')])
+    secret = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_*&$#@]{6,22}$',message='secret invalid')])
 
     def validate_account(self, value):
         if not User.query.filter_by(username=value.data).first():

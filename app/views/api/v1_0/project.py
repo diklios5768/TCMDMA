@@ -1,22 +1,23 @@
 from flask import jsonify, request, Blueprint, g
+
 from app.libs.error_exception import Success, ReadSuccess, CreateSuccess, UpdateSuccess, TrueDeleteSuccess, \
     ParameterException, AuthFailed, \
     ServerError
 from app.models import db
-from app.models.tcm.user import User
-from app.models.tcm.project import Project
-from app.models.tcm.dataset import Dataset
 from app.models.tcm.analysis import Analysis, Method
-from app.viewModels import database_add_single, database_update_single, database_remove_single, database_recover_single, \
-    database_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
-    database_read_by_pagination, database_true_delete_single
-from app.viewModels.common.params import params_ready
-from app.viewModels.tcm.project import find_project
-from app.utils.token_auth import auth
+from app.models.tcm.dataset import Dataset
+from app.models.tcm.project import Project
+from app.models.tcm.user import User
 from app.utils.algorithm_handler import new_analysis
 from app.utils.celery_handler import celery_control
 from app.utils.file_handler import make_dir, create_user_data_dir_path, create_user_project_dir_path
 from app.utils.file_handler.table_handler import read_table_to_dataset_data
+from app.utils.token_auth import auth
+from app.viewModels import database_add_single, database_update_single, database_remove_single, database_recover_single, \
+    database_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
+    database_read_by_pagination, database_true_delete_single
+from app.viewModels.common.params import params_remove_pagination, params_remove_empty, params_fuzzy_query
+from app.viewModels.tcm.project import find_project
 
 project_bp = Blueprint('project', __name__)
 
@@ -123,13 +124,14 @@ def get_project_by_id(project_id):
 def get_project_by_params():
     user_info = g.user_info
     params_dict = request.get_json()
-    params_dict['owner_id'] = user_info.uid
-    print(params_dict)
+    filters_by = {'owner_id': user_info.uid, 'status': 1}
     finished = params_dict.get('finished', 'all')
     if finished == 'all':
         params_dict.pop('finished')
-    filters_by = params_ready(params_dict)
-    projects = database_read_by_params(Project, filters_by=filters_by)
+    else:
+        filters_by['finished'] = params_dict.pop('finished')
+    filters_or = params_fuzzy_query(Dataset, params_remove_empty(params_remove_pagination(params_dict)))
+    projects = database_read_by_params(Project, filters_by=filters_by, filters_or=filters_or)
     project_rows = []
     for project in projects:
         # row.create_time *= 1000
@@ -334,13 +336,14 @@ def add_project_with_dataset_and_analysis():
 
 
 @project_bp.get('/<int:project_id>/stop')
+@auth.login_required
 def stop_project_analyses_by_id(project_id):
     project = Project.query.filter_by(id=project_id).first_or_404()
     for analysis in project.analyses:
         celery_task_id = analysis.other_result_data['celery_task_id']
         celery_control.revoke(task_id=celery_task_id, terminate=True)
         with db.auto_commit():
-            analysis.analysis_status='analysis stop'
+            analysis.analysis_status = 'analysis stop'
     return Success(msg='stop project success', chinese_msg='停止算法运行成功')
 
 
@@ -362,6 +365,7 @@ def remove_project_by_id(project_id):
 
 
 @project_bp.patch('/remove/batch')
+@auth.login_required
 def remove_project_by_id_batch():
     project_id_list = request.get_json()
     database_operation_batch(project_id_list, Project, operation_type='remove')
@@ -377,6 +381,7 @@ def recover_project_by_id(project_id):
 
 
 @project_bp.patch('/recover/batch')
+@auth.login_required
 def recover_project_by_id_batch():
     project_id_list = request.get_json()
     database_operation_batch(project_id_list, Project, operation_type='recover')
@@ -392,6 +397,7 @@ def delete_project_by_id(project_id):
 
 
 @project_bp.patch('/delete/batch')
+@auth.login_required
 def delete_project_by_id_batch():
     project_id_list = request.get_json()
     database_operation_batch(project_id_list, Project, operation_type='delete')
@@ -399,14 +405,33 @@ def delete_project_by_id_batch():
 
 
 @project_bp.post('/admin_params')
+@auth.login_required
 def get_project_by_params_by_admin():
     params_dict = request.get_json()
-    finished = params_dict.get('finished', 'all')
-    if finished == 'all':
-        params_dict.pop('finished')
-    filters_by = params_ready(params_dict)
-    projects = database_read_by_params(Project, filters_by=filters_by)
-    project_rows = [dict(project) for project in projects]
+    print(params_dict)
+    filters_by = {'status': 1}
+    filters_and = []
+    filters_or = []
+    if params_dict.get('finished', ''):
+        finished = params_dict.pop('finished')
+        if finished == 'false':
+            filters_by['finished'] = False
+        elif finished == 'true':
+            filters_by['finished'] = True
+    if params_dict.get('username', ''):
+        username = params_dict.pop('username')
+        filters_and.append(Project.owner_id == User.id)
+        filters_or.append(User.username.like("%{}%".format(username)))
+    filters_or.extend(params_fuzzy_query(Project, params_remove_empty(params_remove_pagination(params_dict))))
+    projects = database_read_by_params(Project, join=[User], filters_by=filters_by, filters_and=filters_and,
+                                       filters_or=filters_or)
+    project_rows = []
+    for project in projects:
+        project.create_time *= 1000
+        project_row = dict(project)
+        project_row['key'] = project_row['id']
+        project_row['username'] = project.user.username
+        project_rows.append(project_row)
     project_rows.reverse()
     return ReadSuccess(data=project_rows)
 

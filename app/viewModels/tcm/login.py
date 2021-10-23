@@ -13,9 +13,9 @@
 """
 __auth__ = 'diklios'
 
+from app.libs.error_exception import AuthFailed, ParameterException, AccountBannedError, AccountNotConfirmedError
 from app.models import db
 from app.models.tcm.user import User
-from app.libs.error_exception import AuthFailed, ParameterException,AccountBannedError,AccountNotConfirmedError
 
 
 def verify_user(verify_type, account, password=None):
@@ -46,10 +46,10 @@ def get_user_info(user: User):
     scopes = []
     roles = user.roles
     for role in roles:
-        if role.id == 1:
+        if role.access_level >= 1:
             scopes.append('UserScope')
-        elif role.id == 2:
+        if role.access_level >= 80:
             scopes.append('AdminScope')
-        elif role.id == 3:
+        if role.access_level >= 100:
             scopes.append('SuperAdminScope')
     return {'uid': user.id, 'scopes': scopes}

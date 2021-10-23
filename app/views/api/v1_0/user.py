@@ -1,12 +1,13 @@
-from flask import request, current_app, Blueprint, jsonify, g
+from flask import request, Blueprint, g
+
 from app.libs.error_exception import Success, ReadSuccess, UpdateSuccess, TrueDeleteSuccess, ParameterException, \
-    AuthFailed, NotFound
+    AuthFailed
 from app.models.tcm.user import User
+from app.utils.token_auth import auth
 from app.viewModels import database_add_single, database_read_by_id_single, database_read_by_params, \
     database_remove_single, database_update_single, database_recover_single, database_delete_single, \
     database_operation_batch, database_true_delete_single
 from app.viewModels.tcm.user import count_user_access_level
-from app.utils.token_auth import auth
 
 user_bp = Blueprint('user', __name__)
 # 绑定数据管理
@@ -30,7 +31,15 @@ def get_user(user_id):
 @auth.login_required
 def get_user_all():
     users = User.query.all()
-    users_list = [dict(user) for user in users]
+    users_list = []
+    for user in users:
+        common_user = True
+        for role in user.roles:
+            if role.access_level >= 80:
+                common_user = False
+                break
+        if common_user:
+            users_list.append(dict(user))
     return ReadSuccess(data=users_list, msg='search all success')
 
 

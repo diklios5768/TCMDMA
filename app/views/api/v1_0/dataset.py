@@ -14,14 +14,18 @@
 __auth__ = 'diklios'
 
 from flask import Blueprint, request, g
-from app.libs.error_exception import ReadSuccess, CreateSuccess, UpdateSuccess,TrueDeleteSuccess
-from app.utils.token_auth import auth
-from app.utils.file_handler.table_handler import read_table_to_dataset_data
+
+from app.libs.error_exception import ReadSuccess, CreateSuccess, UpdateSuccess, TrueDeleteSuccess
 from app.models.tcm.dataset import Dataset
+from app.models.tcm.user import User
+from app.utils.file_handler.table_handler import read_table_to_dataset_data
+from app.utils.token_auth import auth
 from app.viewModels import database_add_single, database_update_single, database_remove_single, database_recover_single, \
-    database_delete_single,database_true_delete_single, database_read_by_id_single, database_operation_batch, database_read_by_params, \
+    database_delete_single, database_true_delete_single, database_read_by_id_single, database_operation_batch, \
+    database_read_by_params, \
     database_read_by_pagination
-from app.viewModels.common.params import params_ready
+from app.viewModels.common.params import params_fuzzy_query, params_remove_pagination, params_remove_empty, \
+    params_status, params_antd_table_return
 
 dataset_bp = Blueprint('dataset', __name__)
 
@@ -59,16 +63,10 @@ def get_dataset_by_id(dataset_id):
 def get_dataset_by_params():
     user_info = g.user_info
     params_dict = request.get_json()
-    params_dict['owner_id'] = user_info.uid
-    filters_by = params_ready(params_dict)
-    rows = database_read_by_params(Dataset, filters_by=filters_by)
-    dataset_rows = []
-    for row in rows:
-        row.create_time *= 1000
-        dataset_row = dict(row)
-        dataset_row['key'] = dataset_row['id']
-        dataset_rows.append(dataset_row)
-    dataset_rows.reverse()
+    filters_or = params_fuzzy_query(Dataset, params_remove_empty(params_remove_pagination(params_dict)))
+    datasets = database_read_by_params(Dataset, filters_by={'owner_id': user_info.uid, 'status': 1},
+                                       filters_or=filters_or)
+    dataset_rows = params_antd_table_return(datasets)
     return ReadSuccess(data=dataset_rows)
 
 
@@ -128,8 +126,10 @@ def remove_dataset_by_id(dataset_id):
 
 
 @dataset_bp.patch('/remove/batch')
+@auth.login_required
 def remove_dataset_by_id_batch():
     dataset_id_list = request.get_json()
+    print(dataset_id_list)
     database_operation_batch(dataset_id_list, Dataset, operation_type='remove')
     return UpdateSuccess(msg='batch remove success', chinese_msg='批量移除成功')
 
@@ -143,6 +143,7 @@ def recover_dataset_by_id(dataset_id):
 
 
 @dataset_bp.patch('/recover/batch')
+@auth.login_required
 def recover_dataset_by_id_batch():
     dataset_id_list = request.get_json().get('idList')
     database_operation_batch(dataset_id_list, Dataset, operation_type='recover')
@@ -158,6 +159,7 @@ def delete_dataset_by_id(dataset_id):
 
 
 @dataset_bp.patch('/delete/batch')
+@auth.login_required
 def delete_dataset_by_id_batch():
     dataset_id_list = request.get_json().get('idList')
     database_operation_batch(dataset_id_list, Dataset, operation_type='delete')
@@ -165,10 +167,24 @@ def delete_dataset_by_id_batch():
 
 
 @dataset_bp.post('/admin_params')
+@auth.login_required
 def get_dataset_by_params_by_admin():
     params_dict = request.get_json()
-    datasets = database_read_by_params(Dataset, filters_by=params_dict)
-    dataset_rows = [dict(dataset) for dataset in datasets]
+    filters_and = params_status(Dataset, 1)
+    filters_or = []
+    if params_dict.get('username', ''):
+        username = params_dict.pop('username')
+        filters_and.append(Dataset.owner_id == User.id)
+        filters_or.append(User.username.like("%{}%".format(username)))
+    filters_or.extend(params_fuzzy_query(Dataset, params_remove_empty(params_remove_pagination(params_dict))))
+    datasets = database_read_by_params(Dataset, join=[User], filters_and=filters_and, filters_or=filters_or)
+    dataset_rows = []
+    for dataset in datasets:
+        dataset.create_time *= 1000
+        dataset_row = dict(dataset)
+        dataset_row['key'] = dataset_row['id']
+        dataset_row['username'] = dataset.user.username
+        dataset_rows.append(dataset_row)
     dataset_rows.reverse()
     return ReadSuccess(data=dataset_rows)
 

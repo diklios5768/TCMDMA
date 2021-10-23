@@ -13,6 +13,8 @@
 """
 __auth__ = 'diklios'
 
+from sqlalchemy import and_, or_
+
 from app.libs.error_exception import DataFormatError, NoDataError, DatabaseOperationError
 from app.models import db
 
@@ -100,16 +102,19 @@ def database_read_by_id_single(class_id=None, database_class=None):
         raise NoDataError()
 
 
-def database_read_by_params(database_class=None, filters_by: dict or None = None, filters: list = None):
+def database_read_by_params(database_class=None, filters_by: dict or None = None, join: dict or None = None,
+                            filters_and: list = None, filters_or: list = None):
     if database_class is not None:
-        if filters_by is not None:
-            rows = database_class.query.filter_by(**filters_by).all()
-            return rows
-        elif filters is not None:
-            rows = database_class.query.filter(*filters).all()
-            return rows
-        else:
-            raise NoDataError()
+        rows = database_class.query
+        if join:
+            rows.join(*join)
+        if filters_by:
+            rows = rows.filter_by(**filters_by)
+        if filters_and:
+            rows = rows.filter(and_(*filters_and))
+        if filters_or:
+            rows = rows.filter(or_(*filters_or))
+        return rows.all()
     else:
         raise NoDataError()
 

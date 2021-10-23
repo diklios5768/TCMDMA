@@ -94,10 +94,11 @@ def is_login():
     user = database_read_by_id_single(class_id=user_info.uid, database_class=User)
     current_user = dict(user)
     # 暂时不直接返回权限等级，方便使用
-    current_user['admin'] = False
+    current_user['user_admin'] = False
     for role in user.roles:
         if role.access_level >= 80:
-            current_user['admin'] = True
+            current_user['user_admin'] = True
+            break
     return Success(data=current_user)
 
 

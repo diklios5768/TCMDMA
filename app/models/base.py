@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, SmallInteger, Float,JSON
+from sqlalchemy import Column, Integer, String, SmallInteger, Float, JSON
 from sqlalchemy.orm import reconstructor
+
 from app.libs.error_exception import ParameterException
 from app.models import db
 
@@ -21,7 +22,7 @@ class Base(db.Model):
     # 如果其他的需要自增，可以使用BigInteger().with_variant(Integer, "sqlite")
     id = Column(Integer, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
     remarks = Column(String(1024), nullable=True, default='')
-    json_remarks=Column(JSON,nullable=True,default={})
+    json_remarks = Column(JSON, nullable=True, default={})
     # 使用datetime.utcnow()保证迁移服务器后使用的时间还是一致的
     # 时间存储的时候推荐使用时间戳，因为时间格式多种多样，而时间戳是通用的数字
     create_time = Column(Float, nullable=True, default=datetime.utcnow().timestamp())
@@ -108,6 +109,21 @@ class Base(db.Model):
         self.remarks = remarks
         self.modify_time = datetime.utcnow().timestamp()
 
+    def has_attr(self,key):
+        if hasattr(self, key):
+            return True
+        else:
+            return False
+
+    def get_attr(self, key):
+        if hasattr(self, key):
+            return getattr(key)
+        else:
+            raise ParameterException(
+                msg='no this key: {}'.format(str(key)),
+                chinese_msg='没有这个属性：{}'.format(str(key))
+            )
+
     def set_attrs(self, attrs_dict, **kwargs):
         """
         根据传回的参数修改属性值，但是id不能修改
@@ -117,7 +133,10 @@ class Base(db.Model):
             if hasattr(self, key) and key != "id" and key != 'password':
                 setattr(self, key, value)
             else:
-                raise ParameterException()
+                raise ParameterException(
+                    msg='no this key: {}'.format(str(key)),
+                    chinese_msg='没有这个属性：{}'.format(str(key))
+                )
             # 如果create_time传回来的是字符串，且本身类型是datetime则可以使用这个方法重写格式化
             # 使用时间戳之后不需要再用这个方法了
             # if key == 'create_time':

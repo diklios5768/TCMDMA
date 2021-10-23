@@ -69,7 +69,7 @@ def verify_auth_token(token):
     # token过期
     except SignatureExpired:
         raise TokenExpired()
-    if is_banned_token:
+    if is_banned_token(token):
         raise TokenDisabled()
     uid = data['uid']
     client_type = data['client_type']

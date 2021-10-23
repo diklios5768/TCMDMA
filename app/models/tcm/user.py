@@ -1,8 +1,9 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, backref
-from app.models.user import BaseUser, BaseRole
-from app.models.manage import BaseLog
+
 from app.models import db
+from app.models.manage import BaseLog
+from app.models.user import BaseUser, BaseRole
 
 # todo:以后考虑用户分组功能
 
@@ -16,7 +17,7 @@ user_role = db.Table(
 
 class User(BaseUser):
     projects = relationship('Project', backref=backref('user'), cascade="all, delete")
-    datasets = relationship('Dataset', backref=backref('user'))
+    datasets = relationship('Dataset', backref=backref('user'), cascade="all, delete")
     # 级联删除
     # api = db.relationship('Api', backref='project', cascade="all, delete-orphan")
     # api = db.relationship('Api', backref='project', cascade="all, delete")
@@ -55,22 +56,23 @@ def init_user():
         # 测试用户
         role_user = Role.query.filter_by(access_level=1).first_or_404()
         user = User()
-        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com','confirmed':True, 'status': 1})
+        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com', 'confirmed': True, 'status': 1})
         user.set_password('test1234')
         user.roles.append(role_user)
         db.session.add(user)
         # 管理员
         role_admin = Role.query.filter_by(access_level=80).first_or_404()
         admin_user = User()
-        admin_user.set_attrs({'username': 'admin','confirmed':True, 'status': 1})
-        admin_user.set_password('admin')
+        admin_user.set_attrs({'username': 'admin', 'email': '1061995104@qq.com', 'confirmed': True, 'status': 1})
+        admin_user.set_password('admin1234')
         admin_user.roles.append(role_admin)
         db.session.add(admin_user)
         # 超级管理员
         role_super_admin = Role.query.filter_by(access_level=100).first_or_404()
         super_admin_user = User()
-        super_admin_user.set_attrs({'username': 'super admin','confirmed':True, 'status': 1})
-        super_admin_user.set_password('super admin')
+        super_admin_user.set_attrs(
+            {'username': 'super admin', 'email': 'taoyang1111@126.com', 'confirmed': True, 'status': 1})
+        super_admin_user.set_password('zwW6nsbBGuk8gwc')
         super_admin_user.roles.append(role_super_admin)
         db.session.add(super_admin_user)
 
@@ -82,7 +84,7 @@ def fake_users(count):
         role_user = Role.query.filter_by(access_level=1).first_or_404()
         for i in range(count):
             user = User()
-            user.set_attrs({'username': 'user' + str(i),'confirmed':True,})
+            user.set_attrs({'username': 'user' + str(i), 'confirmed': True, })
             user.set_password('password' + str(i))
             user.roles.append(role_user)
             db.session.add(user)

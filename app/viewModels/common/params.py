@@ -14,14 +14,39 @@
 __auth__ = 'diklios'
 
 from app.libs.error_exception import NoDataError
+from app.libs.lists import not_pagination
 
 
-def params_ready(params_dict: dict):
+def params_status(database_class,status=1):
+    return [database_class.status==status]
+
+
+def params_remove_pagination(params_dict: dict):
     if params_dict is None:
         return NoDataError()
-    remove_list = ["current", "pageSize"]
     for key in list(params_dict.keys()):
-        if key in remove_list:
+        if key in not_pagination:
             params_dict.pop(key)
-    filters_by = params_dict
-    return filters_by
+    return params_dict
+
+
+def params_remove_empty(params_dict: dict):
+    for key in list(params_dict.keys()):
+        if not params_dict[key]:
+            params_dict.pop(key)
+    return params_dict
+
+
+def params_fuzzy_query(database_class, params_dict):
+    return [database_class.__dict__[key].like('%{}%'.format(value)) for key, value in params_dict.items()]
+
+
+def params_antd_table_return(rows):
+    class_rows = []
+    for row in rows:
+        row.create_time *= 1000
+        dataset_row = dict(row)
+        dataset_row['key'] = dataset_row['id']
+        class_rows.append(dataset_row)
+    class_rows.reverse()
+    return class_rows
