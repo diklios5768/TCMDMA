@@ -198,6 +198,25 @@ class LinkError(AuthFailed):
     chinese_msg = '链接失效或者验证失败（非法）'
 
 
+# 账户错误
+class AccountError(Forbidden):
+    error_code = 1320
+    msg = 'account error'
+    chinese_msg = '账户错误'
+
+
+class AccountBannedError(AccountError):
+    error_code = 1321
+    msg = 'account banned'
+    chinese_msg = '账户被停用'
+
+
+class AccountNotConfirmedError(AccountError):
+    error_code = 1322
+    msg = 'account not confirmed'
+    chinese_msg = '账户还未通过'
+
+
 # 服务器错误
 class ServerError(APIException):
     code = 500

@@ -14,17 +14,20 @@
 __auth__ = 'diklios'
 
 from datetime import datetime
+
 from flask import Blueprint, current_app, jsonify, request, g
+
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_exception import Success, LoginSuccess, AuthFailed
+from app.libs.error_exception import Success, LoginSuccess, AuthFailed, ParameterException
 from app.models.tcm.user import User
+from app.utils.token_auth import auth
+from app.utils.token_auth import generate_auth_token, get_token_info
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.login import LoginUsernameForm, LoginEmailForm, LoginPhoneForm, \
     LoginEmailUseVerificationCodeForm, LoginPhoneUseVerificationCodeForm
-from app.utils.token_auth import generate_auth_token, get_token_info, disable_auth_token
-from app.utils.token_auth import auth, auth_token
-from app.viewModels.tcm.login import verify_user
 from app.viewModels import database_read_by_id_single
+from app.viewModels.common.token import ban_token
+from app.viewModels.tcm.login import verify_user
 
 login_bp = Blueprint('login', __name__)
 
@@ -120,10 +123,14 @@ def get_new_access_token():
 
 @login_bp.get('/logout')
 def logout():
-    # 放入黑名单
-    refresh_token = request.cookies.get('refresh_token')
-    get_token_info(refresh_token)
-    disable_auth_token(refresh_token)
-    res = jsonify({'success': True, 'msg': 'logout success'})
-    res.delete_cookie('refresh_token')
-    return res
+    # refresh_token放入黑名单,access_token时间非常断，可以不放
+    refresh_token = request.cookies.get('refresh_token', None)
+    if refresh_token:
+        token_info=get_token_info(refresh_token)
+        ban_token(refresh_token, token_info['expire_in']-int(datetime.utcnow().timestamp()))
+        # 登出
+        res = jsonify({'success': True, 'msg': 'logout success'})
+        res.delete_cookie('refresh_token')
+        return res
+    else:
+        return ParameterException(msg='cookies has no token', chinese_msg='cookies中没有token')

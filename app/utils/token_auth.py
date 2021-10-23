@@ -6,6 +6,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature, Signatur
 
 from app.libs.error_exception import TokenExpired, TokenInvalid, TokenDisabled, Forbidden
 from app.libs.scope import is_in_scope
+from app.viewModels.common.token import is_banned_token
 
 User = namedtuple('User', ['uid', 'client_type', 'scopes'])
 auth = HTTPBasicAuth()
@@ -68,6 +69,8 @@ def verify_auth_token(token):
     # token过期
     except SignatureExpired:
         raise TokenExpired()
+    if is_banned_token:
+        raise TokenDisabled()
     uid = data['uid']
     client_type = data['client_type']
     scopes = data['scopes']
@@ -99,8 +102,3 @@ def get_token_info(token):
         'client_type': data[0]['client_type']
     }
     return information
-
-
-# todo:手动过期token，放到redis中，并且在其他函数中增加判断
-def disable_auth_token(token):
-    pass

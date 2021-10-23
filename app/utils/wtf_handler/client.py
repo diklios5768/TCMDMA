@@ -2,7 +2,7 @@ from wtforms import StringField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Length, ValidationError, Regexp, EqualTo
 from app.libs.enums import ClientTypeEnum
 from app.models.tcm.user import User
-from app.utils.file_handler.text_handler.verification_code import verify_verification_code
+from app.viewModels.common.verification import verify_verification_code
 from app.utils.wtf_handler.base import BaseForm
 
 

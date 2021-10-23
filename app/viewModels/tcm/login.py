@@ -15,7 +15,7 @@ __auth__ = 'diklios'
 
 from app.models import db
 from app.models.tcm.user import User
-from app.libs.error_exception import AuthFailed, ParameterException
+from app.libs.error_exception import AuthFailed, ParameterException,AccountBannedError,AccountNotConfirmedError
 
 
 def verify_user(verify_type, account, password=None):
@@ -27,6 +27,10 @@ def verify_user(verify_type, account, password=None):
         user = User.query.filter_by(phone=account).first_or_404()
     else:
         raise ParameterException()
+    if not user.active:
+        raise AccountBannedError()
+    if not user.confirmed:
+        raise AccountNotConfirmedError()
     if password is not None:
         if not user.validate_password(password):
             raise AuthFailed(msg='password error', chinese_msg='密码错误')

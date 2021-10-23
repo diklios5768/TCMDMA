@@ -17,11 +17,10 @@ from flask import Blueprint, request, current_app
 
 from app.libs.enums import ClientTypeEnum
 from app.libs.error_exception import Success, ParameterException, LinkError
-from app.utils.file_handler.text_handler.verification_code import verify_verification_code
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
     RegisterEmailWithUsernameForm
-from app.viewModels.common.verification import send_verification_code_full
+from app.viewModels.common.verification import verify_verification_code,send_verification_code_full
 from app.viewModels.tcm.register import (
     register_user_by_email, register_user_by_phone, register_user_by_username,
     confirm_register_link

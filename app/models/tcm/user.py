@@ -53,23 +53,23 @@ def init_role():
 def init_user():
     with db.auto_commit():
         # 测试用户
-        role_user = Role.query.filter_by(id=1).first_or_404()
+        role_user = Role.query.filter_by(access_level=1).first_or_404()
         user = User()
-        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com', 'status': 1})
+        user.set_attrs({'username': 'test', 'email': 'xminer2021@126.com','confirmed':True, 'status': 1})
         user.set_password('test1234')
         user.roles.append(role_user)
         db.session.add(user)
         # 管理员
-        role_admin = Role.query.filter_by(id=2).first_or_404()
+        role_admin = Role.query.filter_by(access_level=80).first_or_404()
         admin_user = User()
-        admin_user.set_attrs({'username': 'admin', 'status': 1})
+        admin_user.set_attrs({'username': 'admin','confirmed':True, 'status': 1})
         admin_user.set_password('admin')
         admin_user.roles.append(role_admin)
         db.session.add(admin_user)
         # 超级管理员
-        role_super_admin = Role.query.filter_by(id=3).first_or_404()
+        role_super_admin = Role.query.filter_by(access_level=100).first_or_404()
         super_admin_user = User()
-        super_admin_user.set_attrs({'username': 'super admin', 'status': 1})
+        super_admin_user.set_attrs({'username': 'super admin','confirmed':True, 'status': 1})
         super_admin_user.set_password('super admin')
         super_admin_user.roles.append(role_super_admin)
         db.session.add(super_admin_user)
@@ -79,10 +79,10 @@ def init_user():
 def fake_users(count):
     with db.auto_commit():
         # 普通用户
-        role_user = Role.query.filter_by(id=1).first_or_404()
+        role_user = Role.query.filter_by(access_level=1).first_or_404()
         for i in range(count):
             user = User()
-            user.set_attrs({'username': 'user' + str(i)})
+            user.set_attrs({'username': 'user' + str(i),'confirmed':True,})
             user.set_password('password' + str(i))
             user.roles.append(role_user)
             db.session.add(user)

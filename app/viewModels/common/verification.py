@@ -14,16 +14,17 @@
 __auth__ = 'diklios'
 
 from datetime import datetime
+
 from flask import current_app
-from app.libs.error_exception import SendEmailSuccess, SendPhoneSuccess, NotFound, VerificationCodeError, \
+
+from app.libs.error_exception import NotFound, VerificationCodeError, \
     VerificationCodeOutOfDateError, ParameterException
-from app.models import db
+from app.models import db, redis
 from app.models.common.verification import EmailVerification, PhoneVerification
-from app.utils.random import random_content
-from app.utils.time import generate_celery_delay_time
-from app.utils.file_handler.text_handler.verification_code import generate_verification_code
+from app.utils.celery_handler import celery
 from app.utils.celery_handler.mail import send_verification_code_mail_sync
-from app.utils.celery_handler.verification_code import delete_verification_code_sync
+from app.utils.random import random_content
+from app.utils.time import generate_celery_delay_time, generate_datetime_timestamp_now
 
 
 def search_verification(account_type, account, verification_code):
@@ -97,12 +98,43 @@ def disable_verification_code(account_type, account, verification_code):
 
 
 # 使用redis数据库管理验证码
+def generate_verification_code(identification, use='register'):
+    verification_code = str(random_content(4, 'number'))
+    verification_content = str(identification) + '--' + str(use) + '--' + str(generate_datetime_timestamp_now())
+    redis.set(verification_code, verification_content)
+    return verification_code
+
+
+def verify_verification_code(code, identification, use='register'):
+    verification_content = redis.get(code)
+    if verification_content:
+        content_identification, content_use, content_timestamp = verification_content.split('--')
+        timestamp_now = generate_datetime_timestamp_now()
+        timestamp_expiration = float(content_timestamp) + float(current_app.config['VERIFICATION_TIME'])
+        if str(identification) == content_identification and str(use) == content_use:
+            if timestamp_now <= timestamp_expiration:
+                redis.delete(code)
+                return True
+            else:
+                raise VerificationCodeOutOfDateError()
+        else:
+            raise VerificationCodeError()
+    else:
+        raise VerificationCodeOutOfDateError()
+
+
+@celery.task(shared=False)
+def delete_verification_code(code):
+    redis.delete(code)
+    return True
+
+
 # 发送验证码完整流程
 def send_verification_code_full(email, use):
     code = generate_verification_code(email, use)
     send_verification_code_mail_sync.delay(code, email)
     try:
-        delete_verification_code_sync.apply_async(args=(code,), eta=generate_celery_delay_time(
+        delete_verification_code.apply_async(args=(code,), eta=generate_celery_delay_time(
             current_app.config['VERIFICATION_TIME']))
     except Exception as e:
         print(str(e))

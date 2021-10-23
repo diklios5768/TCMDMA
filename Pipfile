@@ -53,10 +53,11 @@ gevent = "*"
 #gunicorn = "*"
 
 [dev-packages]
+flake8 = "*"
+pylint = "*"
 faker = "*"
 watchdog = "*"
 pysnooper = "*"
-pylint = "*"
 pytest = "*"
 flask-testing = "*"
 
