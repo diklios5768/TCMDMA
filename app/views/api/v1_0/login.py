@@ -24,7 +24,7 @@ from app.utils.token_auth import auth
 from app.utils.token_auth import generate_auth_token, get_token_info
 from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.login import LoginUsernameForm, LoginEmailForm, LoginPhoneForm, \
-    LoginEmailUseVerificationCodeForm, LoginPhoneUseVerificationCodeForm
+    LoginEmailUserCaptchaForm, LoginPhoneUserCaptchaForm
 from app.viewModels import database_read_by_id_single
 from app.viewModels.common.token import ban_token
 from app.viewModels.tcm.login import verify_user
@@ -42,8 +42,8 @@ def __login_by_email():
     return verify_user('email', form.account.data, form.secret.data)
 
 
-def __login_by_email_with_verification_code():
-    form = LoginEmailUseVerificationCodeForm().validate_for_api()
+def __login_by_email_with_captcha():
+    form = LoginEmailUserCaptchaForm().validate_for_api()
     return verify_user('email', form.account.data)
 
 
@@ -52,8 +52,8 @@ def __login_by_phone():
     return verify_user('phone', form.account.data, form.secret.data)
 
 
-def __login_by_phone_with_verification_code():
-    form = LoginPhoneUseVerificationCodeForm().validate_for_api()
+def __login_by_phone_with_captcha():
+    form = LoginPhoneUserCaptchaForm().validate_for_api()
     return verify_user('phone', form.account.data)
 
 

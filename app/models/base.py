@@ -53,22 +53,21 @@ class Base(db.Model):
         return self.fields
 
     # 直接重新设置fields，可以用列表，也可以传入多个参数
-    def set_fields(self, new_filed_list: list, *new_fields):
-        self.fields = [*new_filed_list, *new_fields]
+    def set_fields(self, new_fields_list: list=[], *new_fields):
+        self.fields = [*new_fields_list, *new_fields]
         return self
 
     # 从现在的fields中需要被移除的字段
-    def hide_fields(self, *hide_keys):
-        for key in hide_keys:
+    def hide_fields(self, hide_fields_list: list=[], *hide_fields):
+        hide_fields_keys = [*hide_fields_list, *hide_fields]
+        for key in hide_fields_keys:
             if key in self.fields:
                 self.fields.remove(key)
         return self
 
-    # 再次在fields中添加字段
-    def append_fields(self, *append_keys):
-        for key in append_keys:
-            self.fields.append(key)
-        self.fields = list(set([*self.fields, *append_keys]))
+    # 在fields中添加字段
+    def append_fields(self, append_fields_list: list=[], *append_fields):
+        self.fields = list(set([*self.fields, *append_fields_list, *append_fields]))
         return self
 
     # 获得所有实例化的属性，转化为字典，尽量不使用，而是在具体的模型中定义keys函数
@@ -109,7 +108,7 @@ class Base(db.Model):
         self.remarks = remarks
         self.modify_time = datetime.utcnow().timestamp()
 
-    def has_attr(self,key):
+    def has_attr(self, key):
         if hasattr(self, key):
             return True
         else:

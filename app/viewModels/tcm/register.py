@@ -17,9 +17,8 @@ from flask import current_app, url_for
 
 from app.models import db
 from app.models.tcm.user import User, Role
-from app.viewModels.tcm.user import generate_user_link, analyse_user_link, confirm_user_link
 from app.utils.random import random_content
-
+from app.viewModels.tcm.user import generate_user_link, analyse_user_link, confirm_user_link
 
 
 # 注册
@@ -60,9 +59,6 @@ def generate_register_link_with_domain(user_id):
     return full_register_link
 
 
-
-
-
 # 用用户名和密码注册，两种都是必须
 def register_user_by_username(username, password):
     role_user = Role.query.filter_by(id=1).first_or_404()
@@ -79,7 +75,7 @@ def register_user_by_email(email, password, username=None):
     role_user = Role.query.filter_by(id=1).first_or_404()
     with db.auto_commit():
         user = User()
-        user.set_attrs({'email': email, 'active': True, 'confirm': True})
+        user.set_attrs({'email': email, 'active': True, 'confirmed': True})
         user.set_password(password)
         if username is not None:
             user.set_attrs({'username': username})

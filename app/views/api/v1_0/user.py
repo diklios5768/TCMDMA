@@ -3,11 +3,13 @@ from flask import request, Blueprint, g
 from app.libs.error_exception import Success, ReadSuccess, UpdateSuccess, TrueDeleteSuccess, ParameterException, \
     AuthFailed
 from app.models.tcm.user import User
+from app.utils.file_handler.text_handler.format import bool_str_to_boolean
 from app.utils.token_auth import auth
 from app.viewModels import database_add_single, database_read_by_id_single, database_read_by_params, \
     database_remove_single, database_update_single, database_recover_single, database_delete_single, \
     database_operation_batch, database_true_delete_single
-from app.viewModels.tcm.user import count_user_access_level
+from app.viewModels.common.params import params_remove_pagination, params_remove_empty, params_fuzzy_query
+from app.viewModels.tcm.user import count_user_access_level, eliminate_admin_user
 
 user_bp = Blueprint('user', __name__)
 # 绑定数据管理
@@ -31,15 +33,13 @@ def get_user(user_id):
 @auth.login_required
 def get_user_all():
     users = User.query.all()
+    users = eliminate_admin_user(users)
     users_list = []
     for user in users:
-        common_user = True
-        for role in user.roles:
-            if role.access_level >= 80:
-                common_user = False
-                break
-        if common_user:
-            users_list.append(dict(user))
+        user.create_time *= 1000
+        row = dict(user.append_fields(['confirmed', 'active']))
+        row['key'] = user.id
+        users_list.append(row)
     return ReadSuccess(data=users_list, msg='search all success')
 
 
@@ -50,14 +50,33 @@ def get_user_count():
     return ReadSuccess(data={'users_count': len(users)}, msg='search count success')
 
 
-@user_bp.get('/params')
+@user_bp.post('/params')
 @auth.login_required
 def get_user_by_params():
     params_dict = request.get_json()
-    users = database_read_by_params(User, filters_by=params_dict)
-    user_rows = [dict(user) for user in users]
-    user_rows.reverse()
-    return ReadSuccess(data=user_rows)
+    # print(params_dict)
+    filters_by = {'status': 1}
+    filters_and = []
+    filters_or = []
+    if params_dict.get('active', ''):
+        active = bool_str_to_boolean(params_dict.pop('active'))
+        filters_by['active'] = active
+    if params_dict.get('confirmed', ''):
+        confirmed = bool_str_to_boolean(params_dict.pop('confirmed'))
+        filters_by['confirmed'] = confirmed
+    if params_dict.get('username', ''):
+        username = params_dict.pop('username')
+        filters_and.append(User.username.like("%{}%".format(username)))
+    filters_or.extend(params_fuzzy_query(User, params_remove_empty(params_remove_pagination(params_dict))))
+    users = database_read_by_params(User, filters_by=filters_by, filters_and=filters_and,filters_or=filters_or)
+    users = eliminate_admin_user(users)
+    users_list = []
+    for user in users:
+        user.create_time *= 1000
+        row = dict(user.append_fields(['confirmed', 'active']))
+        row['key'] = user.id
+        users_list.append(row)
+    return ReadSuccess(data=users_list)
 
 
 @user_bp.post('')
@@ -68,27 +87,51 @@ def add_new_user():
     return Success(msg='add user success', chinese_msg='添加用户成功')
 
 
-@user_bp.patch('/status/<int:user_id>')
+@user_bp.patch('/set_confirmed_status/<int:user_id>')
 @auth.login_required
-def update_user_status(user_id):
+def update_user_confirmed_status(user_id):
     data = request.get_json()
     user = User.query.filter_by(id=user_id).first_or_404()
-    status = data.get('status', user.status)
-    database_update_single({'id': user_id, 'update_data': {'status': status}}, User)
+    confirmed = data.get('confirmed', user.confirmed)
+    database_update_single({'id': user_id, 'update_data': {'confirmed': confirmed}}, User)
     return UpdateSuccess(msg='set user status success', chinese_msg='设置用户状态成功')
 
 
-@user_bp.patch('/pass/<int:user_id>')
+@user_bp.patch('/set_confirmed/<int:user_id>')
 @auth.login_required
-def update_user_status_pass(user_id):
-    database_update_single({'id': user_id, 'update_data': {'status': 1}}, User)
+def update_user_confirmed(user_id):
+    database_update_single({'id': user_id, 'update_data': {'confirmed': True}}, User)
     return UpdateSuccess(msg='set user pass success', chinese_msg='设置用户通过成功')
 
 
-@user_bp.patch('/not_pass/<int:user_id>')
+@user_bp.patch('/set_not_confirmed/<int:user_id>')
 @auth.login_required
-def update_user_status_not_pass(user_id):
-    database_update_single({'id': user_id, 'update_data': {'status': 0}}, User)
+def update_user_not_confirmed(user_id):
+    database_update_single({'id': user_id, 'update_data': {'confirmed': False}}, User)
+    return UpdateSuccess(msg='set user not pass success', chinese_msg='设置用户未通过成功')
+
+
+@user_bp.patch('/set_active_status/<int:user_id>')
+@auth.login_required
+def update_user_active_status(user_id):
+    data = request.get_json()
+    user = User.query.filter_by(id=user_id).first_or_404()
+    active = data.get('active', user.active)
+    database_update_single({'id': user_id, 'update_data': {'active': active}}, User)
+    return UpdateSuccess(msg='set user status success', chinese_msg='设置用户状态成功')
+
+
+@user_bp.patch('/set_active/<int:user_id>')
+@auth.login_required
+def update_user_active(user_id):
+    database_update_single({'id': user_id, 'update_data': {'active': True}}, User)
+    return UpdateSuccess(msg='set user pass success', chinese_msg='设置用户通过成功')
+
+
+@user_bp.patch('/set_not_active/<int:user_id>')
+@auth.login_required
+def update_user_not_active(user_id):
+    database_update_single({'id': user_id, 'update_data': {'active': False}}, User)
     return UpdateSuccess(msg='set user not pass success', chinese_msg='设置用户未通过成功')
 
 

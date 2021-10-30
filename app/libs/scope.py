@@ -107,9 +107,6 @@ class UserScope(BaseScope):
         'sun.api.v1_0.dataset.true_delete_dataset_batch',
     ]
 
-    def __init__(self):
-        pass
-
 
 class AdminScope(BaseScope):
     allow_apis = []
@@ -128,16 +125,12 @@ class AdminScope(BaseScope):
         'sun.api.v1_0.bound',
     ]
 
-    def __init__(self):
-        super().__init__(self)
-
 
 class SuperAdminScope(BaseScope):
     allow_apis = []
     allow_modules = ['sun.api.v1_0']
 
     def __init__(self):
-        super().__init__(self)
         self.add(AdminScope())
 
 
@@ -146,17 +139,19 @@ def is_in_scope(scopes, endpoint):
     # 因为python并没有反射这个机制，所以需要使用globals()
     gl = globals()
     # 在多个角色中查询权限
-    for scope in scopes:
-        scope = gl[scope]()
+    has_scope=False
+    for scope_item in scopes:
+        scope = gl[scope_item]()
         # 先判断URL是否被禁止了
         if endpoint in scope.forbidden_apis:
-            return False
+            has_scope= False
         for i in scope.forbidden_modules:
             if endpoint.startswith(i):
-                return False
+                has_scope= False
+                break
         if endpoint in scope.allow_apis:
             return True
         for i in scope.allow_modules:
             if endpoint.startswith(i):
                 return True
-        return False
+    return has_scope

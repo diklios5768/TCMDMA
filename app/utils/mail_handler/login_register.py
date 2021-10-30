@@ -1,5 +1,6 @@
 from flask import render_template
 from flask_mail import Message
+from app.utils.celery_handler import celery
 from . import mail
 
 
@@ -14,7 +15,7 @@ from . import mail
 #     )
 #     mail.send(message)
 
-
+@celery.task(shared=False)
 def send_register_confirm_email(register_link, to=None):
     if not to:
         return False
@@ -46,13 +47,14 @@ def send_register_confirm_email(register_link, to=None):
 #     mail.send(message)
 
 
-def send_verification_code_mail(verification_code, to=None):
+@celery.task(shared=False)
+def send_captcha_mail(captcha, to=None):
     if not to:
         return False
     message = Message(
         subject='验证码',
         recipients=[to],
-        body=render_template('mail/verification_code.txt', verification_code=verification_code),
-        html=render_template('mail/verification_code.html', verification_code=verification_code)
+        body=render_template('mail/captcha.txt', captcha=captcha),
+        html=render_template('mail/captcha.html', captcha=captcha)
     )
     mail.send(message)

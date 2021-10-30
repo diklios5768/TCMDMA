@@ -141,13 +141,13 @@ class FormValidateError(APIException):
     chinese_msg = '表单验证失败'
 
 
-class VerificationCodeError(FormValidateError):
+class CaptchaError(FormValidateError):
     error_code = 1301
     msg = 'verification code wrong'
     chinese_msg = '验证码错误'
 
 
-class VerificationCodeOutOfDateError(FormValidateError):
+class CaptchaOutOfDateError(FormValidateError):
     error_code = 1302
     msg = 'verification code out of date'
     chinese_msg = '验证码过期'

@@ -18,7 +18,7 @@ from app.viewModels import database_add_single, database_update_single, database
     database_read_by_pagination, database_true_delete_single
 from app.viewModels.common.params import params_remove_pagination, params_remove_empty, params_fuzzy_query
 from app.viewModels.tcm.project import find_project
-
+from app.viewModels.tcm.user import is_common_user
 project_bp = Blueprint('project', __name__)
 
 
@@ -281,12 +281,12 @@ def add_project_with_dataset_and_analysis():
     if analysis_data is None:
         return ParameterException()
     # 项目直接添加
-    project_row = {'owner_id': uid, 'name': project_data.get('projectName', ''),
-                   'description': project_data.get('projectDescription', '')}
+    project_row = {'owner_id': uid, 'name': project_data.get('projectName', '无'),
+                   'description': project_data.get('projectDescription', '无')}
     project = database_add_single(project_row, Project)
     # 数据集直接添加,只是前端注意要带上原始文件路径
-    dataset_row = {'owner_id': uid, 'name': dataset_data.get('datasetName', ''),
-                   'description': dataset_data.get('datasetDescription', '')}
+    dataset_row = {'owner_id': uid, 'name': dataset_data.get('datasetName', '无'),
+                   'description': dataset_data.get('datasetDescription', '无')}
     dataset_upload_method = dataset_data.get('datasetUploadMethod', None)
     if dataset_upload_method is None:
         return ParameterException(msg='', chinese_msg='数据集上传方法参数不存在')
@@ -408,7 +408,7 @@ def delete_project_by_id_batch():
 @auth.login_required
 def get_project_by_params_by_admin():
     params_dict = request.get_json()
-    print(params_dict)
+    # print(params_dict)
     filters_by = {'status': 1}
     filters_and = []
     filters_or = []
@@ -427,11 +427,12 @@ def get_project_by_params_by_admin():
                                        filters_or=filters_or)
     project_rows = []
     for project in projects:
-        project.create_time *= 1000
-        project_row = dict(project)
-        project_row['key'] = project_row['id']
-        project_row['username'] = project.user.username
-        project_rows.append(project_row)
+        if is_common_user(project.user):
+            project.create_time *= 1000
+            project_row = dict(project)
+            project_row['key'] = project_row['id']
+            project_row['username'] = project.user.username
+            project_rows.append(project_row)
     project_rows.reverse()
     return ReadSuccess(data=project_rows)
 

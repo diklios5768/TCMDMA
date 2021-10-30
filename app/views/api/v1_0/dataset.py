@@ -26,6 +26,7 @@ from app.viewModels import database_add_single, database_update_single, database
     database_read_by_pagination
 from app.viewModels.common.params import params_fuzzy_query, params_remove_pagination, params_remove_empty, \
     params_status, params_antd_table_return
+from app.viewModels.tcm.user import is_common_user
 
 dataset_bp = Blueprint('dataset', __name__)
 
@@ -98,7 +99,7 @@ def add_dataset():
     user_info = g.user_info
     uid = user_info.uid
     upload_data = request.get_json()
-    print(upload_data)
+    # print(upload_data)
     file_path = upload_data.get('filePath', "")
     has_header = upload_data.get('hasHeader', False)
     data = read_table_to_dataset_data(file_path=file_path, has_header=has_header)
@@ -180,11 +181,12 @@ def get_dataset_by_params_by_admin():
     datasets = database_read_by_params(Dataset, join=[User], filters_and=filters_and, filters_or=filters_or)
     dataset_rows = []
     for dataset in datasets:
-        dataset.create_time *= 1000
-        dataset_row = dict(dataset)
-        dataset_row['key'] = dataset_row['id']
-        dataset_row['username'] = dataset.user.username
-        dataset_rows.append(dataset_row)
+        if is_common_user(dataset.user):
+            dataset.create_time *= 1000
+            dataset_row = dict(dataset)
+            dataset_row['key'] = dataset_row['id']
+            dataset_row['username'] = dataset.user.username
+            dataset_rows.append(dataset_row)
     dataset_rows.reverse()
     return ReadSuccess(data=dataset_rows)
 

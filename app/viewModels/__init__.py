@@ -102,14 +102,14 @@ def database_read_by_id_single(class_id=None, database_class=None):
         raise NoDataError()
 
 
-def database_read_by_params(database_class=None, filters_by: dict or None = None, join: dict or None = None,
-                            filters_and: list = None, filters_or: list = None):
+def database_read_by_params(database_class=None, filters_by: dict or None = None, join: list or None = None,
+                            filters_and: list or None = None, filters_or: list or None = None):
     if database_class is not None:
         rows = database_class.query
-        if join:
-            rows.join(*join)
         if filters_by:
             rows = rows.filter_by(**filters_by)
+        if join:
+            rows.join(*join)
         if filters_and:
             rows = rows.filter(and_(*filters_and))
         if filters_or:

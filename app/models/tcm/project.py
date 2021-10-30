@@ -1,12 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Enum, JSON, Float
-from sqlalchemy.orm import relationship, backref
 import random
+
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, JSON, Float
+from sqlalchemy.orm import relationship, backref
+
+from app.libs.dicts import project_default_settings
 from app.models.base import Base
 from app.utils.random import random_content
-from app.libs.dicts import project_default_settings
-
-from app.viewModels.tcm.user import find_user
 from app.viewModels import database_operation_batch
+from app.viewModels.tcm.user import find_user
 
 
 class Project(Base):
@@ -32,7 +33,7 @@ class Project(Base):
     other_result = Column(JSON, default={})
     analyses = relationship('Analysis', backref=backref('project'), cascade="all, delete")
 
-    fields = ['id', 'name', 'description', 'finished']
+    fields = ['id', 'name', 'description', 'finished', 'create_time']
 
     def set_star(self, star):
         self.star = star

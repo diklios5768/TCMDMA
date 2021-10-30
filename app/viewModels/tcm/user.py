@@ -37,6 +37,40 @@ def find_user(data):
     return {'rows': users_dict, 'code': 1, 'msg': '查询成功'}
 
 
+# 是否是普通用户
+def is_common_user(user):
+    common_user = True
+    for role in user.roles:
+        if role.access_level >= 80:
+            common_user = False
+            break
+    return common_user
+
+
+# 是否是管理员用户
+def is_user_admin(user):
+    user_admin = False
+    for role in user.roles:
+        if role.access_level >= 80:
+            user_admin = True
+            break
+    return user_admin
+
+
+# 去除管理员用户
+def eliminate_admin_user(users):
+    users_list = []
+    for user in users:
+        common_user = True
+        for role in user.roles:
+            if role.access_level >= 80:
+                common_user = False
+                break
+        if common_user:
+            users_list.append(user)
+    return users_list
+
+
 # 获取用户最高权限
 def count_user_access_level(user_id):
     user = User.query.filter_by(id=user_id).first_or_404()

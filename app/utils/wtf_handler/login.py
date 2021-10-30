@@ -16,8 +16,8 @@ __auth__ = 'diklios'
 from wtforms import StringField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Regexp
 from app.models.tcm.user import User
-from app.utils.wtf_handler.client import ClientForm, RememberForm, ExtraVerificationCodeForm
-from app.viewModels.common.verification import verify_verification_code
+from app.utils.wtf_handler.client import ClientForm, RememberForm, ExtraCaptchaForm
+from app.viewModels.common.captcha import verify_captcha
 
 
 # 用户名+密码
@@ -41,13 +41,13 @@ class LoginEmailForm(RememberForm):
 
 
 # 邮箱+验证码
-class LoginEmailUseVerificationCodeForm(RememberForm, ExtraVerificationCodeForm):
+class LoginEmailUserCaptchaForm(RememberForm, ExtraCaptchaForm):
     def validate_account(self, value):
         if not User.query.filter_by(email=value.data).first():
             raise ValidationError('没有这个账号')
 
-    def validate_verification_code(self, value):
-        verify_verification_code(account_type='email', account=self.account.data, verification_code=value.data,
+    def validate_captcha(self, value):
+        verify_captcha(account_type='email', account=self.account.data, captcha=value.data,
                                  use='login')
 
 
@@ -64,11 +64,11 @@ class LoginPhoneForm(RememberForm):
 
 
 # 手机号+验证码
-class LoginPhoneUseVerificationCodeForm(RememberForm, ExtraVerificationCodeForm):
+class LoginPhoneUserCaptchaForm(RememberForm, ExtraCaptchaForm):
     def validate_account(self, value):
         if not User.query.filter_by(phone=value.data).first():
             raise ValidationError('没有这个账号')
 
-    def validate_verification_code(self, value):
-        verify_verification_code(account_type='phone', account=self.account.data, verification_code=value.data,
+    def validate_captcha(self, value):
+        verify_captcha(account_type='phone', account=self.account.data, captcha=value.data,
                                  use='login')

@@ -48,10 +48,10 @@ class BaseConfig(object):
         'REFRESH_TOKEN_EXPIRATION', 3600 * 24 * 7)
     ACCESS_TOKEN_EXPIRATION = os.getenv('ACCESS_TOKEN_EXPIRATION', 3600 * 2)
     # 设置登录用户默认cookies过期时间为31天，原来为365天
-    REMEMBER_COOKIE_DURATION = datetime.timedelta(
-        days=os.getenv('REMEMBER_COOKIE_DURATION', 31))
+    REMEMBER_COOKIE_EXPIRATION = datetime.timedelta(
+        days=os.getenv('REMEMBER_COOKIE_EXPIRATION', 31))
     # 验证码默认有效期10分钟
-    VERIFICATION_TIME = os.getenv('VERIFICATION_TIME', 60 * 10)
+    CAPTCHA_EXPIRATION = os.getenv('CAPTCHA_EXPIRATION', 60 * 10)
     # Cookie默认只能通过http设置
     SESSION_COOKIE_HTTPONLY = os.getenv('SESSION_COOKIE_HTTPONLY', True)
     # hashids的盐，如果环境变量中没设置，默认使用secret_key

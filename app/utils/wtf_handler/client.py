@@ -2,7 +2,7 @@ from wtforms import StringField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Length, ValidationError, Regexp, EqualTo
 from app.libs.enums import ClientTypeEnum
 from app.models.tcm.user import User
-from app.viewModels.common.verification import verify_verification_code
+from app.viewModels.common.captcha import verify_captcha
 from app.utils.wtf_handler.base import BaseForm
 
 
@@ -44,7 +44,7 @@ class RememberForm(ClientForm):
 # 表单中额外带上用户名
 class ExtraUsernameForm(BaseForm):
     username = StringField(
-        validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_]{8,20}$', message='用户名不合法，只能包含英文字母、数字和下划线'),
+        validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_-]{4,20}$', message='用户名不合法，只能包含英文字母、数字、下划线以及中划线'),
                     Length(min=4, max=20, message='用户名长度不正确')])
 
     def validate_username(self, value):
@@ -53,8 +53,8 @@ class ExtraUsernameForm(BaseForm):
 
 
 # 表单中加上验证码
-class ExtraVerificationCodeForm(BaseForm):
-    verification_code = StringField(validators=[DataRequired(), Length(min=4, max=8, message='验证码长度不正确')])
+class ExtraCaptchaForm(BaseForm):
+    captcha = StringField(validators=[DataRequired(), Length(min=4, max=8, message='验证码长度不正确')])
 
-    def validate_verification_code(self, value):
-        verify_verification_code(verification_code=value.data, identification=self.account.data, use='register')
+    def validate_captcha(self, value):
+        verify_captcha(code=value.data, identification=self.account.data, use='register')

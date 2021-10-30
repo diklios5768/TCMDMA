@@ -15,8 +15,9 @@ __auth__ = 'diklios'
 
 from wtforms import StringField
 from wtforms.validators import DataRequired, Email, Length, ValidationError, Regexp
+
 from app.models.tcm.user import User
-from app.utils.wtf_handler.client import ClientForm, ExtraUsernameForm, VerifySecretForm, ExtraVerificationCodeForm
+from app.utils.wtf_handler.client import ClientForm, ExtraUsernameForm, VerifySecretForm, ExtraCaptchaForm
 
 
 # 用户名+密码
@@ -39,33 +40,23 @@ class RegisterEmailForm(VerifySecretForm):
 
 
 # 邮箱+密码+验证码
-class RegisterEmailWithSecretForm(RegisterEmailForm, ExtraVerificationCodeForm):
+class RegisterEmailWithCaptchaForm(RegisterEmailForm, ExtraCaptchaForm):
     pass
 
 
 # 邮箱+密码+用户名
-class RegisterEmailWithUsernameForm(VerifySecretForm):
-    account = StringField(validators=[DataRequired(), Regexp(r'^[A-Za-z0-9_]{8,20}$', message='用户名不合法，只能包含英文字母、数字和下划线'),
-                                      Length(min=4, max=20, message='用户名长度不正确')])
-    email = StringField(validators=[DataRequired(), Email(message='invalidate email')])
-
-    def validate_account(self, value):
-        if User.query.filter_by(username=value.data).first():
-            raise ValidationError('用户名已经被注册')
-
-    def validate_email(self, value):
-        if User.query.filter_by(email=value.data).first():
-            raise ValidationError('邮箱已经被注册')
+class RegisterEmailWithUsernameForm(RegisterEmailForm, ExtraUsernameForm):
+    pass
 
 
 # 邮箱+密码+验证码+用户名
-class RegisterEmailWithUsernameWithSecretForm(RegisterEmailWithUsernameForm, ExtraVerificationCodeForm):
+class RegisterEmailWithUsernameWithCaptchaForm(RegisterEmailWithUsernameForm, ExtraCaptchaForm):
     pass
 
 
 # todo:手机区号要查询写入，需要再修改
 # 手机号+验证码
-class RegisterPhoneForm(ClientForm, ExtraVerificationCodeForm):
+class RegisterPhoneForm(ClientForm, ExtraCaptchaForm):
     # phone_code= StringField(validators=[DataRequired(), Length(min=1, max=4)])
     account = StringField(
         validators=[DataRequired(), Regexp(r'^[0-9]{8,13}$', message='用户名不合法，只能包含英文字母、数字和下划线'), Length(8, 13)])
