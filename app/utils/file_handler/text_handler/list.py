@@ -13,6 +13,22 @@
 """
 __auth__ = 'diklios'
 
+from app.utils.file_handler.text_handler.string import filter_space
+
+
+# 过滤列表中的空字符
+def filter_empty_text(li, method='empty'):
+    # 只过滤空字符、None、[]
+    if method == 'empty':
+        return list(filter(None, li))
+    # 过滤只含有空格的字符，如果字符中不仅含有空格，还有其他能显示的字符则不过滤，如' space  '
+    elif method == "space":
+        return list(filter(filter_space, li))
+    elif method == 'all':
+        filtered_none_list = filter(None, li)
+        filtered_space_list = list(filter(filter_space, filtered_none_list))
+        return filtered_space_list
+
 
 # 列表递归
 def handle_deep_texts_list(lists):

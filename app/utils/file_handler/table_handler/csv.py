@@ -1,13 +1,16 @@
 from io import StringIO
 from csv import reader, writer
 from app.libs.error_exception import ParameterException
+from app.utils.file_handler.text_handler.list import filter_empty_text
 from app.settings import basedir
 
 
-def get_csv_data(file, row_limit: int = None, col_limit: int = None):
+def get_csv_data(file_data, row_limit: int = None, col_limit: int = None):
     table_data = []
-    for row in file:
-        table_data.append(row)
+    for row in file_data:
+        row_filter=filter_empty_text(row)
+        if row_filter:
+            table_data.append(row_filter)
     if row_limit is not None:
         if col_limit is not None:
             table_data = table_data[0:row_limit][0:col_limit]

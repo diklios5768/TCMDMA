@@ -3,7 +3,7 @@ from .csv import read_csv
 from .xls import read_xls
 from .xlsx import read_xlsx
 from app.libs.error_exception import ParameterException
-from app.utils.file_handler.text_handler import texts_to_single_col_table_data_integral_process
+from app.utils.file_handler.text_handler.table import texts_to_single_col_table_data_integral_process
 
 
 def read_table(file_path_or_stream, file_type='csv', method='path', row_limit: int = None, col_limit: int = None):

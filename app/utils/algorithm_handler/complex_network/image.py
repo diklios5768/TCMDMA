@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from app.libs.error_exception import ParameterException
 from app.libs.lists import colors, colors_length
 from app.utils.file_handler import make_dir
-from app.utils.file_handler.text_handler import filter_empty_text
+from app.utils.file_handler.text_handler.list import filter_empty_text
 
 # 解决main thread is not in main loop
 # matplotlib.use('Agg')

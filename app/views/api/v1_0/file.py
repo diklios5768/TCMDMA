@@ -19,7 +19,7 @@ from flask import Blueprint, request, send_from_directory, send_file, g, current
 from app.libs.error_exception import Success, ParameterException, ServerError
 from app.models.tcm.user import User
 from app.utils.file_handler import make_dir, create_user_upload_dir_path
-from app.utils.file_handler.text_handler import texts_to_single_col_table_data_integral_process
+from app.utils.file_handler.text_handler.table import texts_to_single_col_table_data_integral_process
 from app.utils.file_handler.table_handler import read_table_to_dataset_data, ant_design_table_limit
 from app.utils.token_auth import auth
 from app.utils.path import divide_dir_file

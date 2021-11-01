@@ -3,13 +3,15 @@ from openpyxl import Workbook, load_workbook
 from app.settings import basedir
 from app.libs.error_exception import ParameterException, ServerError
 from app.utils.file_handler import make_dir
+from app.utils.file_handler.text_handler.list import filter_empty_text
+
 
 
 def read_xlsx(file_path_or_stream, method='path', row_limit: int = None, col_limit: int = None):
     if method == 'path':
-        wb = load_workbook(filename=file_path_or_stream)
+        wb = load_workbook(filename=file_path_or_stream,data_only=True)
     elif method == 'stream':
-        wb = load_workbook(filename=BytesIO(file_path_or_stream))
+        wb = load_workbook(filename=BytesIO(file_path_or_stream),data_only=True)
     else:
         raise ParameterException()
     ws = wb.active
@@ -25,8 +27,10 @@ def read_xlsx(file_path_or_stream, method='path', row_limit: int = None, col_lim
         else:
             col = row
         for j in col:
-            row_data.append(j.value)
-        table_data.append(row_data)
+            if j.value:
+                row_data.append(j.value)
+        if row_data:
+            table_data.append(row_data)
     return table_data
 
 

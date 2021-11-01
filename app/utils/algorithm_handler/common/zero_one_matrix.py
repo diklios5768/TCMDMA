@@ -16,7 +16,7 @@ __auth__ = 'diklios'
 import re
 import pandas as pd
 import numpy as np
-from app.utils.file_handler.text_handler import filter_empty_text
+from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
 # 0-1矩阵

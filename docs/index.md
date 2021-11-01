@@ -2,7 +2,7 @@
 
 * [readme](../README.md):总的说明文档，包含了项目简介和启动说明
 * [index](index.md):文档入口和索引
-* [code](code.md):数据库的字段和http协议码的定义
+* [code](code.md):数据库字段和http协议码的定义
 * [develop](development.md):开发的一些帮助、说明和指南
 * [require](require.md):需求文档和计划功能
 * [version](version.md):版本变动记录

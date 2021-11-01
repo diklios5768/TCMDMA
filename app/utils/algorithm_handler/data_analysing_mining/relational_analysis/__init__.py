@@ -1,7 +1,7 @@
-from app.utils.file_handler.text_handler import filter_empty_text
 from app.utils.algorithm_handler.complex_network.image import generate_image
 from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.apriori import apriori_analysis, \
     single_items_sorted, items_sorted, rules_sorted
+from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
 # from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.fpGrowth import fp_growth_analysis
@@ -186,7 +186,6 @@ def handle_homogeneous(data: list, params: dict, user_project_analysis_files_dir
     # print(item_sets)
     # print(rules)
     return handle_homogeneous_result_show(item_sets, rules, params, user_project_analysis_files_dir)
-
 
 # if __name__ == '__main__':
 #     handle_homogeneous([[
