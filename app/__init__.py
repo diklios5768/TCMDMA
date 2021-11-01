@@ -102,6 +102,8 @@ def register_commands(app):
         elif env in ['development', 'dev', 'd']:
             init_development_data()
             click.echo('development data init success')
+        else:
+            click.echo('no this env')
 
     # 开发数据
     @app.cli.command()
