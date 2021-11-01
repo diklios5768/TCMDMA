@@ -37,8 +37,6 @@
     * models:测试数据库（一般是sqlite3）
     * test.py:常规测试文件
 * docs：文档
-    * code.md:码对应表
-    * development.md:开发的一些帮助、说明和指南
 * venv：通过virtual environment创建的虚拟环境，不会上传，但是尽量使用 `venv` 名称
 * 启动和配置文件
     * .env：敏感环境配置，不推荐上传到git
