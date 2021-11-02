@@ -3,8 +3,8 @@
 # from flask_moment import Moment
 # from flask_babel import Babel
 from flask_cors import CORS
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+# from flask_limiter import Limiter
+# from flask_limiter.util import get_remote_address
 
 from app.models import db, migrate, redis
 from app.utils.mail_handler import mail
@@ -15,10 +15,10 @@ from app.utils.mail_handler import mail
 # babel = Babel()
 cors = CORS()
 
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["200 per day", "100 per hour", "20 per minute"],
-)
+# limiter = Limiter(
+#     key_func=get_remote_address,
+#     default_limits=["200 per day", "100 per hour", "20 per minute"],
+# )
 
 
 # 注册插件,全部使用init_app的方法生成
