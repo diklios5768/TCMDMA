@@ -117,8 +117,9 @@ MAIL_SERVER='smtp.126.com'
 MAIL_USERNAME=''
 MAIL_PASSWORD=''
 MAIL_DEFAULT_SENDER='NJUCM MedInfo'
+ADMIN_MAIL=''
 # 配置域名和https
-HTTPS=0
+SSL_DISABLE=1
 HTTP2=0
 DOMAIN_NAME='localhost:5000'
 ```
@@ -136,18 +137,33 @@ DOMAIN_NAME='localhost:5000'
     * 类Unix环境下
         * 先安装gunicorn：`pipenv install gunicorn`
         * 启动：`gunicorn -c gunicorn.py wsgi:wsgi_app`
-        * 使用`-D`参数可以以守护进程形式来运行Gunicorn进程，其实就是将这个服务放到后台去运行。
+            * 如果有HTTPS:`gunicorn --certfile=<证书文件> --keyfile=<证书密钥文件> -c gunicorn.py wsgi:wsgi_app`
+            * 使用`-D`参数可以以守护进程形式来运行Gunicorn进程，其实就是将这个服务放到后台去运行。
         * 查看端口占用情况：`netstat -ntulp |grep 8000`
         * 删除进程：`kill pid`
     * windows环境下
         * 先安装waitress：`pipenv install waitress`
         * 启动：`waitress-serve --listen=*:8000 wsgi:wsgi_app`
-            * 或者`python .\waitress_server.py`(启动之后终端不会有任何提示)
+            * 或者`python waitress_server.py`(启动之后终端不会有任何提示)
+            * 或者`.\run-flaskapp.ps1`
+                * 注意：powershell脚本并不能用于nssm安装服务，因为没有加载任何环境变量（除非自己手动设置，但是非常麻烦），所以连python都不会载入进去
         * 永久启动：使用nssm一类的工具
-            * 注意设置一些参数，最重要的项目启动文件夹和开机自启动
+            * 管理员模式启动终端
             * 进入到项目文件夹
-            *
-          添加服务，如：`nssm install xminer "C:/Users/Administrator/.virtualenvs/TCMDMA-xHTHL4l7/Scripts/python.exe" "waitress_server.py"`
+            * 添加服务
+                * `nssm install xminer "虚拟环境的python路径" ".\waitress_server.py"`
+            * 设置参数
+                * 设置启动文件夹：`nssm set xminer AppDirectory 绝对路径`
+                * 设置开机自启动：`nssm set xminer Start SERVICE_AUTO_START`
+                * 设置日志路径：`nssm set xminer AppStdout "...\nssm-log\service.log"`
+                * 设置错误日志路径：`nssm set xminer AppStderr "...\nssm-log\service-error.log"`
+                    * 日志文件一定要存在
+                    * 路径是具体的绝对路径
+            * 设置环境变量
+                * `nssm set xminer AppEnvironmentExtra 变量名=变量值`
+                * 由于一个一个设置环境变量比较麻烦，所以在`wsgi.py`和`app/settings.py`中手动进行了环境变量的载入
+                    * 在`app/settings.py`中再次设置是celery的原因
+                    * 实际上这个方法不够优雅，导致settings没法分模块，但暂时没找到更完美的解决办法
             * 启动服务：`nssm start xminer`
 * 启动redis数据库
     * 配置celery的环境变量，在app/utils/celery_handler/config.py中配置，一般来说默认0、1端口即可

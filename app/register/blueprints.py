@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   waitress_server.py    
-@Create Time    :   2021/8/19 21:42
+@File Name      :   blueprints.py    
+@Create Time    :   2021/11/2 8:52
 @Description    :   
 @Version        :   
 @License        :   
@@ -13,10 +13,9 @@
 """
 __auth__ = 'diklios'
 
-from waitress import serve
+from app.views import tcm_bp
 
-from wsgi import wsgi_app
 
-if __name__ == '__main__':
-    print('wsgi_app running')
-    serve(wsgi_app, host='0.0.0.0', port='8000')
+# 注册路由
+def register_blueprints(app):
+    app.register_blueprint(tcm_bp, url_prefix='/')

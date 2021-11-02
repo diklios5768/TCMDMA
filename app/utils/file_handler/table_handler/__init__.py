@@ -86,5 +86,4 @@ def read_table_to_dataset_data(file_path: str, has_header: bool, limit: int = No
         table_data = read_table(file_path, file_type='csv', method='path')
     else:
         return ParameterException(msg='file type error', chinese_msg='文件格式不支持，请重新上传')
-    data = ant_design_table_limit(has_header=has_header, table_data=table_data, file_path=file_path, limit=limit)
-    return data
+    return ant_design_table_limit(has_header=has_header, table_data=table_data, file_path=file_path, limit=limit)

@@ -280,6 +280,11 @@
         * [graphene-sqlalchemy](https://github.com/graphql-python/graphene-sqlalchemy/)
             * `pipenv install graphene-sqlalchemy`
     * 自定义
+* API限制
+    * 使用`flask-limiter`
+        * 安装：`pipenv install Flask-Limiter`
+        * [文档](https://flask-limiter.readthedocs.io/en/stable/)
+        
 * 前后端交互
     * ajax
         * 游览器原生XMLHttpRequest(XHR)
@@ -498,6 +503,7 @@ data4 = request.args.to_dict()
     * PyPDF2
     * PyPDF3
 
+
 ### 单元测试
 
 * 使用`pytest`
@@ -713,6 +719,8 @@ server {
     * 免费CA：https://letsencrypt.org/
     * 腾讯云
     * 阿里云
+* `flask-sslify`:因为长时间不维护已经不推荐使用
+* 直接使用NGINX代理即可简单实现
 
 ### 域名
 
@@ -721,7 +729,7 @@ server {
 
 ### 日志记录
 
-* 使用logging模块配合flask自带的app.logger即可
+* 使用logging模块配合flask自带的app.logger即可，详细参考register中的logger模块
 
 ## 注意事项
 
@@ -731,21 +739,23 @@ server {
 
 # 文档更新记录
 
-* 更新时间：2021-07-11
+* 2021-07-11
     * 重构了整个文档结构，增加了大量参考链接
-* 更新时间：2021-07-21
+* 2021-07-21
     * 微调了文档的结构
     * 添加了http状态码和restful api相关的内容
-* 更新时间：2021-07-23
+* 2021-07-23
     * 增加了测试部分
     * 完善了项目文档结构说明
     * 注意事项中添加了清除python缓存的方法
-* 更新时间：2021-07-28
+* 2021-07-28
     * 修改了celery的说明使用部分
     * 更新了网页开发资源和模板文件说明
-* 更新时间：2021-07-30
+* 2021-07-30
     * 更改了celery 需要flask上下文变量的使用说明
-* 更新时间：2021-08-17
+* 2021-08-17
     * 增加了uwsgi、gunicorn和nginx的内容
-* 更新时间：2021-10-22
+* 2021-10-22
     * 完善了项目结构说明
+* 2021-11-02
+    * 增加HTTPS和api限制相关的内容

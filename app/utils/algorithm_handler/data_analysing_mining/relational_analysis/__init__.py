@@ -2,6 +2,7 @@ from app.utils.algorithm_handler.complex_network.image import generate_image
 from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.apriori import apriori_analysis, \
     single_items_sorted, items_sorted, rules_sorted
 from app.utils.file_handler.text_handler.list import filter_empty_text
+from app.utils.file_handler.text_handler.reg import replace_character
 
 
 # from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.fpGrowth import fp_growth_analysis
@@ -11,8 +12,9 @@ def rows_to_table(rows, character=','):
     data = []
     all_node_data = []
     for row in rows:
-        row_array = row.split(character)
-        no_empty_row = filter_empty_text(row_array, method='empty')
+        row = replace_character(row)
+        row_list = row.split(character)
+        no_empty_row = filter_empty_text(row_list, method='empty')
         data.append(tuple(no_empty_row))
         all_node_data.extend(no_empty_row)
 
@@ -26,7 +28,10 @@ def handle_homogeneous_result_show(item_sets, rules, params: dict = {}, user_pro
     fore_end_graph_limit = limits.get('fore_end_graph_limit', 500)
     item_sets_rows = []
     # 绘图需要使用的数据
-    single_items_num = len(item_sets[1])
+    if item_sets.get('1', None):
+        single_items_num = len(item_sets[1])
+    else:
+        single_items_num = 0
     items_num = 0
     for key_num in item_sets:
         for item in item_sets[key_num]:
@@ -178,35 +183,138 @@ def handle_homogeneous(data: list, params: dict, user_project_analysis_files_dir
     rows = [row[0] for row in data]
     # print(rows)
     main_data, all_node_data = rows_to_table(rows)
-    # print(main_data)
+    print(main_data)
     item_sets, rules = apriori_analysis(main_data, min_support=params['min_support'],
                                         min_confidence=params['min_confidence'])
     # item_sets, rules =fp_growth_analysis(main_data, min_support=params['min_support'],
     #                                      min_confidence=params['min_confidence'])
-    # print(item_sets)
-    # print(rules)
+    print(item_sets)
+    print(rules)
     return handle_homogeneous_result_show(item_sets, rules, params, user_project_analysis_files_dir)
 
-# if __name__ == '__main__':
-#     handle_homogeneous([[
-#         '天龙,酒地龙,山慈菇,醋莪术,法半夏,广郁金,川贝粉,仙鹤草,前胡,蜜紫苑,三七粉煎汤带水,炒王不留行,皂角刺,全蝎,醋延胡索,白芥子,半枝莲,白花蛇舌草,炙甘草,姜厚朴,酒黄芩,火麻仁,丹参,醋五味子,猪苓,茯苓,麦冬'],
-#         [
-#             '天龙先煎,酒地龙先煎,山慈菇,醋莪术,法半夏,广郁金,川贝粉冲服,仙鹤草,前胡,蜜紫苑,三七粉冲服,炒王不留行,皂角刺,全蝎先煎,醋延胡索,白芥子,半枝莲,白花蛇舌草,炙甘草,姜厚朴,酒黄芩,丹参,醋五味子,猪苓,茯苓,麦冬,醋柴胡,鱼腥草,金银花,生大黄后下,地鳖虫先煎'],
-#         [
-#             '天龙先煎,酒地龙先煎,山慈菇,醋莪术,法半夏,广郁金,川贝粉冲服,仙鹤草,前胡,蜜紫苑,三七粉冲服,炒王不留行,皂角刺,全蝎先煎,醋延胡索,白芥子,半枝莲,白花蛇舌草,炙甘草,姜厚朴,酒黄芩,丹参,猪苓,茯苓,麦冬,醋柴胡,鱼腥草,地鳖虫先煎,片姜黄,羌活,黑附片先煎,干姜,番泻叶另煎'],
-#         [
-#             '天龙先煎,酒地龙先煎,山慈菇,醋莪术,法半夏,广郁金,川贝粉冲服,仙鹤草,前胡,蜜紫苑,三七粉冲服,炒王不留行,皂角刺,全蝎先煎,醋延胡索,白芥子,半枝莲,白花蛇舌草,炙甘草,姜厚朴,酒黄芩,丹参,猪苓,茯苓,麦冬,醋柴胡,鱼腥草,地鳖虫先煎,片姜黄,黑附片先煎,干姜,番泻叶另煎,陈皮,代赭石先煎,旋复花包煎'],
-#         ['天龙,酒地龙,山慈菇,半枝莲,白花蛇舌草,川贝粉,猪苓,茯苓,麦冬,酒山萸肉,天花粉,丹参,太子参,山药,醋五味子,鱼腥草,炒王不留行,皂角刺,炮甲粉,法半夏,酒黄芩,枸杞子,灵芝'],
-#         [
-#             '藤梨根,半枝莲,白花蛇舌草,麦冬,川贝粉煎汤代水,炒王不留行,法半夏,皂角刺,炮甲粉煎汤代水,桑寄生,炙甘草,醋莪术,醋延胡索,炒白术,炒薏苡仁,黄芪,陈皮,灵芝,枸杞子,全蝎,炒白芍,独活,鸡血藤,三七粉煎汤带水,砂仁,地鳖虫'],
-#         [
-#             '藤梨根,半枝莲,白花蛇舌草,麦冬,川贝粉冲服,炒王不留行,法半夏,皂角刺,炮甲粉冲服,桑寄生,炙甘草,醋莪术,醋延胡索,炒白术,炒薏苡仁,黄芪,陈皮,灵芝,枸杞子,全蝎先煎,炒白芍,独活,鸡血藤,三七粉冲服,砂仁后下,地鳖虫先煎,醋龟板先煎,丹皮'],
-#         [
-#             '醋柴胡,广郁金,鱼腥草,川贝粉,法半夏,半枝莲,白花蛇舌草,前胡,蜜紫苑,制款冬花,仙鹤草,酒黄芩,姜厚朴,麦冬,醋五味子,柏子仁,天龙,酒地龙,白芥子,醋延胡索,炙甘草,炒白术,炒薏苡仁,陈皮,瓜子金,灵芝,太子参,苦杏仁,桔梗'],
-#         [
-#             '广郁金,鱼腥草,川贝粉,法半夏,半枝莲,白花蛇舌草,前胡,蜜紫苑,制款冬花,仙鹤草,酒黄芩,姜厚朴,麦冬,醋五味子,天龙,酒地龙,白芥子,醋延胡索,炙甘草,炒白术,炒薏苡仁,陈皮,灵芝,太子参,苦杏仁,桔梗,苏子,煅龙骨,煅牡蛎,瓜子金'],
-#         [
-#             '天麻,全蝎先煎,猪苓,茯苓,山慈菇,三七粉冲服,炒王不留行,皂角刺,川贝粉冲服,广郁金,前胡,蜜紫苑,法半夏,醋延胡索,太子参,炙甘草,姜厚朴,火麻仁,酒黄芩,陈皮,鱼腥草,白芷,金银花'],
-#     ],
-#         params={'min_support': 0.6, 'min_confidence': 0.6},
-#         user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+
+if __name__ == '__main__':
+    handle_homogeneous([
+        [
+            "L02、L08、L10、L11、R02、R10、R11"
+        ],
+        [
+            "L01、L02、L06、L09、L10、R02"
+        ],
+        [
+            "L03、L09、L11、R03、R06、R09"
+        ],
+        [
+            "L03、L04、L07、L11、L12、R07"
+        ],
+        [
+            "R02"
+        ],
+        [
+            "R11"
+        ],
+        [
+            "L02、L03、L11、R02"
+        ],
+        [
+            "L02、L11、R07、R08、R12"
+        ],
+        [
+            "L03、L06、L11、R08"
+        ],
+        [
+            "L03、L07、L08、L11、L12、R03、R08、R11"
+        ],
+        [
+            "L05、L09、R05"
+        ],
+        [
+            "L11、R03"
+        ],
+        [
+            "L02、L05、L08、L11、R10、R11"
+        ],
+        [
+            "L02、L04、L05、L07"
+        ],
+        [
+            "R01、R11"
+        ],
+        [
+            "L01、L05、L09、R02、R05、R06、R09、R10"
+        ],
+        [
+            "L06、L08、R06、R08、R10、R11"
+        ],
+        [
+            "L02、L03、L08、L10、L11、L12、R02、R03、R08、R10、R11、R12"
+        ],
+        [
+            "L02"
+        ],
+        [
+            "L01、L02、L03、L10、L11、L12、R01、R02、R03、R06、R11"
+        ],
+        [
+            "L02、L06、L10、L11、R02、R03、R10、R11"
+        ],
+        [
+            "L08"
+        ],
+        [
+            "R02、R06、R09"
+        ],
+        [
+            "L01、L02、L10、L11"
+        ],
+        [
+            "R08、R11"
+        ],
+        [
+            "L01、L07、R01"
+        ],
+        [
+            "L02、L05、L06、L10、R01、R02、R05、R06、R10"
+        ],
+        [
+            "L01、L03、L04、L07、L09、R01、R07"
+        ],
+        [
+            "L04、L07、L11、R04、R07"
+        ],
+        [
+            "L02"
+        ],
+        [
+            "L04、L08、R08、R11"
+        ],
+        [
+            "L02、L10、R02、R10"
+        ],
+        [
+            "L04、L06、L07、L08、L09、L10、L11"
+        ],
+        [
+            "L01、L05、L06、L08、L09、L10、L11、R05、R08、R09"
+        ],
+        [
+            "L10"
+        ],
+        [
+            "L11、R11"
+        ],
+        [
+            "L02、R08"
+        ],
+        [
+            "L06、L10、R01、R06、R07、R10"
+        ],
+        [
+            "L10、R03、R12"
+        ],
+        [
+            "L03、L06、L09、R01、R06、R11"
+        ]
+    ],
+        params={'min_support': 0.6, 'min_confidence': 0.6},
+        user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')

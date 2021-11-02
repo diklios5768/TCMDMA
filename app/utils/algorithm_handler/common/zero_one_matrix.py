@@ -14,8 +14,10 @@
 __auth__ = 'diklios'
 
 import re
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
 from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
@@ -58,8 +60,9 @@ def zero_one_matrix_to_rows(zero_one_matrix):
 def rows_to_zero_one_matrix_pd(rows):
     new_rows = []
     for row_text in rows:
-        row_list = re.sub(r'[，,、]', ',', row_text).split(',')
-        new_rows.append(row_list)
+        row_list = re.sub(r'[，、 ]', ',', row_text).split(',')
+        no_empty_row = filter_empty_text(row_list)
+        new_rows.append(no_empty_row)
     all_nodes_set = set([node for row in new_rows for node in row])
     zero_one_matrix = pd.DataFrame(np.zeros([len(new_rows), len(all_nodes_set)]), columns=all_nodes_set)
     for i in range(len(new_rows)):
@@ -70,9 +73,9 @@ def rows_to_zero_one_matrix_pd(rows):
 
 def zero_one_matrix_to_rows_pd(zero_one_matrix):
     all_nodes_set = zero_one_matrix.columns.values
-    print(all_nodes_set)
+    # print(all_nodes_set)
     zero_one_matrix_rows = zero_one_matrix.to_numpy()
-    print(zero_one_matrix_rows)
+    # print(zero_one_matrix_rows)
     # 更快的写法
     text_list = [','.join([all_nodes_set[index] for (index, value) in enumerate(row) if value == 1]) for row in
                  zero_one_matrix_rows]

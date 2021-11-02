@@ -24,6 +24,8 @@ flask-migrate = "*"
 # http
 requests = "*"
 flask-cors = "*"
+flask-limiter = "*"
+#flask-socketio="*"
 # email
 email-validator = "*"
 flask-mail = "*"
@@ -47,6 +49,8 @@ networkx = "*"
 matplotlib = "*"
 python-louvain = "*"
 # server
+pyopenssl = "*"
+#flask-sslify = "*"
 eventlet = "*"
 gevent = "*"
 #waitress = "*"
@@ -60,7 +64,6 @@ watchdog = "*"
 pysnooper = "*"
 pytest = "*"
 flask-testing = "*"
-
 
 [requires]
 python_version = "3.9"

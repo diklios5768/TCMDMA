@@ -5,8 +5,13 @@ from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-load_dotenv(verbose=True)
-load_dotenv(dotenv_path='../.flaskenv', verbose=True)
+# 手动载入环境变量
+dotenv_path = os.path.join(basedir, '../.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path=dotenv_path, verbose=True)
+flask_dotenv_path = os.path.join(basedir, '../.flaskenv')
+if os.path.exists(flask_dotenv_path):
+    load_dotenv(dotenv_path=flask_dotenv_path, verbose=True)
 
 
 # 基础环境
@@ -30,7 +35,8 @@ class BaseConfig(object):
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
     }
-
+    # redis数据库地址
+    REDIS_URL = os.getenv('REDIS_URL', 'redis://@localhost:6379/0')
     # 邮件设置部分
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT', 465)
@@ -42,7 +48,9 @@ class BaseConfig(object):
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     # 默认发件人，发送邮件不设置的时候就用这个
-    MAIL_DEFAULT_SENDER = (os.getenv('MAIL_DEFAULT_SENDER'), MAIL_USERNAME)
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', MAIL_USERNAME)
+    # 管理员的邮箱
+    ADMIN_MAIL = os.getenv('ADMIN_MAIL', MAIL_USERNAME)
     # 设置TOKEN过期时间
     REFRESH_TOKEN_EXPIRATION = os.getenv(
         'REFRESH_TOKEN_EXPIRATION', 3600 * 24 * 7)
@@ -53,13 +61,15 @@ class BaseConfig(object):
     # 验证码默认有效期10分钟
     CAPTCHA_EXPIRATION = os.getenv('CAPTCHA_EXPIRATION', 60 * 10)
     # Cookie默认只能通过http设置
-    SESSION_COOKIE_HTTPONLY = os.getenv('SESSION_COOKIE_HTTPONLY', True)
+    SESSION_COOKIE_HTTPONLY = bool(os.getenv('SESSION_COOKIE_HTTPONLY', True))
     # hashids的盐，如果环境变量中没设置，默认使用secret_key
     HASHIDS_SALT = os.getenv('HASHIDS_SALT', SECRET_KEY)
     # 用户文件夹设置
     USER_DIR = os.path.join(basedir, 'users')
     USER_DATA_DIR = os.path.join(basedir, 'users/data')
     USER_UPLOAD_DIR = os.path.join(basedir, 'users/upload')
+    # 限制API
+    RATELIMIT_STORAGE_URL = os.getenv('RATELIMIT_STORAGE_URL', REDIS_URL)
 
 
 # 开发环境
@@ -70,8 +80,6 @@ class DevelopmentConfig(BaseConfig):
         'SQLALCHEMY_DATABASE_URI',
         'sqlite:///' +
         os.path.join(basedir, '../tests/model/dev.db'))
-    # redis数据库地址
-    REDIS_URL = os.getenv('REDIS_URL', 'redis://@localhost:6379/0')
 
 
 # 测试环境

@@ -15,6 +15,7 @@ def register_celery(app, celery_app):
     """
     # 除非flask 中做了什么改动，以他为优先，否则并不需要更新配置
     # celery.conf.update(app.config)
+    # print(app.config)
     TaskBase = Task
 
     class ContextTask(TaskBase):
