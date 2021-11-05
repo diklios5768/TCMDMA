@@ -171,8 +171,9 @@ DOMAIN_NAME='localhost:5000'
     * 配置验证码和token用的环境变量，暂定使用2端口，和celery的端口区分开
 * 启动celery
     * 在`app/utils/celery_handler/config.py`中配置环境变量
-    * 启动：`celery -A wsgi:celery worker -l INFO`
-        * Windows需要使用：`celery -A wsgi:celery worker -l INFO -P threads`
+    * 启动：`celery -A wsgi:celery worker -l INFO -n xminer_worker`
+        * Windows需要使用：`celery -A wsgi:celery worker -l INFO -n xminer_worker -P threads`
+        * 似乎`-P gevent`或者`-P eventlet`也能启动，未测试运行效果
     * 最好也添加为服务在后台运行
 
 ## 开发团队介绍

@@ -18,7 +18,7 @@ cors = CORS()
 
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["200 per day", "100 per hour", "20 per minute"],
+    default_limits=["500 per day", "200 per hour", "50 per minute"],
     # X-RateLimit写入响应头
     headers_enabled=True,
 )

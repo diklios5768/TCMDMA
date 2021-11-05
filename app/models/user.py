@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, SmallInteger, Enum, Boolean
+from sqlalchemy import Column, String, SmallInteger, Enum, Boolean, JSON
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.models.base import Base
 
 
@@ -50,3 +51,4 @@ class BaseRole(Base):
     name = Column(String(50), unique=True)
     description = Column(String(255), default='')
     access_level = Column(SmallInteger, default=1)
+    settings = Column(JSON, default={})

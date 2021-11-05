@@ -68,7 +68,9 @@ def register_commands(app):
     def data_update(env):
         if env in ['production', 'prod', 'p']:
             update_production_data()
+            init_redis_production()
             click.echo('production data update success')
         elif env in ['development', 'dev', 'd']:
             update_development_data()
+            init_redis_development()
             click.echo('development data update success')

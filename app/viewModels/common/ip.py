@@ -17,6 +17,7 @@ from app.models import redis
 
 
 def init_banned_ip_address():
+    redis.delete('banned_ip_address')
     redis.sadd('banned_ip_address', 'init')
 
 

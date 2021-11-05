@@ -19,6 +19,7 @@ from app.utils.time import generate_celery_delay_time
 
 
 def init_banned_token():
+    redis.delete('banned_token')
     redis.sadd('banned_token', 'init')
 
 

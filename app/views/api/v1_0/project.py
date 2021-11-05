@@ -19,6 +19,7 @@ from app.viewModels import database_add_single, database_update_single, database
 from app.viewModels.common.params import params_remove_pagination, params_remove_empty, params_fuzzy_query
 from app.viewModels.tcm.project import find_project
 from app.viewModels.tcm.user import is_common_user
+
 project_bp = Blueprint('project', __name__)
 
 
@@ -56,10 +57,13 @@ def get_all_projects():
     projects = Project.query.filter_by(owner_id=user_id).all()
     projects_count = len(projects)
     rows = []
+    need_refresh = False
     for project in projects:
         project_row = dict(project)
         rate = project.finished_rate
         project_row['rate'] = int(rate * 100)
+        if not project.finished:
+            need_refresh = True
         failed_analyses = []
         for analysis in project.analyses:
             status = analysis.analysis_status
@@ -73,7 +77,7 @@ def get_all_projects():
         project_row['pdf_download_path'] = project.other_result.get('pdf_download_path', '')
         rows.append(project_row)
     rows.reverse()
-    return ReadSuccess(data={"projects": rows, "projects_count": projects_count})
+    return ReadSuccess(data={"projects": rows, "projects_count": projects_count, 'need_refresh': need_refresh})
 
 
 @project_bp.get('/all_count')
@@ -130,7 +134,7 @@ def get_project_by_params():
         params_dict.pop('finished')
     else:
         filters_by['finished'] = params_dict.pop('finished')
-    filters_or = params_fuzzy_query(Dataset, params_remove_empty(params_remove_pagination(params_dict)))
+    filters_or = params_fuzzy_query(Project, params_remove_empty(params_remove_pagination(params_dict)))
     projects = database_read_by_params(Project, filters_by=filters_by, filters_or=filters_or)
     project_rows = []
     for project in projects:

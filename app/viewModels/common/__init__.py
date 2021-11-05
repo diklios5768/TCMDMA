@@ -13,12 +13,14 @@
 """
 __auth__ = 'diklios'
 
-from app.viewModels.common.token import init_banned_token
 from app.viewModels.common.ip import init_banned_ip_address
+from app.viewModels.common.token import init_banned_token
+
 
 def init_redis_production():
     init_banned_token()
     init_banned_ip_address()
+
 
 def init_redis_development():
     init_redis_production()
