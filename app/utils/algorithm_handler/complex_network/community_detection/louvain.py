@@ -14,7 +14,9 @@
 __auth__ = 'diklios'
 
 import json
+
 import community as community_louvain
+
 from app.libs.lists import colors, colors_length
 from app.utils.algorithm_handler.common import rows_to_graph, rows_to_graph_with_weight
 from app.utils.algorithm_handler.complex_network.image import generate_image_with_differentiate
@@ -117,11 +119,7 @@ def handle_louvain(data: list, params: dict, user_project_analysis_files_dir):
     return handle_louvain_result_show(graph, partition, params, user_project_analysis_files_dir)
 
 
-if __name__ == '__main__':
-    handle_louvain([['蛇舌草,半枝莲,龙葵,石打穿,狗舌草,莪术,山慈菇,漏芦,肿节风,猫爪草,泽漆,土鳖虫,桃仁,蟾皮,砂仁'],
-                    ['败酱草,椿根白皮,墓头回,生薏苡仁,冬瓜子,苦参,泽泻,红藤,仙鹤草,失笑散,太子参,枸杞'],
-                    ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根,鸡血藤,泽漆,椿根白皮,夜交藤'],
-                    ['党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,石斛,仙鹤草,生薏苡仁'],
-                    ['法半夏,莱菔子,石斛,党参,焦白术,茯苓,炙甘草,太子参,麦冬,北沙参,仙鹤草,生薏苡仁,藤梨根']],
-                   params={'weight': True},
-                   user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-louvain方法分析结果')
+# if __name__ == '__main__':
+#     handle_louvain([['L03、L06、L09、R01、R11、R09、L04、R10、R12、L05、L10、R02']],
+#                    params={'weight': True},
+#                    user_project_analysis_files_dir='D:\\Coding\\Python\\databaseAPI\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-louvain方法分析结果')

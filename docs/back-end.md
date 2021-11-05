@@ -284,59 +284,43 @@
     * 使用`flask-limiter`
         * 安装：`pipenv install Flask-Limiter`
         * [文档](https://flask-limiter.readthedocs.io/en/stable/)
-        
-* 前后端交互
-    * ajax
-        * 游览器原生XMLHttpRequest(XHR)
-        * jQuery:$.ajax()
-        * Axios:axios.put()
-    * fetch
-        * 游览器原生fetch方法(推荐)
-            * 参考[Fetch API](http://www.ruanyifeng.com/blog/2020/12/fetch-tutorial.html)
-            * [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-            * [传统 Ajax 已死，Fetch 永生](https://github.com/camsong/blog/issues/2)
-        * NodeJS:Request库
-        * UmiJS
-            * [request](https://umijs.org/zh-CN/plugins/plugin-request#%E9%85%8D%E7%BD%AE)
-                * 用法基本同umi-request
-                * [umi-request](https://github.com/umijs/umi-request/blob/master/README_zh-CN.md)
-            * [useRequest](https://hooks.umijs.org/zh-CN/hooks/async)
-* fetch方法的示例
-
-```javascript
-const data = {'type': 'random', 'count': 2};
-const response = await fetch('http://127.0.0.1:5000/sun/api/find_project', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify(data)
-});
-
-const json = await response.json();
-console.log(json);
-```
-
-* jQuery的ajax示例
-
-```javascript
-let data = {};
-let url = '';
-$.ajax({
-    url: url,
-    data: data,
-    type: 'POST',
-    success: function (data) {
-
-    }, error: function (e) {
-
-    }, complete: function (data) {
-
-    }
-
-})
-
-```
+        * 限制
+            * 格式
+                * "100 per day"、"20 per hour"、"5 per minute"、"1 per second"
+                * "100/day"、"20/hour"、"5/minute"、"1/second"
+            * 速率限制可以设置全局配置，针对所有接口进行限制
+            * 也可以通过装饰器进行局部限制
+            * 对于不想限制的接口，可以通过装饰器@limiter.exempt进行解除限制
+        * limiter装饰器
+            * @limiter.exempt：解除限制
+            * @limiter.limit
+                * limit_value:可以是字符串，也可以是一个获得字符串的函数（从app.config中加载）
+                * key_func:据什么进行限制，flask_limiter.util提供了两种方式
+                    * flask_limiter.util.get_ipaddr()：使用X-Forwarded-For标头中的最后一个IP地址，否则回退到请求的remote_address 。
+                    * flask_limiter.util.get_remote_address()：使用请求的remote_address
+                    * 注意：在真实开发中，大部分项目都配置了Nginx，如果直接使用get_remote_address，获取到的是Nginx服务器的地址，相当于来自该Nginx服务器的所有请求会被当做同一个IP访问，所以项目中一般都是自定义key_func
+                        * X-Forwarded-For：一般是每一个非透明代理转发请求时会将上游服务器的ip地址追加到X-Forwarded-For的后面，使用英文逗号分割；
+                        * X-Real-IP：一般是最后一级代理将上游ip地址添加到该头中；
+                        * X-Forwarded-For 是多个ip地址，而X-Real-IP是一个；如果只有一层代理，这两个头的值就是一样的
+                * exempt_when=callable:当满足给定条件时，可以免除限制
+                    * 也可以使用Limiter.request_filter实现
+                * deduct_when:断某些情况不计入使用频率的次数
+                * error_message：自定义错误信息
+            * 共享限制：创建一个limiter.shared_limit对象
+                * 命名共享限制：通过相同的shared_limit对象进行装饰。
+                * 动态共享限制：将可调用对象作为范围传递，该函数的返回值将用作范围。注意，callable具有一个参数：表示请求端点的字符串。
+                * 与单个limiter一样可以叠加多个share_limiter装饰器 
+                * 可接受key_function参数
+                * 也可结束动态的策略配置函数， 与limiter一致
+            * @limiter.request_filter：符合条件的屏蔽策略
+        * 速度限制策略
+            * Flask-Limiter内置了三种不同的速率限制策略
+                * Fixed Window
+                * Fixed Window with Elastic Expiry
+                * Moving Window
+        * 参考
+            * https://www.cnblogs.com/Du704/p/13281032.html
+            * https://blog.csdn.net/zuozuochong/article/details/88365970
 
 * 后端获取回传值的方法
 
@@ -453,8 +437,18 @@ data4 = request.args.to_dict()
 
 ### 缓存
 
-* 使用`Flask-Cache`
+* 使用`Flask-Cache`:太老了，很多年不更新了，不推荐使用
+    * 安装：`pipenv install Flask-Cache`
+    * [官网](https://github.com/thadeusb/flask-cache)
     * [文档](https://pythonhosted.org/Flask-Cache/)
+    * 使用Memoization甚至能够缓存相同参数的函数
+        * 如果函数不接受参数的话，cached() 和 memoize() 两者的作用是一样的
+    * 具体的删除方法见官方文档
+    * 参考：https://blog.csdn.net/qq_41134008/article/details/105698861
+* 使用`flask-caching`:fork老版本的flask-cache
+    * 安装：`pipenv install flask-caching`
+    * [官网](https://github.com/pallets-eco/flask-caching)
+    * [文档](https://flask-caching.readthedocs.io/en/latest/)
 
 ### 字符处理
 
@@ -527,35 +521,6 @@ data4 = request.args.to_dict()
     * [官网](https://github.com/jarus/flask-testing)
     * [文档](https://pythonhosted.org/Flask-Testing/)
 
-## 前端开发
-
-### 传统网页开发方法：引入css和js文件
-
-* 文档
-    * [jQuery中文](https://www.jquery123.com/)
-    * [bootstrap](https://getbootstrap.com/)
-* 静态资源设置
-    * static_folder表示静态文件所在路径，默认为root_dir下的static文件夹
-    * static_url_path的行为比较复杂
-        * 如果static_folder未被指定（也就是默认值static），那么static_url_path取为static
-        * 如果static_folder被指定了，那么static_url_path等于static_folder的最后一级文件夹名称
-        *
-      手动指定static_url_path时，如果static_url_path不为空串，url的路径必须以/开头，如/static，否则相当于static_url_path=None的情况，也就是使用static_folder的目录名字
-        * 手动指定static_url_path时，如果static_url_path为空串，url路径不必以/开头
-    * static_path即将废弃，推荐使用static_path_url
-    * `static_folder`是你知道的文件夹位置，`static_url_path`是对外提供的静态资源url前缀，修改它可以防止别人知道你的文件夹名称
-    * js和css文件在`static/js`、`static/css`文件夹下
-    * 其他静态资源文件也建议每个人自己创建对应的文件夹
-    * 将静态资源文件替换为相应的CDN
-* 模板
-    * 注意IDE设置jinja2为模板语言，才有相应的提示
-    * 已经在templates/frame文件夹下创建了一些模板文件，里面已经集成了各对应的框架所需要的基本文件
-    * 每个人的网页请在各自的模板文件夹下进行开发
-
-### 现代网页开发方法：使用nodejs、webpack等工具进行开发
-
-* 具体开发方法因为内容太多就不赘述了，只是推荐使用webstorm辅助开发，前后端分离，flask只提供api
-* 打包完成后将静态资源文件放到自己的资源文件夹下
 
 ### 国际化
 
@@ -759,3 +724,4 @@ server {
     * 完善了项目结构说明
 * 2021-11-02
     * 增加HTTPS和api限制相关的内容
+    * 拆分出前端开发文档

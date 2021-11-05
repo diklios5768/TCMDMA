@@ -23,4 +23,6 @@ celery = register_celery(wsgi_app, celery)
 # 加上if判断可以保证在生产环境下不会启动flask自带的服务器
 if __name__ == '__main__':
     # 多进程或多线程只能选择一个，不能同时开启
+    # 使用ipv6运行
+    # wsgi_app.run(host='::')
     wsgi_app.run(threaded=True)

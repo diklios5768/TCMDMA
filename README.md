@@ -111,6 +111,8 @@ SECURITY_PASSWORD_SALT='120426439174435924094353414614255850770'
 SQLALCHEMY_DATABASE_URI='mysql+pymysql://username:password@host:port/databasename'
 # redis数据库URL
 REDIS_URL = 'redis://@localhost:6379/2'
+RATELIMIT_STORAGE_URL='redis://@localhost:6379/3'
+CACHE_REDIS_URL='redis://@localhost:6379/4'
 # 邮件部分
 MAIL_SERVER='smtp.126.com'
 # MAIL_PORT=587
@@ -118,9 +120,8 @@ MAIL_USERNAME=''
 MAIL_PASSWORD=''
 MAIL_DEFAULT_SENDER='NJUCM MedInfo'
 ADMIN_MAIL=''
-# 配置域名和https
-SSL_DISABLE=1
 HTTP2=0
+# 配置域名
 DOMAIN_NAME='localhost:5000'
 ```
 

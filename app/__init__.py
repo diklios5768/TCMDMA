@@ -6,6 +6,7 @@ from app.register.commands import register_commands
 from app.register.errors import register_errors
 from app.register.extensions import register_extensions
 from app.register.logger import register_logger
+from app.register.context import register_context
 from .settings import config
 
 
@@ -22,7 +23,7 @@ def create_app(config_name=None):
     # 日志注册尽量在前面
     register_logger(app)
     register_commands(app)
-    # register_context(app)
+    register_context(app)
     register_errors(app)
 
     return app

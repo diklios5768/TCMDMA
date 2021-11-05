@@ -26,6 +26,7 @@ from app.utils.wtf_handler.client import ClientForm
 from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
     RegisterEmailWithUsernameWithCaptchaForm
 from app.utils.file_handler.text_handler.reg import is_email
+from app.utils.limiter import register_limit
 
 register_bp = Blueprint('register', __name__)
 
@@ -51,6 +52,7 @@ def __register_by_phone():
 
 
 @register_bp.post('/new_user')
+@register_limit
 def register():
     form = ClientForm().validate_for_api()
     promise = {
@@ -64,7 +66,8 @@ def register():
 
 
 @register_bp.post('/get_email_register_captcha')
-def get_register_captcha():
+@register_limit
+def get_email_register_captcha():
     data = request.get_json()
     email = data.get('email', '')
     if is_email(email):
@@ -75,7 +78,7 @@ def get_register_captcha():
 
 
 @register_bp.post('/verify_email_register_captcha')
-def email_register_captcha():
+def verify_email_register_captcha():
     data = request.get_json()
     email = data.get('email', '')
     code = data.get('captcha', '')

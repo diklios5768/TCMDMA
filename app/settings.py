@@ -51,6 +51,8 @@ class BaseConfig(object):
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', MAIL_USERNAME)
     # 管理员的邮箱
     ADMIN_MAIL = os.getenv('ADMIN_MAIL', MAIL_USERNAME)
+    # 用户设置
+    # 登录设置
     # 设置TOKEN过期时间
     REFRESH_TOKEN_EXPIRATION = os.getenv(
         'REFRESH_TOKEN_EXPIRATION', 3600 * 24 * 7)
@@ -68,8 +70,14 @@ class BaseConfig(object):
     USER_DIR = os.path.join(basedir, 'users')
     USER_DATA_DIR = os.path.join(basedir, 'users/data')
     USER_UPLOAD_DIR = os.path.join(basedir, 'users/upload')
-    # 限制API
+    # 限制API访问
+    # 限制数据存储在redis中
     RATELIMIT_STORAGE_URL = os.getenv('RATELIMIT_STORAGE_URL', REDIS_URL)
+    # 缓存
+    # 缓存过期时间
+    CACHE_DEFAULT_TIMEOUT=os.getenv('CACHE_DEFAULT_TIMEOUT')
+    # 缓存的redis存储位置
+    CACHE_REDIS_URL=os.getenv('CACHE_REDIS_URL',REDIS_URL)
 
 
 # 开发环境

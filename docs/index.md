@@ -2,10 +2,13 @@
 
 * [readme](../README.md):总的说明文档，包含了项目简介和启动说明
 * [index](index.md):文档入口和索引
+* [api](api.md):API开发规范
 * [code](code.md):数据库字段和http协议码的定义
-* [develop](development.md):开发的一些帮助、说明和指南
+* [back-end](back-end.md):后端开发文档
+* [fore-end](fore-end.md):前端开发文档
 * [require](requirement.md):需求文档和计划功能
 * [version](version.md):版本变动记录
+* [table](table.md):表格文件格式说明
 
 # 文档更新记录
 
@@ -37,3 +40,10 @@
     * 拆分为更细的文档结构
 * 2021-11-02
     * 增加nssm注册服务更加详细的说明
+    * 拆分前后端开发文档
+* 2021-11-03
+    * 增加表格文件说明
+* 2021-11-04
+    * 补充flask-limiter使用方法
+    * 增加API开发规范
+    * 补充flask-cache内容

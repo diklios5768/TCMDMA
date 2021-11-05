@@ -18,7 +18,7 @@ import click
 from app.models.create_db import init_db, drop_db, recreate_db
 from app.models.tcm.development import init_development_data, update_development_data
 from app.models.tcm.production import init_production_data, update_production_data
-
+from app.viewModels.common import init_redis_production,init_redis_development
 
 # 注册命令
 def register_commands(app):
@@ -53,9 +53,11 @@ def register_commands(app):
     def data_init(env):
         if env in ['production', 'prod', 'p']:
             init_production_data()
+            init_redis_production()
             click.echo('production data init success')
         elif env in ['development', 'dev', 'd']:
             init_development_data()
+            init_redis_development()
             click.echo('development data init success')
         else:
             click.echo('no this env')

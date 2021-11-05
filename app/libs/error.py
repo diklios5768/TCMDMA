@@ -40,7 +40,7 @@ class APIException(HTTPException):
             msg=self.msg,
             chinese_msg=self.chinese_msg,
             request=request.method + ' ' + self.get_url_no_param(),
-            host=request.remote_addr,
+            remote_addr=request.remote_addr,
             user_agent=str(request.user_agent)
         )
         text = json.dumps(body)

@@ -217,6 +217,39 @@ class AccountNotConfirmedError(AccountError):
     chinese_msg = '账户还未通过'
 
 
+class IPAddressBanned(AccountError):
+    error_code = 1323
+    msg = 'ip address banned'
+    chinese_msg = 'IP被禁止'
+
+
+class ResourcesExhaustion(AccountError):
+    error_code = 1324
+    msg = 'exhaustion of resources '
+    chinese_msg = '资源耗尽'
+
+
+# API相关错误
+class APIError(APIException):
+    code = 403
+    error_code = 1330
+    msg = 'API error'
+    chinese_msg = '接口相关错误'
+
+
+class APINotExist(APIError):
+    error_code = 1331
+    msg = 'API not exist'
+    chinese_msg = '接口不存在'
+
+
+class APILimited(APIException):
+    code = 429
+    error_code = 1332
+    msg = 'API is limited'
+    chinese_msg = '接口被限制访问'
+
+
 # 服务器错误
 class ServerError(APIException):
     code = 500

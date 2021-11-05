@@ -16,12 +16,12 @@ __auth__ = 'diklios'
 from werkzeug.exceptions import HTTPException
 
 from app.libs.error import APIException
-from app.libs.error_exception import ServerError
+from app.libs.error_exception import ServerError,APILimited
 
 
 # 注册错误处理函数
 def register_errors(app):
-    # 1.0以后才能捕捉到所有的异常，返回格式改为通用的格式
+    # 1.0以后才能捕捉到所有的异常（包括abort()），返回格式改为通用的格式
     # 注意这里只捕捉了异常，成功的并不会被捕捉
     @app.errorhandler(Exception)
     def framework_error(e):
@@ -38,3 +38,7 @@ def register_errors(app):
                 return ServerError()
             else:
                 raise e
+
+    @app.errorhandler(429)
+    def rate_limit_handler(e):
+        return APILimited(msg=e.description)

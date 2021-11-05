@@ -2,9 +2,10 @@
 # from flask_socketio import SocketIO
 # from flask_moment import Moment
 # from flask_babel import Babel
+from flask_caching import Cache
 from flask_cors import CORS
-# from flask_limiter import Limiter
-# from flask_limiter.util import get_remote_address
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from app.models import db, migrate, redis
 from app.utils.mail_handler import mail
@@ -15,10 +16,14 @@ from app.utils.mail_handler import mail
 # babel = Babel()
 cors = CORS()
 
-# limiter = Limiter(
-#     key_func=get_remote_address,
-#     default_limits=["200 per day", "100 per hour", "20 per minute"],
-# )
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "100 per hour", "20 per minute"],
+    # X-RateLimit写入响应头
+    headers_enabled=True,
+)
+# 使用redis进行缓存存储
+cache = Cache(config={'CACHE_TYPE': 'redis'})
 
 
 # 注册插件,全部使用init_app的方法生成
@@ -34,4 +39,6 @@ def register_extensions(app):
     # 跨域
     cors.init_app(app, supports_credentials=True)
     # 设置api调用限制
-    # limiter.init_app(app)
+    limiter.init_app(app)
+    # 设置缓存
+    cache.init_app(app)

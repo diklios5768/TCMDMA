@@ -42,6 +42,7 @@ interface ErrorInfoStructure {
 
 ## HTTP常用状态码
 
+* 参考:https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 * 100:应该继续发送请求
 * 200:查询成功
 * 201:创建、更新成功
@@ -58,6 +59,12 @@ interface ErrorInfoStructure {
 * 401:未授权
 * 403:禁止访问
 * 404:没有找到资源
+* 405:Method Not Allowed
+* 407:代理认证请求 — 客户机首先必须使用代理认证自身。
+* 415:介质类型不受支持 — 服务器拒绝服务请求，因为不支持请求实体的格式。
+* 428:Precondition Required (要求先决条件)
+* 429:Too Many Requests (太多请求)
+* 431:Request Header Fields Too Large (请求头字段太大)
 * 500:服务器产生未知错误
 * 503:服务器由于在维护或已经超载而无法响应
 
@@ -133,9 +140,16 @@ interface ErrorInfoStructure {
     * 1313:token失效，被手动禁用
     * 1314:权限不足
     * 1315:链接失效或者链接验证失败
+    * 1320:API
+    * 1330:操作达到上限
 * 1320:账户本身错误
     * 1321:账户被停用
     * 1322:账户还未通过
+    * 1323:IP禁止访问
+    * 1324:可使用资源达到上限
+* 1330:API相关错误
+    * 1331:API不存在
+    * 1332:API单位时间内访问次数被限制
 
 ### 服务器错误
 

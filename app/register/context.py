@@ -13,51 +13,52 @@
 """
 __auth__ = 'diklios'
 
-from flask import request, make_response, g
+from flask import request, make_response
+
+from app.libs.error_exception import IPAddressBanned
+from app.viewModels.common.ip import is_banned_ip_address
 
 
 # 注册上下文
 def register_context(app):
     register_request_context(app)
-    register_shell_context(app)
-    register_template_context(app)
-    register_jinja2(app)
+    # register_shell_context(app)
+    # register_template_context(app)
+    # register_jinja2(app)
 
 
 # 注册全局的请求处理
 def register_request_context(app):
-    # 钩子函数 before_first_request
-    @app.before_first_request
-    def before_first():
-        print("app.before_first")
+    # # 钩子函数 before_first_request
+    # @app.before_first_request
+    # def before_first():
+    #     print("app.before_first")
 
     # 钩子函数 before_request
     @app.before_request
-    def before():
-        data = request.get_json()
-        if data is None:
-            data = request.args.to_dict()
-        g.data = data
-        print("app.before")
+    def limit_remote_address():
+        remote = request.remote_addr
+        if is_banned_ip_address(remote):
+            raise IPAddressBanned()
 
-    # 钩子函数 after_request
-    @app.after_request
-    def make_cors(resp):
-        """
-        #请求钩子，在所有的请求发生后执行，加入headers，用于跨域。
-        :param resp:
-        :return:
-        """
-        resp = make_response(resp)
-        resp.headers['Access-Control-Allow-Origin'] = '*'
-        resp.headers['Access-Control-Allow-Methods'] = 'GET,POST'
-        resp.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
-        return resp
-
-    # 钩子函数 teardown_request
-    @app.teardown_request
-    def teardown(e):
-        print("app.teardown" + str(e))
+    # # 钩子函数 after_request
+    # @app.after_request
+    # def make_cors(resp):
+    #     """
+    #     #请求钩子，在所有的请求发生后执行，加入headers，用于跨域。
+    #     :param resp:
+    #     :return:
+    #     """
+    #     resp = make_response(resp)
+    #     resp.headers['Access-Control-Allow-Origin'] = '*'
+    #     resp.headers['Access-Control-Allow-Methods'] = 'GET,POST'
+    #     resp.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+    #     return resp
+    #
+    # # 钩子函数 teardown_request
+    # @app.teardown_request
+    # def teardown(e):
+    #     print("app.teardown" + str(e))
 
 
 # 注册shell上下文

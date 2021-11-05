@@ -14,10 +14,9 @@ def rows_to_table(rows, character=','):
     for row in rows:
         row = replace_character(row)
         row_list = row.split(character)
-        no_empty_row = filter_empty_text(row_list, method='empty')
+        no_empty_row = list(set(filter_empty_text(row_list, method='empty')))
         data.append(tuple(no_empty_row))
         all_node_data.extend(no_empty_row)
-
     all_node_data = list(set(all_node_data))
     return data, all_node_data
 
@@ -183,138 +182,17 @@ def handle_homogeneous(data: list, params: dict, user_project_analysis_files_dir
     rows = [row[0] for row in data]
     # print(rows)
     main_data, all_node_data = rows_to_table(rows)
-    print(main_data)
+    # print(main_data)
     item_sets, rules = apriori_analysis(main_data, min_support=params['min_support'],
                                         min_confidence=params['min_confidence'])
     # item_sets, rules =fp_growth_analysis(main_data, min_support=params['min_support'],
     #                                      min_confidence=params['min_confidence'])
-    print(item_sets)
-    print(rules)
+    # print(item_sets)
+    # print(rules)
     return handle_homogeneous_result_show(item_sets, rules, params, user_project_analysis_files_dir)
 
 
-if __name__ == '__main__':
-    handle_homogeneous([
-        [
-            "L02、L08、L10、L11、R02、R10、R11"
-        ],
-        [
-            "L01、L02、L06、L09、L10、R02"
-        ],
-        [
-            "L03、L09、L11、R03、R06、R09"
-        ],
-        [
-            "L03、L04、L07、L11、L12、R07"
-        ],
-        [
-            "R02"
-        ],
-        [
-            "R11"
-        ],
-        [
-            "L02、L03、L11、R02"
-        ],
-        [
-            "L02、L11、R07、R08、R12"
-        ],
-        [
-            "L03、L06、L11、R08"
-        ],
-        [
-            "L03、L07、L08、L11、L12、R03、R08、R11"
-        ],
-        [
-            "L05、L09、R05"
-        ],
-        [
-            "L11、R03"
-        ],
-        [
-            "L02、L05、L08、L11、R10、R11"
-        ],
-        [
-            "L02、L04、L05、L07"
-        ],
-        [
-            "R01、R11"
-        ],
-        [
-            "L01、L05、L09、R02、R05、R06、R09、R10"
-        ],
-        [
-            "L06、L08、R06、R08、R10、R11"
-        ],
-        [
-            "L02、L03、L08、L10、L11、L12、R02、R03、R08、R10、R11、R12"
-        ],
-        [
-            "L02"
-        ],
-        [
-            "L01、L02、L03、L10、L11、L12、R01、R02、R03、R06、R11"
-        ],
-        [
-            "L02、L06、L10、L11、R02、R03、R10、R11"
-        ],
-        [
-            "L08"
-        ],
-        [
-            "R02、R06、R09"
-        ],
-        [
-            "L01、L02、L10、L11"
-        ],
-        [
-            "R08、R11"
-        ],
-        [
-            "L01、L07、R01"
-        ],
-        [
-            "L02、L05、L06、L10、R01、R02、R05、R06、R10"
-        ],
-        [
-            "L01、L03、L04、L07、L09、R01、R07"
-        ],
-        [
-            "L04、L07、L11、R04、R07"
-        ],
-        [
-            "L02"
-        ],
-        [
-            "L04、L08、R08、R11"
-        ],
-        [
-            "L02、L10、R02、R10"
-        ],
-        [
-            "L04、L06、L07、L08、L09、L10、L11"
-        ],
-        [
-            "L01、L05、L06、L08、L09、L10、L11、R05、R08、R09"
-        ],
-        [
-            "L10"
-        ],
-        [
-            "L11、R11"
-        ],
-        [
-            "L02、R08"
-        ],
-        [
-            "L06、L10、R01、R06、R07、R10"
-        ],
-        [
-            "L10、R03、R12"
-        ],
-        [
-            "L03、L06、L09、R01、R06、R11"
-        ]
-    ],
-        params={'min_support': 0.6, 'min_confidence': 0.6},
-        user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')
+# if __name__ == '__main__':
+#     handle_homogeneous([],
+#         params={'min_support': 0.6, 'min_confidence': 0.6},
+#         user_project_analysis_files_dir='D:\\Coding\\Python\\TCMDMA\\app\\users\\data\\1-user0\\2021-08-02-13-30-34--104-sa\\504-cliques方法分析结果')

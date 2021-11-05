@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 from app.utils.file_handler.text_handler.list import filter_empty_text
-
+from app.utils.file_handler.text_handler.reg import replace_col_character
 
 # 0-1矩阵
 def rows_to_zero_one_matrix(rows):
@@ -29,7 +29,7 @@ def rows_to_zero_one_matrix(rows):
     all_nodes_set = []
     new_rows = []
     for row_text in rows:
-        row_list = re.sub(r'[，,、]', ',', row_text).split(',')
+        row_list = replace_col_character(row_text).split(',')
         new_rows.append(row_list)
         all_nodes_set.extend(row_list)
     all_nodes_set = filter_empty_text(list(set(all_nodes_set)), method='space')
@@ -60,10 +60,10 @@ def zero_one_matrix_to_rows(zero_one_matrix):
 def rows_to_zero_one_matrix_pd(rows):
     new_rows = []
     for row_text in rows:
-        row_list = re.sub(r'[，、 ]', ',', row_text).split(',')
-        no_empty_row = filter_empty_text(row_list)
+        row_list = re.sub(r'[，、]', ',', row_text).split(',')
+        no_empty_row = list(set(filter_empty_text(row_list)))
         new_rows.append(no_empty_row)
-    all_nodes_set = set([node for row in new_rows for node in row])
+    all_nodes_set = list(set([node for row in new_rows for node in row]))
     zero_one_matrix = pd.DataFrame(np.zeros([len(new_rows), len(all_nodes_set)]), columns=all_nodes_set)
     for i in range(len(new_rows)):
         columns = [ele for ele in new_rows[i]]

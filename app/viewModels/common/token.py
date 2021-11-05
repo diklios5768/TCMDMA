@@ -18,9 +18,21 @@ from app.utils.celery_handler import celery
 from app.utils.time import generate_celery_delay_time
 
 
+def init_banned_token():
+    redis.sadd('banned_token', 'init')
+
+
 def add_banned_token(token):
-    redis.sadd('banned_token', token)
-    return True
+    try:
+        redis.sadd('banned_token', token)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+def get_banned_token():
+    return redis.smembers('banned_token')
 
 
 def is_banned_token(token):
@@ -29,8 +41,7 @@ def is_banned_token(token):
 
 @celery.task(shared=False)
 def remove_banned_token(token):
-    redis.srem('banned_token', token)
-    return True
+    return redis.srem('banned_token', token)
 
 
 def ban_token(token, expiration):
