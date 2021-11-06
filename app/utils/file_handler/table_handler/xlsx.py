@@ -44,7 +44,7 @@ def generate_xlsx_file(filename, table_sheets, file_dir: str = None):
             col_length = len(table_data[i])
             for j in range(col_length):
                 ws.cell(row=i + 1, column=j + 1, value=table_data[i][j])
-    wb.remove_sheet(wb['Sheet'])
+    wb.remove(wb['Sheet'])
     if file_dir is not None:
         if make_dir(file_dir):
             if not file_dir.endswith('/'):
