@@ -68,16 +68,16 @@ class BaseConfig(object):
     HASHIDS_SALT = os.getenv('HASHIDS_SALT', SECRET_KEY)
     # 用户文件夹设置
     USER_DIR = os.path.join(basedir, 'users')
-    USER_DATA_DIR = os.path.join(basedir, 'users/data')
-    USER_UPLOAD_DIR = os.path.join(basedir, 'users/upload')
+    USER_DATA_DIR = os.path.join(basedir, 'users', 'data')
+    USER_UPLOAD_DIR = os.path.join(basedir, 'users', 'upload')
     # 限制API访问
     # 限制数据存储在redis中
     RATELIMIT_STORAGE_URL = os.getenv('RATELIMIT_STORAGE_URL', REDIS_URL)
     # 缓存
     # 缓存过期时间
-    CACHE_DEFAULT_TIMEOUT=os.getenv('CACHE_DEFAULT_TIMEOUT')
+    CACHE_DEFAULT_TIMEOUT = os.getenv('CACHE_DEFAULT_TIMEOUT')
     # 缓存的redis存储位置
-    CACHE_REDIS_URL=os.getenv('CACHE_REDIS_URL',REDIS_URL)
+    CACHE_REDIS_URL = os.getenv('CACHE_REDIS_URL', REDIS_URL)
 
 
 # 开发环境
