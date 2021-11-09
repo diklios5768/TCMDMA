@@ -4,25 +4,27 @@ from app.libs.error_exception import ParameterException
 from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
-def read_xls(file_path_or_stream, method='path', row_limit: int = None, col_limit: int = None):
+def read_xls(file_path_or_stream, method='path', sheet_name: str = '', sheet_index: int = 0,
+             row_start: int or None = None, row_end: int or None = None,
+             col_start: int or None = None, col_end: int or None = None, ):
     if method == 'path':
         wb = open_workbook(filename=file_path_or_stream)
     elif method == 'stream':
         wb = open_workbook(file_contents=file_path_or_stream)
     else:
         raise ParameterException()
-    ws = wb.sheet_by_index(0)
+    if sheet_name:
+        ws = wb.sheet_by_name(sheet_name)
+    else:
+        ws = wb.sheet_by_index(sheet_index)
     table_data = []
     rows_num = ws.nrows
-    if row_limit is not None:
-        rows_num = row_limit
-    for i in range(rows_num):
-        if col_limit is not None:
-            row = filter_empty_text(ws.row_values(i)[0:col_limit])
-            if row:
-                table_data.append()
-        else:
-            row = filter_empty_text(ws.row_values(i))
-            if row:
-                table_data.append(row)
+    if row_start < rows_num:
+        row_start = None
+    if row_end > rows_num:
+        row_end = None
+    for i in range(row_start, row_end):
+        row = filter_empty_text(ws.row_values(i)[col_start:col_end])
+        if row:
+            table_data.append(row)
     return table_data

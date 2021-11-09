@@ -1,18 +1,27 @@
 import os
+
+from app.libs.error_exception import ParameterException
+from app.utils.file_handler.text_handler.table import texts_to_single_col_table_data_integral_process
 from .csv import read_csv
 from .xls import read_xls
 from .xlsx import read_xlsx
-from app.libs.error_exception import ParameterException
-from app.utils.file_handler.text_handler.table import texts_to_single_col_table_data_integral_process
 
 
-def read_table(file_path_or_stream, file_type='csv', method='path', row_limit: int = None, col_limit: int = None):
+def read_table(file_path_or_stream, file_type='csv', method='path',
+               row_start: int or None = None, row_end: int or None = None,
+               col_start: int or None = None, col_end: int or None = None, ):
     if file_type == 'csv':
-        return read_csv(file_path_or_stream, method, row_limit, col_limit)
+        return read_csv(file_path_or_stream, method,
+                        row_start=row_start, row_end=row_end,
+                        col_start=col_start, col_end=col_end)
     elif file_type == 'xls':
-        return read_xls(file_path_or_stream, method, row_limit, col_limit)
+        return read_xls(file_path_or_stream, method,
+                        row_start=row_start, row_end=row_end,
+                        col_start=col_start, col_end=col_end)
     elif file_type == 'xlsx':
-        return read_xlsx(file_path_or_stream, method, row_limit, col_limit)
+        return read_xlsx(file_path_or_stream, method,
+                         row_start=row_start, row_end=row_end,
+                         col_start=col_start, col_end=col_end)
     else:
         raise ParameterException()
 

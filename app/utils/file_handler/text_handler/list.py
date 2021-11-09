@@ -16,6 +16,11 @@ __auth__ = 'diklios'
 from app.utils.file_handler.text_handler.string import filter_space
 
 
+# 分组
+def group(list_to_group, step: int = 10):
+    return [list_to_group[i:i + step] for i in range(0, len(list_to_group), step)]
+
+
 # 过滤列表中的空字符
 def filter_empty_text(li, method='empty'):
     # 只过滤空字符、None、[]

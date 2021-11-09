@@ -1,34 +1,38 @@
 from io import BytesIO
+
 from openpyxl import Workbook, load_workbook
-from app.settings import basedir
+
 from app.libs.error_exception import ParameterException, ServerError
+from app.settings import basedir
 from app.utils.file_handler import make_dir
-from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
-
-def read_xlsx(file_path_or_stream, method='path', row_limit: int = None, col_limit: int = None):
+def read_xlsx(file_path_or_stream, sheet_name: str = '', method='path',
+              row_start: int or None = None,row_end: int or None = None,
+              col_start: int or None = None, col_end: int or None = None, ):
+    """
+    注意：start一定要比end小1，否则读出来是空数组
+    """
     if method == 'path':
-        wb = load_workbook(filename=file_path_or_stream,data_only=True)
+        wb = load_workbook(filename=file_path_or_stream, data_only=True)
     elif method == 'stream':
-        wb = load_workbook(filename=BytesIO(file_path_or_stream),data_only=True)
+        wb = load_workbook(filename=BytesIO(file_path_or_stream), data_only=True)
     else:
         raise ParameterException()
-    ws = wb.active
-    table_data = []
-    if row_limit is not None:
-        rows = ws[1:row_limit]
+    if sheet_name:
+        ws = wb[sheet_name]
     else:
-        rows = ws.rows
+        ws = wb.active
+    table_data = []
+    rows = ws.rows[row_start:row_end]
     for row in rows:
         row_data = []
-        if col_limit is not None:
-            col = row[0:col_limit]
-        else:
-            col = row
-        for j in col:
-            if j.value:
-                row_data.append(j.value)
+        cols = row[col_start:col_end]
+        for col in cols:
+            if col.value:
+                row_data.append(col.value)
+            else:
+                row_data.append('')
         if row_data:
             table_data.append(row_data)
     return table_data
@@ -44,7 +48,7 @@ def generate_xlsx_file(filename, table_sheets, file_dir: str = None):
             col_length = len(table_data[i])
             for j in range(col_length):
                 ws.cell(row=i + 1, column=j + 1, value=table_data[i][j])
-    wb.remove_sheet(wb['Sheet'])
+    wb.remove(wb['Sheet'])
     if file_dir is not None:
         if make_dir(file_dir):
             if not file_dir.endswith('/'):
