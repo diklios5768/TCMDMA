@@ -12,6 +12,7 @@
 * 使用supervisor提供应用管理能力
 * 增加数据集和项目数量限制（相当于区分普通用户和VIP）
 * 增加异质关联分析的算法
+* 拆分models和viewModels为sql、redis、mongo、graphql等文件夹
 
 ### 前端优化计划
 

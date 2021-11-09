@@ -280,6 +280,7 @@
             * `pipenv install flask-graphql`
         * [graphene-sqlalchemy](https://github.com/graphql-python/graphene-sqlalchemy/)
             * `pipenv install graphene-sqlalchemy`
+        * 教程：https://docs.graphene-python.org/projects/sqlalchemy/en/latest/tutorial/
     * 自定义
 * API限制
     * 使用`flask-limiter`

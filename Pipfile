@@ -58,6 +58,7 @@ gevent = "*"
 #gunicorn = "*"
 
 [dev-packages]
+autopep8 = "*"
 flake8 = "*"
 pylint = "*"
 faker = "*"
