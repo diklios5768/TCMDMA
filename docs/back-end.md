@@ -91,8 +91,8 @@
     * `pip install 包名`
 * 使用IDE
     * 在设置中，选择解释器，添加新的包
-* 导出包
-    * `pip freeze > requirements.txt`
+* 导出包：`pip freeze > requirements.txt`
+* 导出开发环境包：`pip freeze > requirements-dev.txt`
 * 问题
     * 如果报错说找不到包，可以在终端进行代理，或者换源
     * 虚拟环境像是本机环境，注意有可能是之前安装过虚拟环境，没有删除干净又创建了新的虚拟环境，需要手动更改文件内容，或者重新拉项目安装虚拟环境

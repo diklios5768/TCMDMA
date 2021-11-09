@@ -19,4 +19,11 @@ from wsgi import wsgi_app
 
 if __name__ == '__main__':
     print('wsgi_app running')
-    serve(wsgi_app, host='0.0.0.0', port='8000')
+    serve(
+        wsgi_app,
+        # listen方法即将被弃用
+        host='0.0.0.0',
+        port='8000',
+        # 使用HTTPS
+        # url_scheme='https'
+    )
