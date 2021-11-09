@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = { extras = ["async"], version = "*" }
 # base
+pipreqs = "*"
 python-dotenv = "*"
 bcrypt = "*"
 cryptography = "*"
@@ -54,7 +55,7 @@ python-louvain = "*"
 pyopenssl = "*"
 eventlet = "*"
 gevent = "*"
-#waitress = "*"
+waitress = "*"
 #gunicorn = "*"
 
 [dev-packages]

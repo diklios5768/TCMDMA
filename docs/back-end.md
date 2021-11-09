@@ -37,6 +37,9 @@
     * models:测试数据库（一般是sqlite3）
     * test.py:常规测试文件
 * docs：文档
+* dependency：依赖文件夹
+    * pipenv由于认为父文件夹为虚拟环境文件夹，会自动创建，其他都是先创建虚拟环境的，故不能移过来，而且常用的就是这个，不需要移动
+    * requirements.txt:无pipenv环境的时候，通过virtual environment创建虚拟环境时需要的配置文件
 * venv：通过virtual environment创建的虚拟环境，不会上传，但是尽量使用 `venv` 名称
 * 启动和配置文件
     * .env：敏感环境配置，不推荐上传到git
@@ -46,7 +49,7 @@
     * gunicorn.py:gunicorn配置文件
     * Pipfile,Pipfile.lock：pipenv配置文件
     * README.md:项目说明
-    * requirements.txt:无pipenv环境的时候，通过virtual environment创建虚拟环境时需要的配置文件
+
     * waitress_config.ini:Windows环境下使用waitress的配置文件
     * waitress_server.py:服务器启动文件
     * wsgi.py：程序开发和调试的入口文件，不到万不得已不要修改
@@ -92,6 +95,11 @@
 * 使用IDE
     * 在设置中，选择解释器，添加新的包
 * 导出包：`pip freeze > requirements.txt`
+    * 使用`pipreqs`:这个不像freeze那样会导出一大堆的包
+        * 安装：`pipenv install pipreqs`
+        * 导出：`pipreqs ./ --encoding=utf8`
+            * 默认导出的文件名就是`requirements.txt`
+    * 使用`pipenv`:`pipenv lock -r > requirements-pipenv.txt`
 * 导出开发环境包：`pip freeze > requirements-dev.txt`
 * 问题
     * 如果报错说找不到包，可以在终端进行代理，或者换源
@@ -598,6 +606,41 @@ data4 = request.args.to_dict()
         * [文档](https://www.osgeo.cn/networkx/)
 
 ## 运维
+
+### 快速启动脚本
+
+* flask
+
+```shell
+# run-flaskapp.sh
+. $(pipenv --venv)/bin/activate;
+gunicorn -c gunicorn.py wsgi:wsgi_ap -D;
+```
+
+```powershell
+# run-flaskapp.ps1
+# 不能使用pipenv shell，这会新建一个终端，后面的命令会全部消失
+# 注意：Windows下是Scripts不是bin
+# -join转的字符串不带空格，鬼知道为什么Out-String没有用
+$pipenvPath = (pipenv --venv) -join "";
+& "$pipenvPath\Scripts\activate";
+python waitress_server.py;
+```
+
+* celery
+
+```shell
+# run-celeryapp.sh
+. $(pipenv --venv)/bin/activate;
+celery -A wsgi:celery worker -l INFO;
+```
+
+```powershell
+# run-celeryapp.ps1
+$pipenvPath = (pipenv --venv) -join "";
+& "$pipenvPath\Scripts\activate";
+celery -A wsgi:celery worker -l INFO -P threads;
+```
 
 ### 部署
 

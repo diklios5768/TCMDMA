@@ -13,6 +13,7 @@
 """
 __auth__ = 'diklios'
 
+
 class Operations:
     CONFIRM = 'confirm'
     RESET_PASSWORD = 'reset-password'
