@@ -13,12 +13,15 @@
 """
 __auth__ = 'diklios'
 
+import os
 import click
 
 from app.models.create_db import init_db, drop_db, recreate_db
 from app.models.tcm.development import init_development_data, update_development_data
 from app.models.tcm.production import init_production_data, update_production_data
-from app.viewModels.common import init_redis_production,init_redis_development
+from app.viewModels.common import init_redis_production, init_redis_development
+from app.utils.file_handler import copy_dir, move_dir
+
 
 # 注册命令
 def register_commands(app):
@@ -74,3 +77,22 @@ def register_commands(app):
             update_development_data()
             init_redis_development()
             click.echo('development data update success')
+
+    @app.cli.command()
+    @click.option('--dir_path', prompt='input absolute folder to copy users data', help='Copy users data.')
+    def copy_user_data(dir_path):
+        if os.path.isdir(dir_path):
+            copy_dir(app.config['USER_DIR'], dir_path)
+            click.echo('move success')
+        else:
+            click.echo('invalid dir path')
+
+    # 快速备份用户数据
+    @app.cli.command()
+    @click.option('--dir_path', prompt='input absolute folder to move users data', help='Move users data.')
+    def move_user_data(dir_path):
+        if os.path.isdir(dir_path):
+            move_dir(app.config['USER_DIR'], dir_path)
+            click.echo('move success')
+        else:
+            click.echo('invalid dir path')

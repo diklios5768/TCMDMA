@@ -175,7 +175,7 @@
             * [官网](https://github.com/locationlabs/mockredis)
     * `pipenv install flask-redis`
         * [官网](https://github.com/underyx/flask-redis)
-        * 这个库比较基础
+        * 这个库比较基础，但足够了
     * `pipenv install Flask-And-Redis`
         * [官网](https://github.com/playpauseandstop/Flask-And-Redis)
         * [文档](https://flask-and-redis.readthedocs.io/en/latest/)
@@ -236,7 +236,7 @@
     * flask-praetorian
         * [文档](https://flask-praetorian.readthedocs.io/en/latest/)
     * flask-httpauth
-        * 比较基础的token验证方案
+        * 比较基础的token验证方案，也比较足够了
         * [示例](https://www.cnblogs.com/se7enjean/p/12470502.html)
     * https://www.jianshu.com/p/0d14ae8f081c
 * 使用OAuth服务进行认证
@@ -249,7 +249,7 @@
 * 权限管理一定是基于用户角色的，用户角色的划分是根据需求决定的
 * 但是不同项目架构中的管理方法是有区别的
     * 可以使用基于`Flask-Security-Too`的权限验证方法（自己写也可以实现，就是需要加一个permission模型或者在role模型里面加上一个permission字段），但是会在每个函数前面加上装饰器
-    * 个人推荐使用scope权限作用域的方法，把api写进配置文件，只要模块分的够好，写的代码就会少很多
+    * 个人现在使用scope权限作用域的方法，把api写进配置文件，只要模块分的够好，写的代码就会少很多
 
 ### API
 
@@ -268,9 +268,10 @@
             * 有api版本号
             * 通过HTTP请求的各项方法访问和修改资源
             * 只使用JSON格式传输数据
+        * flask-restful
+            * [文档](https://flask-restful.readthedocs.io/en/latest/)
         * 其他参考：
             * [put、post、patch的区别](https://www.cnblogs.com/shuchengyi/p/11139273.html)
-        * flask-restful：https://flask-restful.readthedocs.io/en/latest/
         * 注意：但是严格的restful API是有缺陷的，所以也没必要严格使用这套方法
     * GraphQL
         * [GraphQL 官网](https://graphql.cn/)
@@ -279,6 +280,7 @@
             * `pipenv install flask-graphql`
         * [graphene-sqlalchemy](https://github.com/graphql-python/graphene-sqlalchemy/)
             * `pipenv install graphene-sqlalchemy`
+        * 教程：https://docs.graphene-python.org/projects/sqlalchemy/en/latest/tutorial/
     * 自定义
 * API限制
     * 使用`flask-limiter`
@@ -298,10 +300,10 @@
                 * key_func:据什么进行限制，flask_limiter.util提供了两种方式
                     * flask_limiter.util.get_ipaddr()：使用X-Forwarded-For标头中的最后一个IP地址，否则回退到请求的remote_address 。
                     * flask_limiter.util.get_remote_address()：使用请求的remote_address
-                    * 注意：在真实开发中，大部分项目都配置了Nginx，如果直接使用get_remote_address，获取到的是Nginx服务器的地址，相当于来自该Nginx服务器的所有请求会被当做同一个IP访问，所以项目中一般都是自定义key_func
-                        * X-Forwarded-For：一般是每一个非透明代理转发请求时会将上游服务器的ip地址追加到X-Forwarded-For的后面，使用英文逗号分割；
-                        * X-Real-IP：一般是最后一级代理将上游ip地址添加到该头中；
-                        * X-Forwarded-For 是多个ip地址，而X-Real-IP是一个；如果只有一层代理，这两个头的值就是一样的
+                    *
+                  注意：在真实开发中，大部分项目都配置了Nginx，如果直接使用get_remote_address，获取到的是Nginx服务器的地址，相当于来自该Nginx服务器的所有请求会被当做同一个IP访问，所以项目中一般都是自定义key_func
+                    * X-Forwarded-For：一般是每一个非透明代理转发请求时会将上游服务器的ip地址追加到X-Forwarded-For的后面，使用英文逗号分割； *
+                      X-Real-IP：一般是最后一级代理将上游ip地址添加到该头中； * X-Forwarded-For 是多个ip地址，而X-Real-IP是一个；如果只有一层代理，这两个头的值就是一样的
                 * exempt_when=callable:当满足给定条件时，可以免除限制
                     * 也可以使用Limiter.request_filter实现
                 * deduct_when:断某些情况不计入使用频率的次数
@@ -309,7 +311,7 @@
             * 共享限制：创建一个limiter.shared_limit对象
                 * 命名共享限制：通过相同的shared_limit对象进行装饰。
                 * 动态共享限制：将可调用对象作为范围传递，该函数的返回值将用作范围。注意，callable具有一个参数：表示请求端点的字符串。
-                * 与单个limiter一样可以叠加多个share_limiter装饰器 
+                * 与单个limiter一样可以叠加多个share_limiter装饰器
                 * 可接受key_function参数
                 * 也可结束动态的策略配置函数， 与limiter一致
             * @limiter.request_filter：符合条件的屏蔽策略
@@ -321,7 +323,22 @@
         * 参考
             * https://www.cnblogs.com/Du704/p/13281032.html
             * https://blog.csdn.net/zuozuochong/article/details/88365970
-
+* swagger：基于RESTful API的文档集成工具
+    * [官网](https://swagger.io/)
+    * [Swagger UI](https://swagger.io/tools/swagger-ui/)
+    * Flask-RESTPlus:flask-restful框架的一个加强版
+        * 两年多不维护了，新的fork是Flask RESTX
+        * [官网](https://github.com/noirbizarre/flask-restplus)
+        * [文档](https://flask-restplus.readthedocs.io/en/stable/swagger.html)
+    * Flask RESTX
+        * [官网](https://github.com/python-restx/flask-restx)
+        * [文档](https://flask-restx.readthedocs.io/en/latest/)
+        * 虽然这两个效果不错，但是问题在于他们使用的是基于类的视图，对于代码改动较大
+    * Flasgger
+        * 非常棒的插件，支持视图级别的文档撰写，也支持类，还支持参数验证（注意，非表单验证，不一样的）
+        * 安装：`pipenv install flasgger`
+        * [官网](https://github.com/flasgger/flasgger)
+        *
 * 后端获取回传值的方法
 
 ```python
@@ -336,6 +353,21 @@ data3 = request.get_json('data')
 # 使用url查询字符串
 data4 = request.args.to_dict()
 ```
+
+### 表单
+
+* 使用`flask-WTF`
+    * `pipenv install flask-wtf`、`pipenv install wtforms`、`pipenv install email_validator`
+    * [文档](http://www.pythondoc.com/flask-wtf/)
+    * [参考](https://www.cnblogs.com/cwp-bg/p/9714741.html)
+* 使用`webargs`
+    * 增强版flask-wtf，不仅仅是表单，连HTTP的各个参数也能校验
+        * Flasgger只能方便的校验query和body的参数
+        * 其他的校验虽然可以自己写，但不简便
+    * 安装：`pipenv install webargs`
+    * [官网](https://github.com/marshmallow-code/webargs)
+    * [文档](https://webargs.readthedocs.io/en/latest/)
+    *
 
 ### 后台管理
 
@@ -364,7 +396,7 @@ data4 = request.args.to_dict()
         * `pipenv install flask-moment`
         * [官网](https://flask-moment.readthedocs.io/en/latest/)
         * [参考](https://www.cnblogs.com/franknihao/p/7374964.html)
-        * 前后端分离的话无法使用
+        * **注意：前后端分离的话无法使用这个插件**
     * 使用dayjs(moment.js已经不维护了)
         * [官网](https://day.js.org)
         * [中文文档](https://dayjs.gitee.io/docs/zh-CN/installation/installation)
@@ -375,15 +407,11 @@ data4 = request.args.to_dict()
     * [flask-mail官网](https://pythonhosted.org/Flask-Mail/)
 * `pipenv install sendgrid`
     * [sendgrid官网](https://sendgrid.com/)
+    * 现在的sendgrid似乎不能免费使用了，换126或者163邮箱吧
 
-### 表单
+### 手机验证码
 
-* 使用`flask-WTF`
-    * `pipenv install flask-wtf`、`pipenv install wtforms`、`pipenv install email_validator`
-    * [文档](http://www.pythondoc.com/flask-wtf/)
-    * [参考](https://www.cnblogs.com/cwp-bg/p/9714741.html)
-* 使用`webargs`
-    * 增强版flask-wtf
+* 用阿里云的服务
 
 ### 异步任务队列
 
@@ -497,7 +525,6 @@ data4 = request.args.to_dict()
     * PyPDF2
     * PyPDF3
 
-
 ### 单元测试
 
 * 使用`pytest`
@@ -521,7 +548,6 @@ data4 = request.args.to_dict()
     * [官网](https://github.com/jarus/flask-testing)
     * [文档](https://pythonhosted.org/Flask-Testing/)
 
-
 ### 国际化
 
 * 使用[flask-babel](http://www.pythondoc.com/flask-babel/)
@@ -537,7 +563,12 @@ data4 = request.args.to_dict()
         * 百度飞桨
 * 必备库
     * numpy
+        * 安装：`pipenv install numpy`
+        * [官网](https://numpy.org/)
+        * [英文文档](https://numpy.org/doc/stable/)
+        * [中文文档](https://www.numpy.org.cn/)
     * pandas
+        * 安装：`pipenv install pandas`
         * [官网](https://pandas.pydata.org/)
 * 绘图和图像处理
     * matplotlib
@@ -551,7 +582,12 @@ data4 = request.args.to_dict()
         * `pipenv install opencv-python`
 * 人工智能
     * scipy
+        * `pipenv install scipy`
     * pytorch
+        * 安装：`pipenv install pytorch torchvision torchaudio cpuonly -c pytorch`
+            * 更详细的安装见：https://pytorch.org/get-started/locally/
+        * [官网](https://pytorch.org/)
+        * [中文文档](https://pytorch-cn.readthedocs.io/zh/latest/)
     * TensorFlow
         * `pipenv install tensorflow`
         * [官网](https://www.tensorflow.org/)
@@ -695,6 +731,7 @@ server {
 ### 日志记录
 
 * 使用logging模块配合flask自带的app.logger即可，详细参考register中的logger模块
+* 一般来说错误信息是要发邮件的
 
 ## 注意事项
 
@@ -725,3 +762,6 @@ server {
 * 2021-11-02
     * 增加HTTPS和api限制相关的内容
     * 拆分出前端开发文档
+* 2021-11-06
+    * 增加文档集成的内容
+    * 整体修补了一些内容
