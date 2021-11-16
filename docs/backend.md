@@ -497,7 +497,14 @@ data4 = request.args.to_dict()
         * 安装：`pipenv install pypinyin`
 * 加密
     * 使用`Flask-Bcrypt`
+        * [官网](https://github.com/maxcountryman/flask-bcrypt)
         * [文档](https://flask-bcrypt.readthedocs.io/en/latest/)
+        * 安装：`pipenv install Flask-Bcrypt`
+        * 但是问题在于这个库很久没有提交到pypi上了
+    * 使用`Bcrypt-Flask`
+        * [官网](https://github.com/mahenzon/flask-bcrypt)
+        * 安装：`pipenv install Bcrypt-Flask`
+        * 有人把Flask-Bcrypt的最新版提交了上来
 
 ### 全文搜索
 
@@ -776,6 +783,11 @@ server {
 * 使用logging模块配合flask自带的app.logger即可，详细参考register中的logger模块
 * 一般来说错误信息是要发邮件的
 
+### 持续集成(CI)
+* Jenkins
+* Gitlab-CI和Gitlab-runner
+
+
 ## 注意事项
 
 * flask2.0开始支持异步，蓝图嵌套，快捷路由器装饰等功能，尽量使用新版本，详见：https://zhuanlan.zhihu.com/p/371659808
@@ -808,3 +820,5 @@ server {
 * 2021-11-06
     * 增加文档集成的内容
     * 整体修补了一些内容
+* 2021-11-16
+    * 新开持续集成内容

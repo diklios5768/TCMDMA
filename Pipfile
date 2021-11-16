@@ -8,7 +8,7 @@ flask = { extras = ["async"], version = "*" }
 # base
 pipreqs = "*"
 python-dotenv = "*"
-bcrypt = "*"
+Bcrypt-Flask = "*"
 cryptography = "*"
 # flask extensions
 #flask-babel = "*"

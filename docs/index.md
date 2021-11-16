@@ -4,8 +4,8 @@
 * [index](index.md):文档入口和索引
 * [api](api.md):API开发规范
 * [code](code.md):数据库字段和http协议码的定义
-* [back-end](back-end.md):后端开发文档
-* [fore-end](fore-end.md):前端开发文档
+* [backend](backend.md):后端开发文档
+* [frontend](frontend.md):前端开发文档
 * [require](requirement.md):需求文档和计划功能
 * [version](version.md):版本变动记录
 * [table](table.md):表格文件格式说明
@@ -48,3 +48,5 @@
     * 补充flask-limiter使用方法
     * 增加API开发规范
     * 补充flask-cache内容
+* 2021-11-16
+    * 更改前后端文档名称
