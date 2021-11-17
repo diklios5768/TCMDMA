@@ -14,15 +14,16 @@ cryptography = "*"
 #flask-babel = "*"
 #flask-moment = "*"
 # database
-sqlalchemy = "*"
 redis = "*"
 pymysql = "*"
-#hashids = "*"
+sqlalchemy = "*"
+sqlalchemy-utils = "*"
+hashids = "*"
 flask-sqlalchemy = "*"
 flask-redis = "*"
 flask-migrate = "*"
 #flask-whooshee = "*"
-# http
+# http and api
 requests = "*"
 flask-cors = "*"
 flask-limiter = "*"
@@ -57,6 +58,7 @@ eventlet = "*"
 gevent = "*"
 waitress = "*"
 #gunicorn = "*"
+
 
 [dev-packages]
 autopep8 = "*"

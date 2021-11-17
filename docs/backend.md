@@ -159,6 +159,10 @@
             * [参考](https://www.cnblogs.com/ChangAn223/p/11277468.html)
         * 也可以使用`Flask-SQLAlchemy-Session`
             * [文档](https://flask-sqlalchemy-session.readthedocs.io/en/latest/)
+* 使用`sqlalchemy-utils`
+    * 提供了大量的字段类型和工具函数
+    * [官网](https://github.com/kvesteri/sqlalchemy-utils)
+    * [文档](https://sqlalchemy-utils.readthedocs.io/en/latest/installation.html)
 * 数据库迁移:
     * `pipenv install flask-migrate`
     * 当已经是生产环境的时候，建议纳入版本控制
@@ -784,9 +788,9 @@ server {
 * 一般来说错误信息是要发邮件的
 
 ### 持续集成(CI)
+
 * Jenkins
 * Gitlab-CI和Gitlab-runner
-
 
 ## 注意事项
 

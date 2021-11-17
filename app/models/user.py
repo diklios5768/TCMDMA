@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, SmallInteger, Enum, Boolean, JSON
+from sqlalchemy import Column, String, SmallInteger, Integer, Enum, Boolean, JSON
+from sqlalchemy_utils import ChoiceType
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models.base import Base
@@ -7,6 +8,11 @@ from app.models.base import Base
 # 使用flask-login的用户基类
 class BaseUser(Base):
     __abstract__ = True
+    gender_choices = [
+        (0, '未知'),
+        (1, '男'),
+        (2, '女')
+    ]
     # 用户名
     username = Column(String(100), nullable=True, index=True, unique=True)
     _password = Column('password', String(255), nullable=False)
@@ -20,6 +26,7 @@ class BaseUser(Base):
     # 别名
     nickname = Column(String(24), nullable=True, default='')
     gender = Column(Enum('male', 'female', '男', '女'), default='male', nullable=True)
+    # sex = Column(ChoiceType(gender_choices, Integer()), nullable=True)
     age = Column(SmallInteger, nullable=True)
     # 通过认证
     confirmed = Column(Boolean, default=False)
