@@ -89,21 +89,30 @@
 * pipenv：推荐使用，更加现代化，后续所有的安装包的方法都是此方法，如果使用的是传统的方法，记得把`pipenv`更改为`pip`
     * `pipenv install 包名`
     * 更新所有包：`pipenv update`
+    * [官网](https://github.com/pypa/pipenv)
+    * [文档](https://pipenv.pypa.io/en/latest/)
+        * 最好学习一下高级用法
 * virtual environment
     * 请注意先激活了虚拟环境
     * `pip install 包名`
 * 使用IDE
     * 在设置中，选择解释器，添加新的包
-* 导出包：`pip freeze > requirements.txt`
+* 导出包
+    * 原生方法
+        * 导出生产环境包：`pip freeze > requirements.txt`
+        * 导出开发环境包：`pip freeze > requirements-dev.txt`
     * 使用`pipreqs`:这个不像freeze那样会导出一大堆的包
         * 安装：`pipenv install pipreqs`
         * 导出：`pipreqs ./ --encoding=utf8`
             * 默认导出的文件名就是`requirements.txt`
-    * 使用`pipenv`:`pipenv lock -r > requirements-pipenv.txt`
-* 导出开发环境包：`pip freeze > requirements-dev.txt`
+    * 使用`pipenv`：推荐，导出的方法多种多样
+        * 导出生产环境包：`pipenv lock -r > requirements-pipenv.txt`
+        * 可以导出包含开发环境的包：`pipenv lock -r --dev > requirements-pipenv-dev.txt`
+        * 也可以只导出开发环境的包：`pipenv lock -r --dev-only > requirements-pipenv-dev-only.txt`
 * 问题
     * 如果报错说找不到包，可以在终端进行代理，或者换源
-    * 虚拟环境像是本机环境，注意有可能是之前安装过虚拟环境，没有删除干净又创建了新的虚拟环境，需要手动更改文件内容，或者重新拉项目安装虚拟环境
+    * 安装失败，注意看是不是要安装vc++14，我倾向于直接装一个visual studio的c++环境，操作起来很简单，下载安装即可
+    * 虚拟环境像是本机环境，注意有可能是之前安装过虚拟环境，没有删除干净又创建了新的虚拟环境，导致路径错误，需要手动更改文件内容，或者重新拉项目安装虚拟环境
 
 ## 后端开发
 
@@ -826,3 +835,5 @@ server {
     * 整体修补了一些内容
 * 2021-11-16
     * 新开持续集成内容
+* 2021-11-18
+    * 添加部分pipenv内容

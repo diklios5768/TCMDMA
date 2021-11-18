@@ -13,6 +13,7 @@
 * 增加数据集和项目数量限制（相当于区分普通用户和VIP）
 * 增加异质关联分析的算法
 * 拆分models和viewModels为sql、redis、mongo、graphql等文件夹
+* 增加快速生成文档的能力
 
 ### 前端优化计划
 

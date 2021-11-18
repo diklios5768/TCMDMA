@@ -1,4 +1,7 @@
-# XMiner项目说明
+XMiner
+==============================================
+
+------------------------------------------------------------------------
 
 ## 项目目的
 
@@ -26,11 +29,11 @@
 ## 项目启动
 
 ### 安装虚拟环境
+--------------
 
 * 请提前装好python3
 * 选择 `pipenv` 进行安装
     * 先安装`pipenv`:`pip install pipenv`
-    * **根据系统中使用的python版本的不同，请先修改`Pipfile`文件中最后一行python的版本**
     * 使用IDE
         * 设置->项目->python解释器->在三个点点处点击添加->在左边选择使用 pipenv *新建虚拟环境*
         * pipenv会自动选择根目录下的pipenv和pipenv.lock下载需要的库
@@ -41,12 +44,13 @@
 * 使用 `virtual environment` 进行安装
     * 使用`Pycharm`
         * 设置->项目->python解释器->在三个点点处点击添加->在左边选择使用 virtual environment *新建虚拟环境*
-        * 创建之后会自动选择虚拟环境的解释器，之后进入终端执行
-            * `pip install -r requiremnets.txt`
+        * 创建之后会自动选择虚拟环境的解释器，之后进入终端，进入`dependency`文件夹
+            * 直接安装提供的环境：`pip install -r requiremnets.txt`
             * 或者手动安装包 `pip install flask`
     * 使用终端
-        * 需要安装 virtual environment的包
+        * 安装 virtual environment的包（python3.4以下）
             * `pip install virtualenv`
+            * python3.4以上自带虚拟环境包，不需要安装，跳过这一步
         * 确定终端进入根目录后，在终端执行`python -m venv venv`
         * 启动和退出虚拟环境
             * 先进入虚拟环境 venv 文件夹（`cd 文件夹名称`）
@@ -56,6 +60,7 @@
             * Windows
                 * 启动：在Scripts文件夹里，使用 `activate` 命令
                 * 退出：任意地方使用 `deactivate` 命令
+        * 剩下的安装方法同`pycharm`
         * 如果后续更换了 `pycharm`
             * 设置->项目->python解释器->在三个点点处点击添加->在左边选择使用`virtual environment`->*添加已经存在的虚拟环境*
 * 有可能遇到的问题
@@ -81,6 +86,7 @@
         * 先进入下载下来的包的文件夹：`python setup.py install`
 
 ### 安装数据库（只提供思路，具体百度）
+------------------------------
 
 * MySQL
     * Windows
@@ -178,7 +184,10 @@ DOMAIN_NAME='localhost:5000'
         * 似乎`-P gevent`或者`-P eventlet`也能启动，未测试运行效果
     * 最好也添加为服务在后台运行
 
-## 开发团队介绍
+## 开发
+
+### 开发团队介绍
+--------------
 
 * 南京中医药大学人工智能与信息技术学院医学信息工程专业创新工作室
 * 南京中医药大学人工智能与信息技术学院医学信息工程专业17级学生21届毕业生diklios
@@ -186,5 +195,6 @@ DOMAIN_NAME='localhost:5000'
     * @Github:https://github.com/diklios5768
 
 ### 开发文档
+------------
 
 * [简体中文](docs/index.md)
