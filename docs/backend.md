@@ -6,6 +6,11 @@
 
 # !!!请先看完文档再进行开发!!!
 
+## 预备知识
+
+* python3.6以上的基础知识
+* flask1.0以上
+
 ## 项目目录（必看）
 
 * 注意：由于git不支持空文件夹，可能由于疏忽未在里面创建文件，导致你可能看不到一些文件夹，建议手动创建
@@ -49,7 +54,6 @@
     * gunicorn.py:gunicorn配置文件
     * Pipfile,Pipfile.lock：pipenv配置文件
     * README.md:项目说明
-
     * waitress_config.ini:Windows环境下使用waitress的配置文件
     * waitress_server.py:服务器启动文件
     * wsgi.py：程序开发和调试的入口文件，不到万不得已不要修改

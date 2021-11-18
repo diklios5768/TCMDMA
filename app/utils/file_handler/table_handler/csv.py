@@ -1,6 +1,8 @@
 from csv import reader, writer
 from io import StringIO
 
+import pandas as pd
+
 from app.libs.error_exception import ParameterException
 from app.settings import basedir
 from app.utils.file_handler.text_handler.list import filter_empty_text
@@ -33,7 +35,7 @@ def read_csv(file_path_or_stream, method='path',
         csv_file = reader(StringIO(file_path_or_stream.decode('utf-8')), delimiter=delimiter)
         return get_csv_data(csv_file, filter_row=filter_row,
                             row_start=row_start, row_end=row_end,
-                            col_start=col_start,col_end=col_end)
+                            col_start=col_start, col_end=col_end)
     else:
         raise ParameterException()
 
@@ -50,3 +52,15 @@ def generate_csv_file(filename, table_data, file_dir: str = None):
             csv_file = writer(f)
             csv_file.writerows(table_data)
     return True
+
+
+def read_csv_by_pandas(filepath_or_buffer):
+    """
+    参数参考read_txt_table_by_pandas
+    """
+    df = pd.read_csv(filepath_or_buffer)
+    return df.to_numpy().tolist(), df
+
+
+def generate_csv_by_pandas(path_or_buf, df: pd.DataFrame):
+    return df.to_csv(path_or_buf)

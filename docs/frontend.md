@@ -1,23 +1,39 @@
 # 前端开发文档
 
+## 预备知识
+
+* HTML5
+* CSS3
+* JavaScript(至少掌握 ES5)
+* 进阶
+    * NodeJS
+    * ECMAScript6及以上
+    * TypeScript
+    * 三大前端框架Vue、React、Angular
+
 ## API
+
 ### 前后端交互
+
 * ajax
-    * 游览器原生XMLHttpRequest(XHR)
+    * 游览器原生XMLHttpRequest(XHR)，极力不推荐，除非维护上古页面
     * jQuery:$.ajax()
-    * Axios:axios.put()
-* fetch
-    * 游览器原生fetch方法(推荐)
-        * 参考[Fetch API](http://www.ruanyifeng.com/blog/2020/12/fetch-tutorial.html)
-        * [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-        * [传统 Ajax 已死，Fetch 永生](https://github.com/camsong/blog/issues/2)
-    * NodeJS:Request库
-    * UmiJS
-        * [request](https://umijs.org/zh-CN/plugins/plugin-request#%E9%85%8D%E7%BD%AE)
-            * 用法基本同umi-request
-            * [umi-request](https://github.com/umijs/umi-request/blob/master/README_zh-CN.md)
-        * [useRequest](https://hooks.umijs.org/zh-CN/hooks/async)
+    * Axios
+        * 极力推荐
+    * fetch
+        * 游览器原生fetch方法(推荐，但是要注意兼容性)
+            * 参考[Fetch API](http://www.ruanyifeng.com/blog/2020/12/fetch-tutorial.html)
+            * [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+            * [传统 Ajax 已死，Fetch 永生](https://github.com/camsong/blog/issues/2)
+        * NodeJS:Request库
+        * UmiJS
+            * [request](https://umijs.org/zh-CN/plugins/plugin-request#%E9%85%8D%E7%BD%AE)
+                * 用法基本同umi-request
+                * [umi-request](https://github.com/umijs/umi-request/blob/master/README_zh-CN.md)
+            * [useRequest](https://hooks.umijs.org/zh-CN/hooks/async)
+
 ### 示例
+
 * fetch方法的示例
 
 ```javascript
@@ -83,6 +99,38 @@ $.ajax({
 * 具体开发方法因为内容太多就不赘述了，只是推荐使用webstorm辅助开发，前后端分离，flask只提供api
 * 打包完成后将静态资源文件放到自己的资源文件夹下
 
+## 工具包
+
+* dom操作
+    * jQuery
+    * Vue
+    * Knockout
+    * riot
+    *
+* ajax
+    * axios
+        * [中文文档](http://www.axios-js.com/)
+        * [官网](https://github.com/axios/axios)
+* 打包
+    * webpack
+    * Gulp
+        * [中文官网](https://www.gulpjs.com.cn/)
+    * Snowpack
+* 绘图
+    * AntV
+        * [官网](https://antv.vision/zh)
+    * echarts
+        * [官网](https://echarts.apache.org/)
+    * cytoscape
+        * [官网](https://js.cytoscape.org/)
+    * d3
+        * [官网](https://d3js.org/)
+    * google charts
+        * [文档](https://developers.google.cn/chart)
+
 # 文档更新记录
+
 * 2021-11-02
     * 初始化文档
+* 2021-11-18
+    * 补充一些包
