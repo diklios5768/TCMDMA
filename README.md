@@ -106,6 +106,13 @@ XMiner
 * 配置.env环境变量
 
 ```dotenv
+#可以使用PIPENV_VENV_IN_PROJECT环境变量让环境创建在当前项目目录下
+PIPENV_VENV_IN_PROJECT=1
+#保持其他包不更新，pipenv install/update 会默认更新所有包
+PIPENV_KEEP_OUTDATED=1
+#是否保留缓存
+PIPENV_CLEAR=0
+
 # 示例，在真实的生产环境中请不要加中文注释，因为pipenv的gbk问题至今未解决
 # 存储包含敏感信息的环境变量，不提交到git仓库
 # 注意：secret key需要使用特定的方法生成，具体见app/settings文件中的注释

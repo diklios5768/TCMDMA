@@ -14,6 +14,7 @@
 * 增加异质关联分析的算法
 * 拆分models和viewModels为sql、redis、mongo、graphql等文件夹
 * 增加快速生成文档的能力
+* 将flask-mail改为Flask-Mailman
 
 ### 前端优化计划
 

@@ -421,19 +421,22 @@ data4 = request.args.to_dict()
         * `pipenv install flask-moment`
         * [官网](https://flask-moment.readthedocs.io/en/latest/)
         * [参考](https://www.cnblogs.com/franknihao/p/7374964.html)
-        * **注意：前后端分离的话无法使用这个插件**
-    * 使用dayjs(moment.js已经不维护了)
-        * [官网](https://day.js.org)
-        * [中文文档](https://dayjs.gitee.io/docs/zh-CN/installation/installation)
+        * **注意：前后端分离的话不需要使用这个插件**
 
 ### 邮件
 
-* `pipenv install flask-mail`
-    * [flask-mail官网](https://pythonhosted.org/Flask-Mail/)
-* `pipenv install sendgrid`
-    * [sendgrid官网](https://sendgrid.com/)
-    * 现在的sendgrid似乎不能免费使用了，换126或者163邮箱吧
-
+* `Flask-Mail`
+  * 安装：`pipenv install flask-mail`
+  * [官网](https://pythonhosted.org/Flask-Mail/)
+  * 2014年之后项目不再维护，建议使用`Flask-Mailman`
+* `Flask-Mailman`
+  * [官网](https://github.com/waynerv/flask-mailman)
+  * [文档](https://www.waynerv.com/flask-mailman/)
+  * 安装：`pipenv install Flask-Mailman`
+* 使用`sendgrid`提供邮箱服务
+  * `pipenv install sendgrid`
+  * [sendgrid官网](https://sendgrid.com/)
+  * 现在的sendgrid似乎不能免费使用了，换126或者163邮箱吧
 ### 手机验证码
 
 * 用阿里云的服务

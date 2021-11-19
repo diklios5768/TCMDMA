@@ -116,6 +116,12 @@ $.ajax({
     * Gulp
         * [中文官网](https://www.gulpjs.com.cn/)
     * Snowpack
+* 时间处理
+    * moment.js
+    * 使用dayjs(moment.js已经不维护了)
+        * [官网](https://day.js.org)
+        * [中文文档](https://dayjs.gitee.io/docs/zh-CN/installation/installation)
+
 * 绘图
     * AntV
         * [官网](https://antv.vision/zh)

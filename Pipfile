@@ -18,7 +18,7 @@ flask = { extras = ["async"], version = "*" }
 # base
 pipreqs = "*"
 python-dotenv = "*"
-Bcrypt-Flask = "*"
+bcrypt-flask = "*"
 cryptography = "*"
 # flask extensions
 #flask-babel = "*"
@@ -41,6 +41,7 @@ flask-limiter = "*"
 # email
 email-validator = "*"
 flask-mail = "*"
+flask-mailman = "*"
 # login
 wtforms = "*"
 flask-httpauth = "*"
