@@ -38,6 +38,10 @@ app/users
 app/models/*/source
 app/models/source
 
+#jupyter缓存
+.ipynb_checkpoints
+*/.ipynb_checkpoints
+
 #可能的NodeJS环境
 node_modules
 */node_modules
