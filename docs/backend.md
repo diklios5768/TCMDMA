@@ -96,6 +96,7 @@
     * [官网](https://github.com/pypa/pipenv)
     * [文档](https://pipenv.pypa.io/en/latest/)
         * 最好学习一下高级用法
+    * [**巨坑，用了额外的索引会导致lock的时候非常慢，一般来说项目再大几分钟就好了**](https://github.com/pypa/pipenv/issues/2730#issuecomment-423599283)
 * virtual environment
     * 请注意先激活了虚拟环境
     * `pip install 包名`

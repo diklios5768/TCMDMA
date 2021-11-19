@@ -3,15 +3,15 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 name = "pypi"
 
-[[source]]
-url = "https://mirrors.aliyun.com/pypi/simple"
-verify_ssl = true
-name = "aliyun"
-
-[[source]]
-url = "https://pypi.douban/simple"
-verify_ssl = true
-name = "douban"
+#[[source]]
+#url = "https://mirrors.aliyun.com/pypi/simple"
+#verify_ssl = true
+#name = "aliyun"
+#
+#[[source]]
+#url = "https://pypi.douban/simple"
+#verify_ssl = true
+#name = "douban"
 
 [packages]
 flask = { extras = ["async"], version = "*" }
@@ -68,9 +68,9 @@ pyopenssl = "*"
 eventlet = "*"
 gevent = "*"
 # Windows叫win32，MacOS叫darwin
-waitress = {version="*",sys_platform = "== 'win32'"}
-gunicorn = {version="*",markers = "sys_platform == 'linux' or sys_platform == 'darwin'"}
-
+waitress = { version = "*", sys_platform = "== 'win32'" }
+gunicorn = { version = "*", sys_platform = "!= 'win32'" }
+#gunicorn = { version = "*", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }
 
 [dev-packages]
 autopep8 = "*"

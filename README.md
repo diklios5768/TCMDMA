@@ -108,9 +108,9 @@ XMiner
 ```dotenv
 #可以使用PIPENV_VENV_IN_PROJECT环境变量让环境创建在当前项目目录下
 PIPENV_VENV_IN_PROJECT=1
-#保持其他包不更新，pipenv install/update 会默认更新所有包
+#保持其他包不更新，因为pipenv install/update 会默认更新所有包
 PIPENV_KEEP_OUTDATED=1
-#是否保留缓存
+#默认不清除缓存
 PIPENV_CLEAR=0
 
 # 示例，在真实的生产环境中请不要加中文注释，因为pipenv的gbk问题至今未解决
