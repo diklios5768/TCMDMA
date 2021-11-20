@@ -37,37 +37,50 @@
 * fetch方法的示例
 
 ```javascript
-const data = {'type': 'random', 'count': 2};
-const response = await fetch('http://127.0.0.1:5000/sun/api/find_project', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify(data)
-});
+// 使用的es7的async和await写法，也可以使用原始的Promise写法
+const data = {};
+const url = '/test';
+try {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(data)
+    });
 
-const json = await response.json();
-console.log(json);
+    const json = await response.json();
+    console.log(json);
+} catch (error) {
+    console.log(error);
+    if (error.response) {
+        console.log(error.response.status);
+    } else {
+        console.log(error.message);
+    }
+}
+
 ```
 
 * jQuery的ajax示例
 
 ```javascript
 let data = {};
-let url = '';
+let url = '/test';
 $.ajax({
     url: url,
-    data: data,
     type: 'POST',
-    success: function (data) {
+    contentType: "application/json;charset=utf-8",
+    dataType: 'json',
+    data: JSON.stringify(data),
+    done: function (result, status) {
 
-    }, error: function (e) {
-
-    }, complete: function (data) {
+    }, fail: function (error, status) {
+        console.log(error);
+    }, complete: function (result, status) {
 
     }
-
-})
+});
 
 ```
 
@@ -96,7 +109,7 @@ $.ajax({
 
 ## 现代网页开发方法：使用nodejs、webpack等工具进行开发
 
-* 具体开发方法因为内容太多就不赘述了，只是推荐使用webstorm辅助开发，前后端分离，flask只提供api
+* 具体开发方法因为内容太多就不赘述了，只是推荐使用webstorm、vscode、HBuilderX等IDE辅助开发，前后端分离，flask只提供api
 * 打包完成后将静态资源文件放到自己的资源文件夹下
 
 ## 工具包
@@ -140,3 +153,5 @@ $.ajax({
     * 初始化文档
 * 2021-11-18
     * 补充一些包
+* 2021-11-20
+    * 完善jQuery和fetch的ajax操作示例
