@@ -32,12 +32,38 @@
                 * [umi-request](https://github.com/umijs/umi-request/blob/master/README_zh-CN.md)
             * [useRequest](https://hooks.umijs.org/zh-CN/hooks/async)
 
-### 示例
+### AJAX示例
+
+* axios方法的示例
+
+```javascript
+const data = {};
+const url = '/test';
+// GET方法
+axios.get(url, {
+    // 注意：这里不需要转字符串
+    params: data
+})
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+// POST方法
+axios.post(url, data)
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+```
 
 * fetch方法的示例
 
 ```javascript
-// 使用的es7的async和await写法，也可以使用原始的Promise写法
+// 使用的es7的async和await写法
 const data = {};
 const url = '/test';
 try {
@@ -48,7 +74,6 @@ try {
         },
         body: JSON.stringify(data)
     });
-
     const json = await response.json();
     console.log(json);
 } catch (error) {
@@ -59,6 +84,24 @@ try {
         console.log(error.message);
     }
 }
+// 可以使用原始的Promise写法
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(data)
+})
+    .then(res => res.json()).then(json => {
+    console.log(json);
+})
+    .catch(error => {
+        if (error.response) {
+            console.log(error.response.status);
+        } else {
+            console.log(error.message);
+        }
+    })
 
 ```
 
@@ -67,20 +110,34 @@ try {
 ```javascript
 let data = {};
 let url = '/test';
+// 参考：https://www.cnblogs.com/lvonve/p/11322854.html
+// 传统写法
 $.ajax({
     url: url,
     type: 'POST',
     contentType: "application/json;charset=utf-8",
     dataType: 'json',
     data: JSON.stringify(data),
-    done: function (result, status) {
+    success: function (result, status) {
 
-    }, fail: function (error, status) {
+    }, error: function (error, status) {
         console.log(error);
     }, complete: function (result, status) {
 
     }
-});
+})
+// 新写法
+// 全部都可以写成.then()的形式
+$.ajax({})
+    .always(function (res) {
+        console.log(res);
+    })
+    .done(function (res) {
+        console.log(res);
+    })
+    .fail(function (error) {
+        console.log(error);
+    });
 
 ```
 

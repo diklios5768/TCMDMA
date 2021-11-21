@@ -133,10 +133,10 @@
 
 ### Git 相关使用
 
-* 直接克隆项目：`git clone git@129.211.88.58:diklios/databaseAPI.git`
+* 直接克隆项目：`git clone 仓库的链接`
 * 请在下载项目完毕后单独新开一个分支，在自己的分支上进行开发
-* git相关使用可以参考[阮一峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
-* git提交规范参考：[git commit 规范指南 - 简书 (jianshu.com)](https://www.jianshu.com/p/201bd81e7dc9?utm_source=oschina-app)
+* git相关使用可以参考：[阮一峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
+* git提交规范参考：[git commit 规范指南](https://www.jianshu.com/p/201bd81e7dc9?utm_source=oschina-app)
 
 ### 调试
 
@@ -147,7 +147,6 @@
 * google的`Cyberbrain`
     * [介绍](https://mp.weixin.qq.com/s/7kfX3SmTjP89yo4PA4S54Q)
 * `Flask-debugtoolbar`
-    *
 
 ### 数据库开发
 
