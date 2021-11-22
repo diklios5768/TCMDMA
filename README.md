@@ -103,7 +103,9 @@ XMiner
         * scoop：同样是Linux版本
         * docker+wsl2：推荐，这个是Linux版本
     * Linux：同装MySQL的方法
-* 配置.env环境变量
+* 配置环境变量
+    * `.flaskenv`文件已经提供，一般只需要修改`FLASK_DEBUG`和`FLASK_ENV`
+    * 需要自己创建`.env`文件，环境变量参考如下
 
 ```dotenv
 #可以使用PIPENV_VENV_IN_PROJECT环境变量让环境创建在当前项目目录下

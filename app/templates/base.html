@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+        {% block html %}
+            lang="en"
+        {% endblock %}
+>
 <head>
     {#推荐使用antd框架#}
     {% block head %}
@@ -7,9 +11,9 @@
         {% block title %}
             <title>Base</title>
         {% endblock title %}
-        {% block style %}
+        {% block styles %}
             <link href="{{ url_for('static',filename='css/common/index.css') }}" rel="stylesheet"/>
-        {% endblock style %}
+        {% endblock styles %}
     {% endblock head %}
 </head>
 <body>

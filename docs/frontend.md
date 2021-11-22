@@ -15,12 +15,12 @@
 
 ### 前后端交互
 
-* ajax
+* AJAX
     * 游览器原生XMLHttpRequest(XHR)，极力不推荐，除非维护上古页面
-    * jQuery:$.ajax()
+    * JQuery:$.ajax()
     * Axios
         * 极力推荐
-    * fetch
+    * Fetch
         * 游览器原生fetch方法(推荐，但是要注意兼容性)
             * 参考[Fetch API](http://www.ruanyifeng.com/blog/2020/12/fetch-tutorial.html)
             * [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
@@ -32,7 +32,9 @@
                 * [umi-request](https://github.com/umijs/umi-request/blob/master/README_zh-CN.md)
             * [useRequest](https://hooks.umijs.org/zh-CN/hooks/async)
 
-### AJAX示例
+#### AJAX示例
+
+----
 
 * axios方法的示例
 
@@ -143,9 +145,41 @@ $.ajax({})
 
 ## 传统网页开发方法：引入css和js文件
 
-* 文档
-    * [jQuery中文](https://www.jquery123.com/)
-    * [bootstrap](https://getbootstrap.com/)
+* 框架
+    * JQuery
+        * [jQuery中文](https://www.jquery123.com/)
+        * 常用插件集合网站
+            * http://www.bootstrapmb.com/chajian
+    * BootStrap
+        * [英文文档](https://getbootstrap.com/)
+    * Vue:前端三大框架只有这个和传统的网页开发方式能够稍微配合一些，其他的都很难弄进来
+        * Vue2
+            * [官网](https://cn.vuejs.org/)
+        * Vue3
+            * [官网](https://v3.cn.vuejs.org/)
+        * 一些问题
+            * 和jinja2界定符的冲突，参考：https://greyli.com/jinja2-and-js-template/
+                * 因为都是使用双大括号`{{}}`，所以要么重载jinja2，要么重载vue
+                * vue:new的时候重置`delimiters: ['${', '}$'],`(符号选择自己喜欢的即可)
+                * 还有一种解决办法：把JavaScript代码都拆出来，单独放到js文件中，这样就不经过jinja2解析了
+                * jinja2
+                    * 使用 Jinja2 的 raw 标签标记 JavaScript 模板代码
+                        * `{% raw %}js代码{% endraw %}`
+                    * 修改 Jinja2 的语法定界符号
+
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+app.jinja_env.block_start_string = '(%'  # 修改块开始符号
+app.jinja_env.block_end_string = '%)'  # 修改块结束符号
+app.jinja_env.variable_start_string = '(('  # 修改变量开始符号
+app.jinja_env.variable_end_string = '))'  # 修改变量结束符号
+app.jinja_env.comment_start_string = '(#'  # 修改注释开始符号
+app.jinja_env.comment_end_string = '#)'  # 修改注释结束符号
+```
+
 * 静态资源设置
     * static_folder表示静态文件所在路径，默认为root_dir下的static文件夹
     * static_url_path的行为比较复杂
@@ -166,8 +200,13 @@ $.ajax({})
 
 ## 现代网页开发方法：使用nodejs、webpack等工具进行开发
 
-* 具体开发方法因为内容太多就不赘述了，只是推荐使用webstorm、vscode、HBuilderX等IDE辅助开发，前后端分离，flask只提供api
-* 打包完成后将静态资源文件放到自己的资源文件夹下
+* 前后端分离
+    * flask只提供api
+    * 前端打包完成后将静态资源文件放到资源文件夹下，并使用jinja2语法将他们链接到相应的网页即可
+* IDE
+    * WebStorm
+    * VSCode
+    * HBuilderX
 
 ## 工具包
 
@@ -176,7 +215,6 @@ $.ajax({})
     * Vue
     * Knockout
     * riot
-    *
 * ajax
     * axios
         * [中文文档](http://www.axios-js.com/)
@@ -191,7 +229,6 @@ $.ajax({})
     * 使用dayjs(moment.js已经不维护了)
         * [官网](https://day.js.org)
         * [中文文档](https://dayjs.gitee.io/docs/zh-CN/installation/installation)
-
 * 绘图
     * AntV
         * [官网](https://antv.vision/zh)
@@ -204,11 +241,33 @@ $.ajax({})
     * google charts
         * [文档](https://developers.google.cn/chart)
 
+### Vue生态
+
+* vue
+    * vuex
+    * vue-router
+* elements
+* vant
+
+### React生态
+
+* react
+    * redux
+* antd
+    * AHooks.js
+    * AntV
+
 # 文档更新记录
 
 * 2021-11-02
     * 初始化文档
 * 2021-11-18
+    * 增加工具包部分
     * 补充一些包
 * 2021-11-20
     * 完善jQuery和fetch的ajax操作示例
+* 2021-11-21
+    * 修复jQuery的ajax操作错误，增加更多的示例
+    * 完善axios和fetch的操作方法
+* 2021-11-22
+    * 增加Vue和React框架生态部分

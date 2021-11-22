@@ -25,4 +25,4 @@ tcm_bp.register_blueprint(api_bp, url_prefix='/api')
 @tcm_bp.get('/', defaults={'path': ''})
 # @tcm_bp.get('/<path:path>/')
 def index(path):
-    return render_template('index.html')
+    return render_template('tcm/index.html')

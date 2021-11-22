@@ -128,3 +128,11 @@ def register_jinja2(app):
             return False
 
     app.jinja_env.tests['bza'] = bza
+
+    # 修改界定符
+    # app.jinja_env.block_start_string = '(%'  # 修改块开始符号
+    # app.jinja_env.block_end_string = '%)'  # 修改块结束符号
+    # app.jinja_env.variable_start_string = '(('  # 修改变量开始符号
+    # app.jinja_env.variable_end_string = '))'  # 修改变量结束符号
+    # app.jinja_env.comment_start_string = '(#'  # 修改注释开始符号
+    # app.jinja_env.comment_end_string = '#)'  # 修改注释结束符号

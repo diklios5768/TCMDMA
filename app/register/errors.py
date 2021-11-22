@@ -12,11 +12,11 @@
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 """
 __auth__ = 'diklios'
-
+from flask import redirect,url_for
 from werkzeug.exceptions import HTTPException
 
 from app.libs.error import APIException
-from app.libs.error_exception import ServerError,APILimited
+from app.libs.error_exception import ServerError,APILimited,NotFound
 
 
 # 注册错误处理函数
@@ -42,3 +42,7 @@ def register_errors(app):
     @app.errorhandler(429)
     def rate_limit_handler(e):
         return APILimited(msg=e.description)
+
+    @app.errorhandler(404)
+    def not_found_handler(e):
+        return redirect(url_for('main.not_found'))

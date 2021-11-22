@@ -1,1 +1,19 @@
-{% extends 'frame/antd-frame.html' %}
+{% extends 'base.html' %}
+{% block styles %}
+    {{ super() }}
+    {% block  main_styles %}
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div id="root">
+        {% block main_content %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {% block main_scripts %}
+    {% endblock %}
+{% endblock %}
