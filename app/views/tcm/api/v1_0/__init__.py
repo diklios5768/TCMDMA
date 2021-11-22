@@ -14,13 +14,13 @@
 __auth__ = 'diklios'
 
 from flask import Blueprint
-from app.views.api.v1_0.login import login_bp
-from app.views.api.v1_0.register import register_bp
-from app.views.api.v1_0.user import user_bp
-from app.views.api.v1_0.project import project_bp
-from app.views.api.v1_0.dataset import dataset_bp
-from app.views.api.v1_0.file import file_bp
-from app.views.api.v1_0.analysis import analysis_bp
+from app.views.tcm.api.v1_0.login import login_bp
+from app.views.tcm.api.v1_0.register import register_bp
+from app.views.tcm.api.v1_0.user import user_bp
+from app.views.tcm.api.v1_0.project import project_bp
+from app.views.tcm.api.v1_0.dataset import dataset_bp
+from app.views.tcm.api.v1_0.file import file_bp
+from app.views.tcm.api.v1_0.analysis import analysis_bp
 
 v1_0_bp = Blueprint('v1_0', __name__)
 

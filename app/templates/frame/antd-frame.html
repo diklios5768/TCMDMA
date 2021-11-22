@@ -1,0 +1,8 @@
+{% extends 'frame/react-frame.html' %}
+{% block style %}
+    <link href="{{ url_for('static',filename='css/antd/react/antd.min.css') }}"  rel="stylesheet">
+{% endblock style %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static',filename='js/react/antd/antd-with-locales.min.js') }}"></script>
+{% endblock scripts %}

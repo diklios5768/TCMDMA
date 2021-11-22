@@ -13,9 +13,9 @@
 """
 __auth__ = 'diklios'
 
-from app.views import tcm_bp
+from app.views import index_bp
 
 
 # 注册路由
 def register_blueprints(app):
-    app.register_blueprint(tcm_bp, url_prefix='/')
+    app.register_blueprint(index_bp, url_prefix='/')

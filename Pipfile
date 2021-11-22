@@ -25,6 +25,7 @@ cryptography = "*"
 #flask-moment = "*"
 # database
 redis = "*"
+hiredis = "*"
 pymysql = "*"
 sqlalchemy = "*"
 sqlalchemy-utils = "*"

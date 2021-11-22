@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{#bootstrap4默认使用4.6版本#}
+{% block style %}
+    {{ block.super }}
+    {#    bootstrap4 的官方库#}
+    {#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-olOxEXxDwd20BlATUibkEnjPN3sVq2YWmYOnsMYutq7X8YcUdD6y/1I+f+ZOq/47" crossorigin="anonymous">#}
+    <link href="{% static 'css/frame/bootstrap/v4/bootstrap.min.css' %}" rel="stylesheet">
+
+{% endblock style %}
+
+{% block scripts %}
+    {{ block.super }}
+    {#    jquery库引入#}
+    {#    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>#}
+    <script src="{% static 'js/frame/jquery.min.js' %}"></script>
+    {#    popper库引入#}
+    <script src="{% static 'js/plugs/umd_popper.min.js' %}"></script>
+    {#    bootstrap4 库引入#}
+    {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-NU/T4JKmgovMiPaK2GP9Y+TVBQxiaiYFJB6igFtfExinKlzVruIK6XtKqxCGXwCG" crossorigin="anonymous"></script>#}
+    <script src="{% static 'js/frame/bootstrap/v4/bootstrap.min.js' %}"></script>
+{% endblock scripts %}

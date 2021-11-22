@@ -1,0 +1,14 @@
+{% extends 'frame/vue3-frame.html' %}
+{#element3#}
+{% block style %}
+    {{ super() }}
+    <!-- 引入样式 -->
+    <link href="https://unpkg.com/element-plus/lib/theme-chalk/index.css" rel="stylesheet">
+{#    <link href="{{ url_for('static',filename='css/vue/element-plus/index.css') }}">#}
+{% endblock style %}
+{% block scripts %}
+    {{ super() }}
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-plus/lib/index.full.js"></script>
+{#    <script src="{{url_for('static',filename='js/vue/element-plus/index.full.js') }}"></script>#}
+{% endblock scripts %}

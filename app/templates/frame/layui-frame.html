@@ -1,0 +1,18 @@
+{% extends'base.html' %}
+{#TODO:今后需要更换为CDN的形式#}
+{% block style %}
+    {#    layui 的官方库#}
+    <link href="{{ url_for('static',filename='css/layui/layui.css') }}" rel="stylesheet">
+{% endblock style %}
+
+{% block scripts %}
+    {#    jquery引入#}
+    <script src="{{ url_for('static',filename='js/jquery/v3.5.1/jquery-3.5.1.min.js') }}"></script>
+    {#    popper库引入#}
+    <script src="{{ url_for('static',filename='js/plugs/popper/popper.min.js') }}"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"#}
+    {#            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"#}
+    {#            crossorigin="anonymous"></script>#}
+    {#    layui 库引入#}
+    <script src="{{ url_for('static',filename='js/layui/layui.all.min.js') }}"></script>
+{% endblock scripts %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {#推荐使用antd框架#}
+    {% block head %}
+        <meta charset="UTF-8">
+        {% block title %}
+            <title>Base</title>
+        {% endblock title %}
+        {% block style %}
+            <link href="{{ url_for('static',filename='css/common/index.css') }}" rel="stylesheet"/>
+        {% endblock style %}
+    {% endblock head %}
+</head>
+<body>
+{% block body %}
+    {% block content %}
+    {% endblock content %}
+    {% block footer %}
+    {% endblock footer %}
+    {% block scripts %}
+    {% endblock scripts %}
+{% endblock body %}
+</body>
+</html>

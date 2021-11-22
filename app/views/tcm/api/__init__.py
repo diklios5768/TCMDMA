@@ -15,7 +15,7 @@ __auth__ = 'diklios'
 
 from flask import Blueprint
 from app.libs.error_exception import Success
-from app.views.api.v1_0 import v1_0_bp
+from app.views.tcm.api.v1_0 import v1_0_bp
 from app.utils.celery_handler.mail import send_text_mail_sync
 from app.utils.mail_handler.base import text_mail
 

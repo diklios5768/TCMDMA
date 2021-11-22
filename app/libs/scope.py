@@ -13,7 +13,7 @@
 """
 __auth__ = 'diklios'
 
-sun_module_name = 'sun.'
+tcm_module_name = 'tcm.'
 
 api_module_name = 'api.'
 
@@ -95,40 +95,40 @@ class BaseScope:
 
 
 class UserScope(BaseScope):
-    allow_apis = ['sun.api.v1_0.user.update_self_password']
-    allow_modules = ['sun.api.v1_0.login', 'sun.api.v1_0.file', 'sun.api.v1_0.dataset', 'sun.api.v1_0.project',
-                     'sun.api.v1_0.analysis']
+    allow_apis = ['tcm.api.v1_0.user.update_self_password']
+    allow_modules = ['tcm.api.v1_0.login', 'tcm.api.v1_0.file', 'tcm.api.v1_0.dataset', 'tcm.api.v1_0.project',
+                     'tcm.api.v1_0.analysis']
     forbidden_apis = [
-        'sun.api.v1_0.user.get_project_by_params_by_admin',
-        'sun.api.v1_0.project.true_delete_project',
-        'sun.api.v1_0.project.true_delete_project_batch',
-        'sun.api.v1_0.user.get_dataset_by_params_by_admin',
-        'sun.api.v1_0.dataset.true_delete_dataset',
-        'sun.api.v1_0.dataset.true_delete_dataset_batch',
+        'tcm.api.v1_0.user.get_project_by_params_by_admin',
+        'tcm.api.v1_0.project.true_delete_project',
+        'tcm.api.v1_0.project.true_delete_project_batch',
+        'tcm.api.v1_0.user.get_dataset_by_params_by_admin',
+        'tcm.api.v1_0.dataset.true_delete_dataset',
+        'tcm.api.v1_0.dataset.true_delete_dataset_batch',
     ]
 
 
 class AdminScope(BaseScope):
     allow_apis = []
-    allow_modules = ['sun.api.v1_0']
+    allow_modules = ['tcm.api.v1_0']
     forbidden_apis = [
-        'sun.api.v1_0.user.true_delete_user',
-        'sun.api.v1_0.user.true_delete_user_batch',
-        'sun.api.v1_0.user.update_user_by_id',
-        'sun.api.v1_0.project.true_delete_project',
-        'sun.api.v1_0.project.true_delete_project_batch',
-        'sun.api.v1_0.dataset.true_delete_dataset',
-        'sun.api.v1_0.dataset.true_delete_dataset_batch',
+        'tcm.api.v1_0.user.true_delete_user',
+        'tcm.api.v1_0.user.true_delete_user_batch',
+        'tcm.api.v1_0.user.update_user_by_id',
+        'tcm.api.v1_0.project.true_delete_project',
+        'tcm.api.v1_0.project.true_delete_project_batch',
+        'tcm.api.v1_0.dataset.true_delete_dataset',
+        'tcm.api.v1_0.dataset.true_delete_dataset_batch',
     ]
     forbidden_modules = [
-        'sun.api.v1_0.secret',
-        'sun.api.v1_0.bound',
+        'tcm.api.v1_0.secret',
+        'tcm.api.v1_0.bound',
     ]
 
 
 class SuperAdminScope(BaseScope):
     allow_apis = []
-    allow_modules = ['sun.api.v1_0']
+    allow_modules = ['tcm.api.v1_0']
 
     def __init__(self):
         self.add(AdminScope())
@@ -139,15 +139,15 @@ def is_in_scope(scopes, endpoint):
     # 因为python并没有反射这个机制，所以需要使用globals()
     gl = globals()
     # 在多个角色中查询权限
-    has_scope=False
+    has_scope = False
     for scope_item in scopes:
         scope = gl[scope_item]()
         # 先判断URL是否被禁止了
         if endpoint in scope.forbidden_apis:
-            has_scope= False
+            has_scope = False
         for i in scope.forbidden_modules:
             if endpoint.startswith(i):
-                has_scope= False
+                has_scope = False
                 break
         if endpoint in scope.allow_apis:
             return True
