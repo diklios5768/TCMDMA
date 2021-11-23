@@ -426,17 +426,18 @@ data4 = request.args.to_dict()
 ### 邮件
 
 * `Flask-Mail`
-  * 安装：`pipenv install flask-mail`
-  * [官网](https://pythonhosted.org/Flask-Mail/)
-  * 2014年之后项目不再维护，建议使用`Flask-Mailman`
+    * 安装：`pipenv install flask-mail`
+    * [官网](https://pythonhosted.org/Flask-Mail/)
+    * 2014年之后项目不再维护，建议使用`Flask-Mailman`
 * `Flask-Mailman`
-  * [官网](https://github.com/waynerv/flask-mailman)
-  * [文档](https://www.waynerv.com/flask-mailman/)
-  * 安装：`pipenv install Flask-Mailman`
+    * [官网](https://github.com/waynerv/flask-mailman)
+    * [文档](https://www.waynerv.com/flask-mailman/)
+    * 安装：`pipenv install Flask-Mailman`
 * 使用`sendgrid`提供邮箱服务
-  * `pipenv install sendgrid`
-  * [sendgrid官网](https://sendgrid.com/)
-  * 现在的sendgrid似乎不能免费使用了，换126或者163邮箱吧
+    * `pipenv install sendgrid`
+    * [sendgrid官网](https://sendgrid.com/)
+    * 现在的sendgrid似乎不能免费使用了，换126或者163邮箱吧
+
 ### 手机验证码
 
 * 用阿里云的服务
@@ -814,6 +815,55 @@ server {
 * 使用pycharm右键文件夹，可以选择清除python编译文件快速清除.pyc文件（但是不能清除__pycache__文件夹）
     * Linux & MacOS & WSL:`find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf`
 
+# 补充
+
+## 其他通用型框架
+
+### Django
+
+* Python的另一个主流框架
+    * 杀手锏功能是后台管理
+
+### Tornado
+
+### web2py
+
+### Bottle
+
+### CherryPy
+
+### Pyramid
+
+### Sanic
+
+## 二次框架
+
+### Eve
+
+* 简介
+    * 基于Flask
+    * 官网：https://github.com/pyeve/eve
+
+### Connexion
+
+* 简介
+    * 基于Flask
+    * 官网：https://github.com/zalando/connexion
+
+### APIFlask
+
+* 简介
+    * 这是一个基于flask的高阶版框架，可以从flask几乎无缝迁移
+    * 官网：Connexion
+
+### FastAPI
+
+* ***首先必须明确，Flask和FastAPI是不好对比的，具体参考：https://greyli.com/flask-fastapi/***
+* 简介
+    * 基于`Starlette`
+    * 官网：https://fastapi.tiangolo.com/
+    * 源码：https://github.com/tiangolo/fastapi
+
 # 文档更新记录
 
 * 2021-07-11
@@ -844,3 +894,5 @@ server {
     * 新开持续集成内容
 * 2021-11-18
     * 添加部分pipenv内容
+* 2021-11-23
+    * 添加补充部分，主要是其他框架
