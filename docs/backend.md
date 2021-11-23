@@ -137,6 +137,8 @@
 * 请在下载项目完毕后单独新开一个分支，在自己的分支上进行开发
 * git相关使用可以参考：[阮一峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
 * git提交规范参考：[git commit 规范指南](https://www.jianshu.com/p/201bd81e7dc9?utm_source=oschina-app)
+* .gitignore说明
+    * `app/logs`和`app/users`是提交到代码仓库的时候需要移除的，但不是迁移的时候需要移除的
 
 ### 调试
 
