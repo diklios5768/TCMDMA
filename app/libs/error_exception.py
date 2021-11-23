@@ -59,6 +59,12 @@ class RegisterSuccess(Success):
     chinese_msg = '注册成功'
 
 
+class VerifySuccess(Success):
+    error_code = 311
+    msg = 'verify success'
+    chinese_msg = '验证成功'
+
+
 class LoginSuccess(Success):
     code = 201
     error_code = 32
@@ -70,6 +76,7 @@ class LogoutSuccess(Success):
     error_code = 33
     msg = 'logout success'
     chinese_msg = '退出登录成功'
+
 
 
 class AlgorithmAnalysisSuccess(Success):
@@ -89,10 +96,10 @@ class SendPhoneSuccess(Success):
     msg = 'send phone success'
     chinese_msg = '发送手机短信成功'
 
-
+# 异步任务
 class TaskRunningSuccess(Success):
     code = 202
-    error_code = 53
+    error_code = 61
     msg = 'task start running'
     chinese_msg = '任务开始执行'
 

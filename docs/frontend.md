@@ -213,7 +213,15 @@ app.jinja_env.comment_end_string = '#)'  # 修改注释结束符号
 * dom操作
     * jQuery
     * Vue
+        * vue2
+            * [官网](https://cn.vuejs.org/)
+        * vue3
+            * [官网](https://v3.cn.vuejs.org/)
     * Knockout
+        * [官网](https://knockoutjs.com/)
+        * [源码](https://github.com/knockout/knockout)
+        * 压缩之后体积接近70kb，用gzip压缩只有25kb
+        * 2年左右不更新了，vue更加好用，而且体积也没有大很多
     * riot
 * ajax
     * axios
