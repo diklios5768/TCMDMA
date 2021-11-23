@@ -6,17 +6,21 @@
 out
 gen
 
+#visual studio code的设置文件夹
+.vscode
+
 #python缓存
 __pycache__
 *.pyc
 
-#visual studio code设置文件夹
-.vscode
+#jupyter缓存
+.ipynb_checkpoints
+*/.ipynb_checkpoints
 
 #虚拟环境文件夹
-#virtual environment创建的
+#virtual environment创建的环境文件夹
 venv
-#pipenv可能创建的文件夹
+#pipenv创建的环境文件夹
 .venv
 
 #本机环境变量
@@ -25,23 +29,17 @@ venv
 #测试用的文件
 tests
 
+#Flask开发内容
 #缓存文件
 app/temp
-
 #日志文件
 app/logs
-
 #用户文件
 app/users
-
 #数据库源文件
 app/models/*/source
 app/models/source
 
-#jupyter缓存
-.ipynb_checkpoints
-*/.ipynb_checkpoints
-
-#可能的NodeJS环境
+#NodeJS环境
 node_modules
 */node_modules
