@@ -10,6 +10,10 @@ from .xlsx import read_xlsx
 def read_table(file_path_or_stream, file_type='csv', method='path',
                row_start: int or None = None, row_end: int or None = None,
                col_start: int or None = None, col_end: int or None = None, ):
+    """
+    请注意：行数或者列数索引都是从0开始的
+    end一定要比start大1，否则读出来是空数组（与Python切片的规范保持一致）
+    """
     if file_type == 'csv':
         return read_csv(file_path_or_stream, method,
                         row_start=row_start, row_end=row_end,

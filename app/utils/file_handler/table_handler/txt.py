@@ -16,6 +16,57 @@ __auth__ = 'diklios'
 
 import pandas as pd
 
+from app.utils.file_handler.text_handler.regex import replace_row_character
+from app.utils.file_handler.text_handler.table import texts_to_table_data_integral_process
+
+
+def read_txt_table_large_file(file_path: str, sep: str = '\t',
+                              row_start: int = None, row_end: int = None,
+                              col_start: int = None, col_end: int = None, ):
+    """
+    默认换行是回车
+    必须确保是正确的表格形式的文本，而不是单列文本，否则会导致列选择错误
+    读取大文件不允许行的切片从后向前读取，因为会导致内存溢出，所以row_start,row_end>=0,row_end>=row_start
+    :params file_path:文件路径
+    :return 二维列表
+    """
+    if not row_start:
+        row_start = 0
+    if not row_end:
+        row_end = 0
+    if row_end <= row_start or row_start < 0 or row_end < 0:
+        return []
+    done = 0
+    row_count = -1
+    table_data = []
+    with open(file_path, 'r') as f:
+        while not done:
+            line = f.readline()
+            row_count += 1
+            if row_count < row_start:
+                continue
+            if row_count >= row_end:
+                done = 1
+            if line == '':
+                done = 1
+            else:
+                row = replace_row_character(line).replace(';', '').split(sep)[col_start:col_end]
+                table_data.append(row)
+    return table_data
+
+
+def read_txt_table_one_time(file_path: str,
+                            row_start: int = None, row_end: int = None,
+                            col_start: int = None, col_end: int = None):
+    """
+    默认换行是回车
+    必须确保是正确的表格形式的文本，而不是单列文本，否则会导致列选择错误
+    :params file_path:文件路径
+    :return 二维列表
+    """
+    with open(file_path, 'r') as f:
+        return texts_to_table_data_integral_process(f.read())[row_start:row_end, col_start:col_end]
+
 
 def read_txt_table_by_pandas(filepath_or_buffer, sep: str = '\t'):
     """

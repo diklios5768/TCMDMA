@@ -9,11 +9,8 @@ from app.utils.file_handler import make_dir
 
 
 def read_xlsx(file_path_or_stream, sheet_name: str = '', method='path',
-              row_start: int or None = None, row_end: int or None = None,
-              col_start: int or None = None, col_end: int or None = None, ):
-    """
-    注意：start一定要比end小1，否则读出来是空数组
-    """
+              row_start: int = None, row_end: int = None,
+              col_start: int = None, col_end: int = None, ):
     if method == 'path':
         wb = load_workbook(filename=file_path_or_stream, data_only=True)
     elif method == 'stream':

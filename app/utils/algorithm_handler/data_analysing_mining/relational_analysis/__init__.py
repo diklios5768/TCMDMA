@@ -2,7 +2,7 @@ from app.utils.algorithm_handler.complex_network.image import generate_image
 from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.apriori import apriori_analysis, \
     single_items_sorted, items_sorted, rules_sorted
 from app.utils.file_handler.text_handler.list import filter_empty_text
-from app.utils.file_handler.text_handler.reg import replace_character
+from app.utils.file_handler.text_handler.regex import replace_character
 
 
 # from app.utils.algorithm_handler.data_analysing_mining.relational_analysis.fpGrowth import fp_growth_analysis

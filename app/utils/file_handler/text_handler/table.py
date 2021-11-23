@@ -12,8 +12,9 @@
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 """
 __auth__ = 'diklios'
+
 from app.utils.file_handler.text_handler.list import filter_empty_text
-from app.utils.file_handler.text_handler.reg import replace_character
+from app.utils.file_handler.text_handler.regex import replace_character
 
 
 # 列表递归
@@ -28,7 +29,7 @@ def handle_deep_texts_list(lists):
 
 
 # 文本分行
-def texts_division_to_rows(text, method='character', character=';'):
+def texts_to_rows(text, method='character', character=';'):
     rows = []
     if method == "enter":
         rows = text.splitlines()
@@ -54,12 +55,12 @@ def rows_to_single_col_table_data(rows: list):
 
 # 完整文本数据转化为行数据预处理流程
 def texts_to_rows_integral_process(text):
-    return texts_division_to_rows(replace_character(text))
+    return texts_to_rows(replace_character(text))
 
 
 def texts_to_table_data_integral_process(text):
-    return rows_to_table_data(texts_division_to_rows(replace_character(text)))
+    return rows_to_table_data(texts_to_rows(replace_character(text)))
 
 
 def texts_to_single_col_table_data_integral_process(text):
-    return rows_to_single_col_table_data(texts_division_to_rows(replace_character(text)))
+    return rows_to_single_col_table_data(texts_to_rows(replace_character(text)))

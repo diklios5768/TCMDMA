@@ -17,16 +17,16 @@ from flask import Blueprint, request, current_app
 
 from app.libs.enums import ClientTypeEnum
 from app.libs.error_exception import Success, ParameterException, LinkError
-from app.viewModels.common.captcha import verify_captcha,send_captcha_full
+from app.utils.file_handler.text_handler.regex import is_email
+from app.utils.limiter import register_limit
+from app.utils.wtf_handler.client import ClientForm
+from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
+    RegisterEmailWithUsernameWithCaptchaForm
+from app.viewModels.common.captcha import verify_captcha, send_captcha_full
 from app.viewModels.tcm.register import (
     register_user_by_email, register_user_by_phone, register_user_by_username,
     confirm_register_link
 )
-from app.utils.wtf_handler.client import ClientForm
-from app.utils.wtf_handler.register import RegisterOnlyUsernameForm, RegisterEmailForm, RegisterPhoneForm, \
-    RegisterEmailWithUsernameWithCaptchaForm
-from app.utils.file_handler.text_handler.reg import is_email
-from app.utils.limiter import register_limit
 
 register_bp = Blueprint('register', __name__)
 

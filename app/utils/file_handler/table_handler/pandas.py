@@ -16,7 +16,7 @@ __auth__ = 'diklios'
 import pandas as pd
 
 
-def list_to_dataframe(table_data):
+def table_data_to_dataframe(table_data):
     """
     将列表转换为dataframe
     :param table_data:

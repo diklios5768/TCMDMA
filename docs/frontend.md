@@ -11,6 +11,11 @@
     * TypeScript
     * 三大前端框架Vue、React、Angular
 
+### 学习参考
+
+* [前端精读](https://github.com/ascoders/weekly)
+* [前端流媒体技术](https://github.com/zhw2590582/live-video-study-notes)
+
 ## API
 
 ### 前后端交互

@@ -18,7 +18,7 @@ import re
 
 # 文本分隔符号替换预处理
 def replace_character(text):
-    return re.sub(r'[，、]', ',', re.sub(r'!|！|；|。|\.|\r\n|\r|\n', ';', text))
+    return re.sub(r'[，、\t]', ',', re.sub(r'!|！|；|。|\.|\r\n|\r|\n', ';', text))
 
 
 def replace_row_character(text):
@@ -26,7 +26,7 @@ def replace_row_character(text):
 
 
 def replace_col_character(text):
-    return re.sub(r'[，、]', ',', text)
+    return re.sub(r'[，、\t]', ',', text)
 
 
 def is_email(value: str = ''):

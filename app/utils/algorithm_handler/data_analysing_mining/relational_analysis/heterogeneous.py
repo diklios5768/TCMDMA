@@ -14,10 +14,10 @@
 __auth__ = 'diklios'
 
 from app.utils.file_handler.text_handler.list import filter_empty_text
-from app.utils.file_handler.text_handler.reg import replace_character
+from app.utils.file_handler.text_handler.regex import replace_character
 
 
-def heterogeneous_relational_analysis(table_data, combination):
+def heterogeneous_relational_analysis(table_data, combination: float):
     table_list = []
     table_items = []
     for row in table_data:
@@ -29,4 +29,3 @@ def heterogeneous_relational_analysis(table_data, combination):
             row_items.extend(col_list)
         table_list.append(row_list)
         table_items.extend(row_items)
-   

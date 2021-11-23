@@ -9,8 +9,8 @@ from app.utils.file_handler.text_handler.list import filter_empty_text
 
 
 def get_csv_data(file_data, filter_row: bool = False,
-                 row_start: int or None = None, row_end: int or None = None,
-                 col_start: int or None = None, col_end: int or None = None, ):
+                 row_start: int = None, row_end: int = None,
+                 col_start: int = None, col_end: int = None, ):
     table_data = []
     for row in file_data:
         if filter_row:
@@ -23,8 +23,8 @@ def get_csv_data(file_data, filter_row: bool = False,
 
 def read_csv(file_path_or_stream, method='path',
              filter_row: bool = False, delimiter: str = ',',
-             row_start: int or None = None, row_end: int or None = None,
-             col_start: int or None = None, col_end: int or None = None, ):
+             row_start: int = None, row_end: int = None,
+             col_start: int = None, col_end: int = None, ):
     if method == 'path':
         with open(file_path_or_stream, 'r', encoding='utf-8') as f:
             csv_file = reader(f, delimiter=delimiter)

@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 
 from app.utils.file_handler.text_handler.list import filter_empty_text
-from app.utils.file_handler.text_handler.reg import replace_col_character
+from app.utils.file_handler.text_handler.regex import replace_col_character
+
 
 # 0-1矩阵
 def rows_to_zero_one_matrix(rows):
