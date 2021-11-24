@@ -68,7 +68,7 @@ python-louvain = "*"
 pyopenssl = "*"
 eventlet = "*"
 gevent = "*"
-# Windows叫win32，MacOS叫darwin
+# Windows:win32,Linux:linux,MacOS:darwin
 waitress = { version = "*", sys_platform = "== 'win32'" }
 gunicorn = { version = "*", sys_platform = "!= 'win32'" }
 #gunicorn = { version = "*", markers = "sys_platform == 'linux' or sys_platform == 'darwin'" }

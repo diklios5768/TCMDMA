@@ -14,7 +14,7 @@
 - [frontend](frontend.md):前端开发文档
 - [require](requirement.md):需求文档和计划功能
 - [version](version.md):版本变动记录
-- [table](table.md):表格文件格式说明
+- [algorithm](algorithm.md):算法说明
 - [hand over](hand_over.md):交接文档
 
 ## 文档更新记录

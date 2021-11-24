@@ -109,6 +109,7 @@
   - 需要自己创建`.env`文件，环境变量参考如下
 
 ```dotenv
+#注意字符串有空格的话需要双引号包裹
 #可以使用PIPENV_VENV_IN_PROJECT环境变量让环境创建在当前项目目录下
 PIPENV_VENV_IN_PROJECT=1
 #保持其他包不更新，因为pipenv install/update 会默认更新所有包
@@ -134,7 +135,7 @@ MAIL_SERVER='smtp.126.com'
 # MAIL_PORT=587
 MAIL_USERNAME=''
 MAIL_PASSWORD=''
-MAIL_DEFAULT_SENDER='NJUCM MedInfo'
+MAIL_DEFAULT_SENDER="NJUCM MedInfo"
 ADMIN_MAIL=''
 HTTP2=0
 # 配置域名
