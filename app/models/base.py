@@ -20,6 +20,7 @@ class Base(db.Model):
     __abstract__ = True
     # 注意SQLite的AUTOINCREMENT只适用于INTEGER，开发的时候一点小心
     # 如果其他的需要自增，可以使用BigInteger().with_variant(Integer, "sqlite")
+    # 自增主键int类型只有21亿，bigint有2^(64-1)
     id = Column(Integer, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
     remarks = Column(String(1024), nullable=True, default='')
     json_remarks = Column(JSON, nullable=True, default={})

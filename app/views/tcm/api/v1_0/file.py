@@ -62,8 +62,8 @@ def read_file_data():
     # 获取文件信息
     file = request.files.get('file', None)
     if file is not None:
-        user_info = g.user_info
-        uid = user_info.uid
+        token_info = g.token_info
+        uid = token_info.uid
         user = User.query.filter_by(id=uid).first_or_404()
         # 创建用户上传文件夹
         user_upload_files_dir = create_user_upload_dir_path(uid, user.username)
@@ -89,8 +89,8 @@ def read_text_data():
     data = request.get_json()
     text = data.get('text', None)
     if text is not None:
-        user_info = g.user_info
-        uid = user_info.uid
+        token_info = g.token_info
+        uid = token_info.uid
         user = User.query.filter_by(id=uid).first_or_404()
         # 创建用户上传文件夹
         user_upload_files_dir = create_user_upload_dir_path(uid, user.username)

@@ -52,8 +52,8 @@ def operation_project(operation):
 @project_bp.get('/all')
 @auth.login_required
 def get_all_projects():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     projects = Project.query.filter_by(owner_id=user_id).all()
     projects_count = len(projects)
     rows = []
@@ -83,8 +83,8 @@ def get_all_projects():
 @project_bp.get('/all_count')
 @auth.login_required
 def get_all_projects_count():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     projects = Project.query.filter_by(owner_id=user_id).all()
     projects_count = len(projects)
     return ReadSuccess(data={"projects_count": projects_count})
@@ -93,8 +93,8 @@ def get_all_projects_count():
 @project_bp.get('/all/differentiate')
 @auth.login_required
 def get_all_projects_with_differentiate():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     projects = Project.query.filter_by(owner_id=user_id, status=1).all()
     projects_count = len(projects)
     finished_projects = []
@@ -126,9 +126,9 @@ def get_project_by_id(project_id):
 @project_bp.post('/params')
 @auth.login_required
 def get_project_by_params():
-    user_info = g.user_info
+    token_info = g.token_info
     params_dict = request.get_json()
-    filters_by = {'owner_id': user_info.uid, 'status': 1}
+    filters_by = {'owner_id': token_info.uid, 'status': 1}
     finished = params_dict.get('finished', 'all')
     if finished == 'all':
         params_dict.pop('finished')
@@ -201,8 +201,8 @@ def get_project_analysis_status(project_id):
 @project_bp.get('/finished')
 @auth.login_required
 def get_all_projects_finished():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     projects = Project.query.filter_by(owner_id=user_id, finished=True).all()
     rows = [dict(project) for project in projects]
     rows.reverse()
@@ -212,8 +212,8 @@ def get_all_projects_finished():
 @project_bp.get('/unfinished')
 @auth.login_required
 def get_all_projects_unfinished():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     projects = Project.query.filter_by(owner_id=user_id, finished=False).all()
     rows = [dict(project) for project in projects]
     rows.reverse()
@@ -235,8 +235,8 @@ def get_project_is_multiple(project_id):
 @project_bp.get('/<int:project_id>/analyses')
 @auth.login_required
 def get_project_analyses(project_id):
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     project = Project.query.filter_by(id=project_id).first_or_404()
     if project.owner_id != user_id:
         return AuthFailed(chinese_msg='你无权访问此项目，因为这不是你的项目')
@@ -270,8 +270,8 @@ def add_project():
 @project_bp.post('/with_dataset_and_analysis')
 @auth.login_required
 def add_project_with_dataset_and_analysis():
-    user_info = g.user_info
-    uid = user_info.uid
+    token_info = g.token_info
+    uid = token_info.uid
     user = User.query.filter_by(id=uid).first_or_404()
     data = request.get_json()
     # print(data)

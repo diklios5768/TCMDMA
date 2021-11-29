@@ -208,8 +208,8 @@ def true_delete_user_batch():
 @secret_bp.post('/update_self_password')
 @auth.login_required
 def update_self_password():
-    user_info = g.user_info
-    uid = user_info.uid
+    token_info = g.token_info
+    uid = token_info.uid
     data = request.get_json()
     now_password = data.get('now_password', '')
     user = User.query.filter_by(id=uid).first()
@@ -227,8 +227,8 @@ def update_self_password():
 @secret_bp.post('/update_password/<int:be_operated_user_id>')
 @auth.login_required
 def update_user_password(be_operated_user_id):
-    user_info = g.user_info
-    uid = user_info.uid
+    token_info = g.token_info
+    uid = token_info.uid
     # 判断是否有权限更改别的用户的密码
     operate_user_access_level = count_user_access_level(uid)
     be_operated_user_access_level = count_user_access_level(be_operated_user_id)

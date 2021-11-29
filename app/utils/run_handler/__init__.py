@@ -16,6 +16,8 @@ __auth__ = 'diklios'
 import functools
 import time
 from concurrent import futures
+from datetime import datetime
+from threading import Timer
 
 # 任务超时退出
 executor = futures.ThreadPoolExecutor(1)
@@ -27,13 +29,11 @@ def timeout(seconds):
         def wrapper(*args, **kw):
             future = executor.submit(func, *args, **kw)
             return future.result(timeout=seconds)
-
         return wrapper
-
     return decorator
 
 
-# 或者
+# 类写法
 # class timeout:
 #     __executor = futures.ThreadPoolExecutor(1)
 #
@@ -82,7 +82,7 @@ class AllowCount:
 
 
 # 计算程序运行时间
-def print_func_execute_time(function):
+def print_execute_time(function):
     def wrapper(*args, **kwargs):
         t0 = time.time()
         result = function(*args, **kwargs)
@@ -92,3 +92,34 @@ def print_func_execute_time(function):
 
     return wrapper
 
+
+# 定时任务
+class TimingTask(object):
+    def __init__(self, start_time, interval, task_func, *args, **kwargs):
+        """
+        :params start:开始时间
+        :params interval:间隔时间
+        :params task_func:执行的函数
+        :params args,kwargs:函数的参数
+        """
+
+        self.__timer = None
+        self.__start_time = start_time
+        self.__interval = interval
+        self.__task_func = task_func
+        self.__args = args if args is not None else []
+        self.__kwargs = kwargs if kwargs is not None else {}
+
+    def exec_callback(self):
+        self.__task_func(*self.__args, **self.__kwargs)
+        self.__timer = Timer(self.__interval, self.exec_callback)
+        self.__timer.start()
+
+    def start(self):
+        interval = self.__interval - (datetime.now().timestamp() - self.__start_time.timestamp())
+        self.__timer = Timer(interval, self.exec_callback)
+        self.__timer.start()
+
+    def cancel(self):
+        self.__timer.cancel()
+        self.__timer = None

@@ -34,8 +34,8 @@ dataset_bp = Blueprint('dataset', __name__)
 @dataset_bp.get('/all')
 @auth.login_required
 def get_all_datasets():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     datasets = Dataset.query.filter_by(owner_id=user_id).all()
     rows = [dict(dataset) for dataset in datasets]
     rows.reverse()
@@ -45,8 +45,8 @@ def get_all_datasets():
 @dataset_bp.get('/all_count')
 @auth.login_required
 def get_all_datasets_count():
-    user_info = g.user_info
-    user_id = user_info.uid
+    token_info = g.token_info
+    user_id = token_info.uid
     datasets = Dataset.query.filter_by(owner_id=user_id).all()
     datasets_count = len(datasets)
     return ReadSuccess(data={"datasets_count": datasets_count})
@@ -62,10 +62,10 @@ def get_dataset_by_id(dataset_id):
 @dataset_bp.post('/params')
 @auth.login_required
 def get_dataset_by_params():
-    user_info = g.user_info
+    token_info = g.token_info
     params_dict = request.get_json()
     filters_or = params_fuzzy_query(Dataset, params_remove_empty(params_remove_pagination(params_dict)))
-    datasets = database_read_by_params(Dataset, filters_by={'owner_id': user_info.uid, 'status': 1},
+    datasets = database_read_by_params(Dataset, filters_by={'owner_id': token_info.uid, 'status': 1},
                                        filters_or=filters_or)
     dataset_rows = params_antd_table_return(datasets)
     return ReadSuccess(data=dataset_rows)
@@ -96,8 +96,8 @@ def get_dataset_batch():
 @dataset_bp.post('')
 @auth.login_required
 def add_dataset():
-    user_info = g.user_info
-    uid = user_info.uid
+    token_info = g.token_info
+    uid = token_info.uid
     upload_data = request.get_json()
     # print(upload_data)
     file_path = upload_data.get('filePath', "")

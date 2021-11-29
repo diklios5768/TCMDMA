@@ -18,7 +18,7 @@ from datetime import datetime
 from flask import Blueprint, current_app, jsonify, request, g
 
 from app.libs.enums import ClientTypeEnum
-from app.libs.error_exception import Success, LoginSuccess, AuthFailed, ParameterException
+from app.libs.error_exception import Success, LoginSuccess, AuthFailed, ParameterException, Forbidden
 from app.models.tcm.user import User
 from app.utils.token_auth import auth
 from app.utils.token_auth import generate_auth_token, get_token_info
@@ -69,10 +69,10 @@ def login():
     # 生成Token
     refresh_token_expiration = current_app.config['REFRESH_TOKEN_EXPIRATION']
     refresh_token = generate_auth_token(identity['uid'], form.type.data.value, identity['scopes'],
-                                        refresh_token_expiration)
+                                        refresh_token_expiration, 'refresh')
     access_token_expiration = current_app.config['ACCESS_TOKEN_EXPIRATION']
     access_token = generate_auth_token(identity['uid'], form.type.data.value, identity['scopes'],
-                                       access_token_expiration)
+                                       access_token_expiration, 'access')
     t = {
         "data": {
             'access_token': access_token.decode('ascii')
@@ -90,8 +90,8 @@ def login():
 @login_bp.get('/current_user')
 @auth.login_required
 def is_login():
-    user_info = g.user_info
-    user = database_read_by_id_single(class_id=user_info.uid, database_class=User)
+    token_info = g.token_info
+    user = database_read_by_id_single(class_id=token_info.uid, database_class=User)
     current_user = dict(user)
     # 暂时不直接返回权限等级，方便使用
     current_user['user_admin'] = False
@@ -112,8 +112,11 @@ def is_token_valid():
 def get_new_access_token():
     refresh_token = request.cookies.get('refresh_token', None)
     if refresh_token is not None:
-        user_info = get_token_info(refresh_token)
-        access_token = generate_auth_token(user_info['uid'], user_info['client_type'], user_info['scopes'])
+        token_info = get_token_info(refresh_token)
+        if token_info['token_use'] != 'refresh':
+            raise Forbidden(msg='token use error', chinese_msg='token的用途错误')
+        access_token = generate_auth_token(token_info['uid'], token_info['client_type'], token_info['scopes'],
+                                           'access')
         t = {
             'access_token': access_token.decode('ascii')
         }
@@ -124,11 +127,13 @@ def get_new_access_token():
 
 @login_bp.get('/logout')
 def logout():
-    # refresh_token放入黑名单,access_token时间非常断，可以不放
+    # refresh_token放入黑名单,access_token时间非常短，可以不放
     refresh_token = request.cookies.get('refresh_token', None)
     if refresh_token:
-        token_info=get_token_info(refresh_token)
-        ban_token(refresh_token, token_info['expire_in']-int(datetime.utcnow().timestamp()))
+        token_info = get_token_info(refresh_token)
+        if token_info['token_use'] != 'refresh':
+            raise Forbidden(msg='token use error', chinese_msg='token的用途错误')
+        ban_token(refresh_token, token_info['expire_in'] - int(datetime.utcnow().timestamp()))
         # 登出
         res = jsonify({'success': True, 'msg': 'logout success'})
         res.delete_cookie('refresh_token')

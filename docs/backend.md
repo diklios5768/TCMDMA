@@ -107,8 +107,8 @@
       - 默认导出的文件名就是`requirements.txt`
   - 使用`pipenv`：推荐，导出的方法多种多样
     - 导出生产环境包：`pipenv lock -r > requirements-pipenv.txt`
-    - 可以导出包含开发环境的包：`pipenv lock -r --dev > requirements-pipenv-dev.txt`
-    - 也可以只导出开发环境的包：`pipenv lock -r --dev-only > requirements-pipenv-dev-only.txt`
+    - 导出包含开发环境的包：`pipenv lock -r --dev > requirements-pipenv-dev.txt`
+    - 只导出开发环境的包：`pipenv lock -r --dev-only > requirements-pipenv-dev-only.txt`
 - 问题
   - 如果报错说找不到包，可以在终端进行代理，或者换源
   - 安装失败，注意看是不是要安装 vc++14，我倾向于直接装一个 visual studio 的 c++环境，操作起来很简单，下载安装即可
@@ -337,7 +337,7 @@
           - flask_limiter.util.get_remote_address()：使用请求的 remote_address
             - 注意：在真实开发中，大部分项目都配置了 Nginx，如果直接使用 get_remote_address，获取到的是 Nginx 服务器的地址，相当于来自该 Nginx 服务器的所有请求会被当做同一个 IP 访问，所以项目中一般都是自定义 key_func
           - X-Forwarded-For：一般是每一个非透明代理转发请求时会将上游服务器的 ip 地址追加到 X-Forwarded-For 的后面，使用英文逗号分割； _
-X-Real-IP：一般是最后一级代理将上游 ip 地址添加到该头中；_ X-Forwarded-For 是多个 ip 地址，而 X-Real-IP 是一个；如果只有一层代理，这两个头的值就是一样的
+          X-Real-IP：一般是最后一级代理将上游 ip 地址添加到该头中；_ X-Forwarded-For 是多个 ip 地址，而 X-Real-IP 是一个；如果只有一层代理，这两个头的值就是一样的
         - exempt_when=callable:当满足给定条件时，可以免除限制
           - 也可以使用 Limiter.request_filter 实现
         - deduct_when:断某些情况不计入使用频率的次数

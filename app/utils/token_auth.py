@@ -8,7 +8,7 @@ from app.libs.error_exception import TokenExpired, TokenInvalid, TokenDisabled, 
 from app.libs.scope import is_in_scope
 from app.viewModels.common.token import is_banned_token
 
-User = namedtuple('User', ['uid', 'client_type', 'scopes'])
+User = namedtuple('User', ['uid', 'client_type', 'scopes', 'token_use'])
 auth = HTTPBasicAuth()
 
 
@@ -18,11 +18,11 @@ auth = HTTPBasicAuth()
 def verify_password(account, password):
     # 此处account就是token
     # print(account)
-    user_info = verify_auth_token(account)
-    if not user_info:
+    token_info = verify_auth_token(account, 'access')
+    if not token_info:
         return False
     else:
-        g.user_info = user_info
+        g.token_info = token_info
         return True
 
 
@@ -34,16 +34,16 @@ auth_token = HTTPTokenAuth(scheme='JWT')
 @auth_token.verify_token
 def verify_token(token):
     # print(token)
-    user_info = verify_auth_token(token)
-    if not user_info:
+    token_info = verify_auth_token(token, 'access')
+    if not token_info:
         return False
     else:
-        g.user_info = user_info
+        g.token_info = token_info
         return True
 
 
 # 生成token
-def generate_auth_token(uid, client_type, scopes=None, expiration=7200):
+def generate_auth_token(uid, client_type, scopes=None, expiration=7200, token_use: str = 'authorize'):
     """
     uid:用户id
     ac_type:客户端类型
@@ -54,12 +54,13 @@ def generate_auth_token(uid, client_type, scopes=None, expiration=7200):
     return s.dumps({
         'uid': uid,
         'client_type': client_type,
-        'scopes': scopes
+        'scopes': scopes,
+        'token_use': token_use
     })
 
 
 # 验证token和权限
-def verify_auth_token(token):
+def verify_auth_token(token, use: str = 'access'):
     s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
     try:
         data = s.loads(token)
@@ -74,11 +75,14 @@ def verify_auth_token(token):
     uid = data['uid']
     client_type = data['client_type']
     scopes = data['scopes']
+    token_use = data['token_use']
     # 通过request拿到视图函数
     allow = is_in_scope(scopes, request.endpoint)
     if not allow:
         raise Forbidden()
-    return User(uid, client_type, scopes)
+    if use != token_use:
+        raise Forbidden(msg='token use error', chinese_msg='token的用途错误')
+    return User(uid, client_type, scopes, token_use)
 
 
 # 获得token的信息
@@ -99,6 +103,7 @@ def get_token_info(token):
         # 过期时间
         'expire_in': data[1]['exp'],
         'uid': data[0]['uid'],
-        'client_type': data[0]['client_type']
+        'client_type': data[0]['client_type'],
+        'token_use': data[0]['token_use']
     }
     return information

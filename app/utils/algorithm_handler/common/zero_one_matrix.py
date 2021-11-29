@@ -28,15 +28,19 @@ def rows_to_zero_one_matrix(rows):
     :rows:[str,str...]
     """
     all_nodes_set = []
-    new_rows = []
+    table = []
     for row_text in rows:
         row_list = replace_col_character(row_text).split(',')
-        new_rows.append(row_list)
+        table.append(row_list)
         all_nodes_set.extend(row_list)
     all_nodes_set = filter_empty_text(list(set(all_nodes_set)), method='space')
+    return table_to_zero_one_matrix(table, all_nodes_set)
+
+
+def table_to_zero_one_matrix(table, all_nodes_set):
     all_nodes_length = len(all_nodes_set)
     vector = [all_nodes_set]
-    for row in new_rows:
+    for row in table:
         vector_row = [0 for i in range(all_nodes_length)]
         for node in row:
             index = all_nodes_set.index(node)
@@ -59,15 +63,19 @@ def zero_one_matrix_to_rows(zero_one_matrix):
 
 
 def rows_to_zero_one_matrix_pd(rows):
-    new_rows = []
+    table = []
     for row_text in rows:
         row_list = re.sub(r'[，、]', ',', row_text).split(',')
         no_empty_row = list(set(filter_empty_text(row_list)))
-        new_rows.append(no_empty_row)
-    all_nodes_set = list(set([node for row in new_rows for node in row]))
-    zero_one_matrix = pd.DataFrame(np.zeros([len(new_rows), len(all_nodes_set)]), columns=all_nodes_set)
-    for i in range(len(new_rows)):
-        columns = [ele for ele in new_rows[i]]
+        table.append(no_empty_row)
+    all_nodes_set = list(set([node for row in table for node in row]))
+    return table_to_zero_one_matrix_pd(table, all_nodes_set)
+
+
+def table_to_zero_one_matrix_pd(table, all_nodes_set):
+    zero_one_matrix = pd.DataFrame(np.zeros([len(table), len(all_nodes_set)]), columns=all_nodes_set)
+    for i in range(len(table)):
+        columns = [ele for ele in table[i]]
         zero_one_matrix.loc[i, columns] = 1
     return zero_one_matrix
 

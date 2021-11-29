@@ -1,8 +1,7 @@
 /*
 @Date: 2021-11-23 10:57:29
-@LastEditTime: 2021-11-23 11:02:26
+@LastEditTime: 2021-11-28 21:30:20
 @LastEditors: diklios
-@FilePath: \js\utils\array.js
 @Description: 
 @License: MIT
 @Author: diklios
@@ -152,19 +151,37 @@ export const sum = (arr) => {
 export const average = (arr) => {
   return this.sum(arr) / arr.length;
 };
+// 另一种写法
+// export const average = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;
 
 // 数组排序返回索引
-export const getSortedIndex = (array) => {
+export const arraySortedIndex = (array, method) => {
   for (let i = 0; i < array.length; i++) {
     array[i] = [array[i], i];
   }
-  array.sort(function (left, right) {
-    return left[0] < right[0] ? -1 : 1;
-  });
+  if (method === "asc") {
+    array.sort(function (left, right) {
+      return left[0] < right[0] ? -1 : 1;
+    });
+  } else if (method === "desc") {
+    array.sort(function (left, right) {
+      return left[0] > right[0] ? -1 : 1;
+    });
+  }
+
   array.sortedIndex = [];
   for (let j = 0; j < array.length; j++) {
     array.sortedIndex.push(array[j][1]);
     array[j] = array[j][0];
   }
   return array;
+};
+
+// 二维数组平均值排序
+export const arrayAverageSort = (twoDimensionArr, method) => {
+  let arrayAverage = [];
+  twoDimensionArr.forEach((item) => {
+    arrayAverage.push(average(item));
+  });
+  return arraySortedIndex(arrayAverage, method);
 };
