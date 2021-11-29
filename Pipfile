@@ -23,6 +23,7 @@ cryptography = "*"
 # flask extensions
 #flask-babel = "*"
 #flask-moment = "*"
+flask-admin = "*"
 # database
 redis = "*"
 hiredis = "*"

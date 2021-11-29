@@ -258,6 +258,7 @@
       - <https://www.jianshu.com/p/10d0da01244c>
       - <https://blog.csdn.net/djstavaV/article/details/112261875>
   - Flask-Security-Too
+    - 注意，老版本的 flask-security 已经不维护了，不推荐使用
     - [官网](https://github.com/Flask-Middleware/flask-security)
     - [文档](https://flask-security-too.readthedocs.io/en/stable/)
     - 安装：`pipenv install -U Flask-Security-Too`
@@ -335,9 +336,11 @@
         - key_func:据什么进行限制，flask_limiter.util 提供了两种方式
           - flask_limiter.util.get_ipaddr()：使用 X-Forwarded-For 标头中的最后一个 IP 地址，否则回退到请求的 remote_address 。
           - flask_limiter.util.get_remote_address()：使用请求的 remote_address
-            - 注意：在真实开发中，大部分项目都配置了 Nginx，如果直接使用 get_remote_address，获取到的是 Nginx 服务器的地址，相当于来自该 Nginx 服务器的所有请求会被当做同一个 IP 访问，所以项目中一般都是自定义 key_func
+            - 注意：在真实开发中，大部分项目都配置了 Nginx，如果直接使用 get_remote_address，获取到的是 Nginx 服务器的地址，相当于来自该 Nginx
+              服务器的所有请求会被当做同一个 IP 访问，所以项目中一般都是自定义 key_func
           - X-Forwarded-For：一般是每一个非透明代理转发请求时会将上游服务器的 ip 地址追加到 X-Forwarded-For 的后面，使用英文逗号分割； _
-          X-Real-IP：一般是最后一级代理将上游 ip 地址添加到该头中；_ X-Forwarded-For 是多个 ip 地址，而 X-Real-IP 是一个；如果只有一层代理，这两个头的值就是一样的
+            X-Real-IP：一般是最后一级代理将上游 ip 地址添加到该头中；_ X-Forwarded-For 是多个 ip 地址，而 X-Real-IP
+            是一个；如果只有一层代理，这两个头的值就是一样的
         - exempt_when=callable:当满足给定条件时，可以免除限制
           - 也可以使用 Limiter.request_filter 实现
         - deduct_when:断某些情况不计入使用频率的次数
@@ -390,8 +393,12 @@ data4 = request.args.to_dict()
 
 ### 表单
 
+- 使用基础的`wtforms`
+  - `pipenv install wtforms`
+  - [官网](https://github.com/wtforms/wtforms)
+  - [文档](https://wtforms.readthedocs.io/)
 - 使用`flask-WTF`
-  - `pipenv install flask-wtf`、`pipenv install wtforms`、`pipenv install email_validator`
+  - `pipenv install flask-wtf`
   - [文档](http://www.pythondoc.com/flask-wtf/)
   - [参考](https://www.cnblogs.com/cwp-bg/p/9714741.html)
 - 使用`webargs`
@@ -402,14 +409,19 @@ data4 = request.args.to_dict()
   - [官网](https://github.com/marshmallow-code/webargs)
   - [文档](https://webargs.readthedocs.io/en/latest/)
 
-  -
-
 ### 后台管理
 
 - `flask-admin`
-  - 这个插件只适合小型应用的开发，如果使用前后端分离技术，则不适用
-  - [github 地址](https://flask-admin.readthedocs.io/en/latest/)
-  - [参考](https://www.jianshu.com/p/aef7bbdf74fa)
+  - 类似 Django 的 xadmin 插件，提供快速简单的后台管理功能
+  - [官网](https://github.com/flask-admin/flask-admin)
+  - [文档](https://flask-admin.readthedocs.io/en/latest/)
+  - [参考]
+    - <https://www.jianshu.com/p/aef7bbdf74fa>
+    - <https://segmentfault.com/a/1190000013073352>
+- `Flask App Builder`
+  - 基于 Flask 实现的一个用于快速构建 Web 后台管理系统的简单的框架
+  - [官网](https://github.com/dpgaspar/Flask-AppBuilder)
+  - [文档](https://flask-appbuilder.readthedocs.io/en/latest/)
 
 ### 本地化日期和时间
 
@@ -541,6 +553,7 @@ data4 = request.args.to_dict()
 ### 全文搜索
 
 - 使用`flask-whooshee`
+
   - 安装：`pipenv install flask-whooshee`
 
 - 搭配`flask-whooshalchemy`
