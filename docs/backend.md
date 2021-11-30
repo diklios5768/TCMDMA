@@ -151,9 +151,20 @@
 
 ### 数据库开发
 
-- MYSQL（包括其他 SQL 类型数据库）
+- SQL 类型数据库
   - 设计
-    - 使用 CHINER(原 PDMan)，在`app/models/design`文件夹下可以创建自己设计的数据库
+    - 在`app/models/design`文件夹下可以创建自己设计的数据库
+    - Chiner(原 PDMan)
+      - [源码](https://gitee.com/robergroup/chiner)
+    - [NocoDB](https://github.com/nocodb/nocodb)
+  - 查看和管理
+    - Navicat
+      - 自带的 ER 图非常方便
+    - Datagrip
+    - DBeaver
+  - 数据库导出
+    - 最好设计先行，只有实在没有用办法的时候才通过工具导出
+    - [mysql_markdown](https://github.com/alicfeng/mysql_markdown)
   - 开发
     - 使用`Flask-SQLAlchemy`
       - [Flask-SQLAlchemy 官方英文文档](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
@@ -195,8 +206,13 @@
     - `pipenv install faker --dev`
       - [faker 能够生成的数据类型](https://www.jianshu.com/p/6bd6869631d9)
     - 在每个数据库类下面写对应的 fake 函数
-  - 数据库导出
-    - [nocodb(<https://github.com/nocodb/nocodb>)
+  - 问题
+    - create_all()创建数据
+      - 执行成功刷新数据库却没有变化，请重新断开连接，再重新连接数据库看看
+      - create_all()方法被调用时正是通过这个属性来获取表信息。因此，当我们调用 create_all()
+        前，需要确保模型类被声明创建。如果模型类存储在单独的模块中，不导入该模块就不会执行其中的代码，模型类便不会被创建，进而便无法注册表信息到 db.Model.metadata.tables 中，所以这时需要导入相应的模块。
+      - 一般情况下，我们不用关心这个问题。在单脚本的 Flask 程序中自不必说，在使用包组织的 Flask 程序中，创建程序实例时必然需要导入视图函数所在的模块，或是蓝本所在的模块，而这些模块会导入模型类。
+    - 如果使用 MySQL 需要安装`pymysql`或者`cymysql`驱动，并在配置文件中加上相应字段
 - redis 数据库
   - 客户端驱动
     - 常用：`pipenv install redis`
@@ -218,13 +234,6 @@
   - Flask-MongoEngine
   - Flask-Peewee
   - PonyORM
-- 问题
-  - create_all()创建数据
-    - 执行成功刷新数据库却没有变化，请重新断开连接，再重新连接数据库看看
-    - create_all()方法被调用时正是通过这个属性来获取表信息。因此，当我们调用 create_all()
-      前，需要确保模型类被声明创建。如果模型类存储在单独的模块中，不导入该模块就不会执行其中的代码，模型类便不会被创建，进而便无法注册表信息到 db.Model.metadata.tables 中，所以这时需要导入相应的模块。
-    - 一般情况下，我们不用关心这个问题。在单脚本的 Flask 程序中自不必说，在使用包组织的 Flask 程序中，创建程序实例时必然需要导入视图函数所在的模块，或是蓝本所在的模块，而这些模块会导入模型类。
-  - 如果使用 MySQL 需要安装`pymysql`或者`cymysql`驱动，并在配置文件中加上相应字段
 
 ### 用户-角色-权限-分组-安全管理
 
