@@ -1,12 +1,15 @@
 import os
 from shutil import copy2, copytree, move, rmtree
-from flask import current_app
+
 from app.utils.time import generate_datetime_str_now
 
 
-# 没有就创建这个文件夹，有就返回True
-def make_dir(make_dir_path):
-    path = make_dir_path.strip()
+def make_dir(make_dir_path: str) -> bool:
+    """
+    没有就创建这个文件夹，有就直接返回True
+    """
+    # 为了防止是WindowsPath而报错，先转换一下
+    path = str(make_dir_path).strip()
     if not os.path.exists(path):
         try:
             os.makedirs(path)
