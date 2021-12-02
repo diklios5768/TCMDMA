@@ -1,19 +1,18 @@
 import random
-from sqlalchemy import Column, Integer, BigInteger, String, JSON, Enum, ForeignKey
+
+from sqlalchemy import Column, Integer, BigInteger, String, JSON, ForeignKey
+
 from app.libs.lists import analysis_methods
 from app.models import db
 from app.models.base import Base
-from app.viewModels.tcm.project import find_project
-from app.viewModels.tcm.dataset import find_dataset
 from app.viewModels import database_operation_batch
+from app.viewModels.tcm.dataset import find_dataset
+from app.viewModels.tcm.project import find_project
 
 
 class Analysis(Base):
     """
-    :parameters:{
-    name:value,
-    ...
-    }
+    因为为了防止以后出现一个项目对应多个数据集的这种多对多需求，所以改为了这种以一次分析为核心的模式
     """
     id = Column(BigInteger, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
     project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
