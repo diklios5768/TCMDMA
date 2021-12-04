@@ -6,7 +6,7 @@ from app.utils.file_handler.text_handler.list import filter_empty_text
 
 def read_xls(file_path_or_stream, method='path', sheet_name: str = '', sheet_index: int = 0,
              row_start: int = None, row_end: int = None,
-             col_start: int = None, col_end: int = None, ):
+             col_start: int = None, col_end: int = None, ) -> list[list[str, ...]]:
     if method == 'path':
         wb = open_workbook(filename=file_path_or_stream)
     elif method == 'stream':

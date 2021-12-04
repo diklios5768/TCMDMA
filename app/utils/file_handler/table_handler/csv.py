@@ -10,7 +10,7 @@ from app.utils.file_handler.text_handler.list import filter_empty_text
 
 def get_csv_data(file_data, filter_row: bool = False,
                  row_start: int = None, row_end: int = None,
-                 col_start: int = None, col_end: int = None, ):
+                 col_start: int = None, col_end: int = None, ) -> list[list[str, ...]]:
     table_data = []
     for row in file_data:
         if filter_row:
@@ -24,7 +24,7 @@ def get_csv_data(file_data, filter_row: bool = False,
 def read_csv(file_path_or_stream, method='path',
              filter_row: bool = False, delimiter: str = ',',
              row_start: int = None, row_end: int = None,
-             col_start: int = None, col_end: int = None, ):
+             col_start: int = None, col_end: int = None, ) -> list[list[str, ...]]:
     if method == 'path':
         with open(file_path_or_stream, 'r', encoding='utf-8') as f:
             csv_file = reader(f, delimiter=delimiter)
@@ -54,7 +54,7 @@ def generate_csv_file(filename, table_data, file_dir: str = None):
     return True
 
 
-def read_csv_by_pandas(filepath_or_buffer):
+def read_csv_by_pandas(filepath_or_buffer) -> tuple[list[list[str, ...]], pd.DataFrame]:
     """
     参数参考read_txt_table_by_pandas
     """

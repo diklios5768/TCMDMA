@@ -10,7 +10,7 @@ from app.utils.file_handler import make_dir
 
 def read_xlsx(file_path_or_stream, sheet_name: str = '', method='path',
               row_start: int = None, row_end: int = None,
-              col_start: int = None, col_end: int = None, ):
+              col_start: int = None, col_end: int = None, )->list[list[str,...]]:
     if method == 'path':
         wb = load_workbook(filename=file_path_or_stream, data_only=True)
     elif method == 'stream':
@@ -63,7 +63,7 @@ def read_xlsx_by_pandas(file_path: str, sheet_name: int or str = 0, header: list
                         names: list = None, index_col: list = None, use_cols: list = None,
                         squeeze: bool = False, converters: dict = None,
                         skip_header_rows: list or int = None, n_rows: int = None, skip_footer_rows: list or int = None
-                        ):
+                        )->tuple[list[list[str, ...]], pd.DataFrame]:
     """
     :params header:表示第几行或者前几行都作为列名
     :params names:是否自定义列名

@@ -16,10 +16,19 @@ __auth__ = 'diklios'
 import pandas as pd
 
 
-def table_data_to_dataframe(table_data):
+def table_data_to_dataframe(table_data:list[list[str,...]]=None)->pd.DataFrame|bool:
     """
     将列表转换为dataframe
     :param table_data:
     :return:
     """
-    return pd.DataFrame(table_data)
+    if table_data:
+        return pd.DataFrame(table_data)
+    else:
+        return False
+
+def dataframe_to_table_data(dataframe:pd.DataFrame=None):
+    if dataframe:
+        return dataframe.to_numpy().tolist()
+    else:
+        return False

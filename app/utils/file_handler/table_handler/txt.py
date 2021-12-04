@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   txt.py    
+@File Name      :   txt.py
 @Create Time    :   2021/11/18 16:48
-@Description    :   
-@Version        :   
+@Description    :
+@Version        :
 @License        :   MIT
 @Author         :   diklios
 @Contact Email  :   diklios5768@gmail.com
 @Github         :   https://github.com/diklios5768
-@Blog           :   
+@Blog           :
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 @other information
 """
@@ -22,7 +22,7 @@ from app.utils.file_handler.text_handler.table import texts_to_table_data_integr
 
 def read_txt_table_large_file(file_path: str, sep: str = '\t',
                               row_start: int = None, row_end: int = None,
-                              col_start: int = None, col_end: int = None, ):
+                              col_start: int = None, col_end: int = None, ) -> list[list[str, ...]]:
     """
     默认换行是回车
     必须确保是正确的表格形式的文本，而不是单列文本，否则会导致列选择错误
@@ -57,7 +57,7 @@ def read_txt_table_large_file(file_path: str, sep: str = '\t',
 
 def read_txt_table_one_time(file_path: str,
                             row_start: int = None, row_end: int = None,
-                            col_start: int = None, col_end: int = None):
+                            col_start: int = None, col_end: int = None) -> list[list[str, ...]]:
     """
     默认换行是回车
     必须确保是正确的表格形式的文本，而不是单列文本，否则会导致列选择错误
@@ -68,7 +68,20 @@ def read_txt_table_one_time(file_path: str,
         return texts_to_table_data_integral_process(f.read())[row_start:row_end, col_start:col_end]
 
 
-def read_txt_table_by_pandas(filepath_or_buffer, sep: str = '\t'):
+def generate_txt_table(file_path: str, table_data: list[list[str, ...]]) -> bool:
+    try:
+        if table_data and file_path:
+            with open(file_path, 'w') as f:
+                f.write('\n'.join(['\t'.join(row) for row in table_data]))
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(str(e))
+        return False
+
+
+def read_txt_table_by_pandas(filepath_or_buffer, sep: str = '\t') -> tuple[list[list[str, ...]], pd.DataFrame]:
     """
     :params filepath_or_buffer:文件路径或者URL
     :params sep:指定分隔符
