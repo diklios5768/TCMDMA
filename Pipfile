@@ -34,14 +34,13 @@ hashids = "*"
 flask-sqlalchemy = "*"
 flask-redis = "*"
 flask-migrate = "*"
-#flask-whooshee = "*"
+flask-whooshee = "*"
 # http and api
 requests = "*"
 flask-cors = "*"
 flask-limiter = "*"
 #flask-socketio="*"
 # email
-email-validator = "*"
 flask-mail = "*"
 flask-mailman = "*"
 # login

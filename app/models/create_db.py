@@ -3,7 +3,7 @@ from app.models import db
 
 # create_all() 和 drop_all() 方法默认作用于所有声明的绑定(bind)
 # 生成数据库
-def init_db(bind=None):
+def init_db(bind: str or list[str] = None):
     if bind is None:
         db.create_all()
     else:
@@ -11,7 +11,7 @@ def init_db(bind=None):
 
 
 # 删除数据库
-def drop_db(bind=None):
+def drop_db(bind: str or list[str] = None):
     if bind is None:
         db.drop_all()
     else:
@@ -19,7 +19,7 @@ def drop_db(bind=None):
 
 
 # 重新生成数据库
-def recreate_db(bind=None):
+def recreate_db(bind: str or list[str] = None):
     if bind is None:
         db.drop_all()
         db.create_all()

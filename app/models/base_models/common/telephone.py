@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, SmallInteger
 
-from app.models.base import Base
+from app.models.base_models.base import Base
 
 
 class InternationalTelephoneCountryCode(Base):

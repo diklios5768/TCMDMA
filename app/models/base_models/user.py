@@ -1,8 +1,7 @@
-from sqlalchemy import Column, String, SmallInteger, Integer, Enum, Boolean, JSON
-from sqlalchemy_utils import ChoiceType
+from sqlalchemy import Column, String, SmallInteger, Enum, Boolean, JSON
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.models.base import Base
+from app.models.base_models.base import Base
 
 
 # 使用flask-login的用户基类

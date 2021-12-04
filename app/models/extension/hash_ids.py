@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   tag.py    
-@Create Time    :   2021/7/14 21:06
+@File Name      :   hashids.py    
+@Create Time    :   2021/12/4 18:46
 @Description    :   
 @Version        :   
 @License        :   
@@ -12,11 +12,8 @@
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 """
 __auth__ = 'diklios'
+from flask import current_app
+from hashids import Hashids
 
-from sqlalchemy import Column, String
-from app.models.tcm import TCMBase
-
-
-class Tag(TCMBase):
-    name = Column(String(100), nullable=False)
-    description = Column(String(500), nullable=True)
+# hashids
+hashids = Hashids(alphabet=current_app.config['HASHIDS_ALPHABET'])

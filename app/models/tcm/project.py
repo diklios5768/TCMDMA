@@ -1,16 +1,17 @@
 import random
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, JSON, Float
+from sqlalchemy import Column, Integer,BigInteger, String, ForeignKey, Boolean, JSON, Float
 from sqlalchemy.orm import relationship, backref
 
 from app.libs.dicts import project_default_settings
-from app.models.base import Base
+from app.models.tcm import TCMBase
 from app.utils.random import random_content
 from app.viewModels import database_operation_batch
 from app.viewModels.tcm.user import find_user
 
 
-class Project(Base):
+class Project(TCMBase):
+    _id = Column(BigInteger, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
     # 所有者
     owner_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     # 项目名称

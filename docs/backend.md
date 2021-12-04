@@ -562,12 +562,12 @@ data4 = request.args.to_dict()
 ### 全文搜索
 
 - 使用`flask-whooshee`
-
   - 安装：`pipenv install flask-whooshee`
-
-- 搭配`flask-whooshalchemy`
-
-  -
+  - [官网](https://github.com/bkabrda/flask-whooshee)
+  - [文档](https://flask-whooshee.readthedocs.io/en/latest/)
+- 以下两个比较老了，不更新了，不推荐使用
+  - `flask-whooshalchemy`
+  - `Flask-WhooshAlchemyPlus`
 
 ### 文件处理
 

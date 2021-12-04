@@ -16,12 +16,12 @@ __auth__ = 'diklios'
 import random
 from sqlalchemy import Column, Integer, BigInteger, String, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship, backref
-from app.models.base import Base
+from app.models.tcm import TCMBase
 from app.viewModels.tcm.user import find_user
 from app.viewModels import database_operation_batch
 
 
-class Dataset(Base):
+class Dataset(TCMBase):
     """
     :data:{
     table_data:[[],...],
@@ -33,7 +33,7 @@ class Dataset(Base):
     ...
     }
     """
-    id = Column(BigInteger, primary_key=True, nullable=False, index=True, unique=True)
+    _id = Column(BigInteger, primary_key=True, nullable=False, index=True, unique=True)
     owner_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     name = Column(String(100), default='无')
     # 对于数据集的描述介绍

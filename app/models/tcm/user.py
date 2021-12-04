@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 from app.models import db
-from app.models.manage import BaseLog
-from app.models.user import BaseUser, BaseRole
+from app.models.tcm import TCMBaseLog
+from app.models.tcm import TCMBaseUser, TCMBaseRole
 
 # todo:以后考虑用户分组功能
 
@@ -12,10 +12,11 @@ user_role = db.Table(
     Column('user_id', Integer, ForeignKey('user.id')),
     # 级联删除
     Column('role_id', Integer, ForeignKey('role.id')),
+    info={'bind_key': 'tcm_dma'}
 )
 
 
-class User(BaseUser):
+class User(TCMBaseUser):
     projects = relationship('Project', backref=backref('user'), cascade="all, delete")
     datasets = relationship('Dataset', backref=backref('user'), cascade="all, delete")
     # 级联删除
@@ -29,12 +30,12 @@ class User(BaseUser):
 
 
 # 用户角色
-class Role(BaseRole):
+class Role(TCMBaseRole):
     pass
 
 
 # 用户日志
-class UserLog(BaseLog):
+class UserLog(TCMBaseLog):
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False, index=True)
 
 

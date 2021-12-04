@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   tag.py    
-@Create Time    :   2021/7/14 21:06
+@File Name      :   admin.py    
+@Create Time    :   2021/12/4 15:26
 @Description    :   
 @Version        :   
 @License        :   
@@ -13,10 +13,6 @@
 """
 __auth__ = 'diklios'
 
-from sqlalchemy import Column, String
-from app.models.tcm import TCMBase
+from flask_admin import Admin
 
-
-class Tag(TCMBase):
-    name = Column(String(100), nullable=False)
-    description = Column(String(500), nullable=True)
+tcm_admin = Admin(name='tcm', url='admin/tcm', endpoint='tcm_admin', template_mode='bootstrap4')

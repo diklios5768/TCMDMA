@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 """
-@File Name      :   tag.py    
-@Create Time    :   2021/7/14 21:06
+@File Name      :   admin_view.py    
+@Create Time    :   2021/12/4 18:10
 @Description    :   
 @Version        :   
 @License        :   
@@ -13,10 +13,10 @@
 """
 __auth__ = 'diklios'
 
-from sqlalchemy import Column, String
-from app.models.tcm import TCMBase
+from flask_admin import BaseView as _BaseView, expose
 
 
-class Tag(TCMBase):
-    name = Column(String(100), nullable=False)
-    description = Column(String(500), nullable=True)
+class BaseView(_BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('admin/index.html')

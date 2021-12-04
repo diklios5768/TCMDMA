@@ -14,13 +14,14 @@
 __auth__ = 'diklios'
 
 import os
+
 import click
 
 from app.models.create_db import init_db, drop_db, recreate_db
 from app.models.tcm.development import init_development_data, update_development_data
 from app.models.tcm.production import init_production_data, update_production_data
+from app.utils.file_handler import copy_dir, move_dir, remove_dir
 from app.viewModels.common import init_redis_production, init_redis_development
-from app.utils.file_handler import copy_dir, move_dir
 
 
 # 注册命令
@@ -78,6 +79,8 @@ def register_commands(app):
             init_redis_development()
             click.echo('development data update success')
 
+    # 快速备份用户数据
+    # 复制用户数据到指定文件夹
     @app.cli.command()
     @click.option('--dir_path', prompt='input absolute folder to copy users data', help='Copy users data.')
     def copy_user_data(dir_path):
@@ -87,7 +90,7 @@ def register_commands(app):
         else:
             click.echo('invalid dir path')
 
-    # 快速备份用户数据
+    # 剪切用户数据到指定文件夹
     @app.cli.command()
     @click.option('--dir_path', prompt='input absolute folder to move users data', help='Move users data.')
     def move_user_data(dir_path):
@@ -96,3 +99,10 @@ def register_commands(app):
             click.echo('move success')
         else:
             click.echo('invalid dir path')
+
+    # 删除用户数据
+    @app.cli.command()
+    def remove_user_data(confirmed: bool):
+        click.confirm('Are you sure to remove users data?', abort=True)
+        remove_dir(app.config['USER_DIR'])
+        click.echo('remove success')

@@ -1,10 +1,12 @@
 from datetime import datetime
 
+from flask import current_app
 from sqlalchemy import Column, Integer, String, SmallInteger, Float, JSON
 from sqlalchemy.orm import reconstructor
 
 from app.libs.error_exception import ParameterException
 from app.models import db
+from app.models.extension.hash_ids import hashids
 
 
 # todo:给id添加加密和解密
@@ -21,7 +23,23 @@ class Base(db.Model):
     # 注意SQLite的AUTOINCREMENT只适用于INTEGER，开发的时候一点小心
     # 如果其他的需要自增，可以使用BigInteger().with_variant(Integer, "sqlite")
     # 自增主键int类型只有21亿，bigint有2^(64-1)
-    id = Column(Integer, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
+    _id = Column(Integer, primary_key=True, nullable=False, index=True, unique=True, autoincrement=True)
+
+    # 使用hashids加密id
+    @property
+    def id(self):
+        if current_app.config['HASHIDS']:
+            return hashids.encode(self._id)
+        else:
+            return self._id
+
+    @id.setter
+    def id(self, model_id):
+        self._id = model_id
+
+    def get_true_id(self):
+        return self._id
+
     remarks = Column(String(1024), nullable=True, default='')
     json_remarks = Column(JSON, nullable=True, default={})
     # 使用datetime.utcnow()保证迁移服务器后使用的时间还是一致的
@@ -54,12 +72,12 @@ class Base(db.Model):
         return self.fields
 
     # 直接重新设置fields，可以用列表，也可以传入多个参数
-    def set_fields(self, new_fields_list: list=[], *new_fields):
+    def set_fields(self, new_fields_list: list = [], *new_fields):
         self.fields = [*new_fields_list, *new_fields]
         return self
 
     # 从现在的fields中需要被移除的字段
-    def hide_fields(self, hide_fields_list: list=[], *hide_fields):
+    def hide_fields(self, hide_fields_list: list = [], *hide_fields):
         hide_fields_keys = [*hide_fields_list, *hide_fields]
         for key in hide_fields_keys:
             if key in self.fields:
@@ -67,7 +85,7 @@ class Base(db.Model):
         return self
 
     # 在fields中添加字段
-    def append_fields(self, append_fields_list: list=[], *append_fields):
+    def append_fields(self, append_fields_list: list = [], *append_fields):
         self.fields = list(set([*self.fields, *append_fields_list, *append_fields]))
         return self
 

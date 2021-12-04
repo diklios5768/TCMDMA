@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, BigInteger, Integer
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.models.base import Base
+from app.models.base_models.base import Base
 
 
 class BaseLog(Base):

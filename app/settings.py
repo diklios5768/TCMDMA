@@ -35,8 +35,14 @@ class BaseConfig(object):
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
     }
+    # 是否启用HASHIDS
+    HASHIDS = os.getenv('HASHIDS', False)
+    # 设置默认HASHIDS ALPHABET
+    HASHIDS_ALPHABET = os.getenv('HASHIDS_ALPHABET', 'diklios_skywalker_hash_password')
     # redis数据库地址
     REDIS_URL = os.getenv('REDIS_URL', 'redis://@localhost:6379/0')
+    # 后台主题设置
+    FLASK_ADMIN_SWATCH = os.getenv('FLASK_ADMIN_SWATCH', 'cerulean')
     # 邮件设置部分
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT', 465)
@@ -103,6 +109,9 @@ class ProductionConfig(BaseConfig):
     # 如果密码中含有特殊字符需要使用URL编码
     # from urllib import parse
     # SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:'+parse.quote_plus('password')+'@localhost:3306/database_name'
+    SQLALCHEMY_BINDS = {
+        'tcm_dma': os.getenv('SQLALCHEMY_DATABASE_URI'),
+    }
 
 
 # 导出环境设置
