@@ -6,7 +6,7 @@ from sqlalchemy.orm import reconstructor
 
 from app.libs.error_exception import ParameterException
 from app.models import db
-from app.models.extension.hash_ids import hashids
+from app.models.extension import hashids
 
 
 # todo:给id添加加密和解密

@@ -14,7 +14,7 @@
 __auth__ = 'diklios'
 
 from app.models.base_models.base import Base
-from app.models.base_models.manage import BaseLog
+from app.models.base_models.management import BaseLog
 from app.models.base_models.user import BaseUser, BaseRole
 
 many_to_many_table_base_info = {'bind_key': 'users'}
