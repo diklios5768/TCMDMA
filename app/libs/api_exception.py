@@ -13,18 +13,23 @@ class APIException(HTTPException):
     code = 500
     success = False
     data = None
-    error_code = 999
+    # 原为error_code
+    status_code = 999
+    @property
+    def error_code(self):
+        return self.status_code
     msg = ''
     chinese_msg = ''
     headers = []
 
-    def __init__(self, code: int = 500, success: bool = False, data=None, error_code: int = 999, msg: str = '',
+
+    def __init__(self, code: int = 500, success: bool = False, data=None, status_code: int = 999, msg: str = '',
                  chinese_msg: str = '', headers: list[tuple[str, str]] = None):
         self.code = code
         self.success = success
         if data:
             self.data = data
-        self.error_code = error_code
+        self.status_code = status_code
         self.msg = msg
         self.chinese_msg = chinese_msg
         if headers:
@@ -35,6 +40,7 @@ class APIException(HTTPException):
         body = dict(
             success=self.success,
             data=self.data,
+            status_code=self.status_code,
             error_code=self.error_code,
             msg=self.msg,
             chinese_msg=self.chinese_msg,
@@ -42,8 +48,7 @@ class APIException(HTTPException):
             remote_addr=request.remote_addr,
             user_agent=str(request.user_agent)
         )
-        text = json.dumps(body)
-        return text
+        return json.dumps(body)
 
     # 强制只使用JSON传递数据
     def get_headers(self, environ=None, scope=None) -> list[tuple[str, str]]:

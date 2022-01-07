@@ -77,7 +77,7 @@ interface ErrorInfoStructure {
 - 500:服务器产生未知错误
 - 503:服务器由于在维护或已经超载而无法响应
 
-### error_code 说明
+### status_code 说明
 
 - 100 以下表示成功
 - 999 以上表示错误
@@ -181,3 +181,5 @@ interface ErrorInfoStructure {
   - 增加链接错误定义
 - 2021-11-17
   - 增加性别定义
+- 2022-1-6
+  - 更改error_code为status_code，更加易懂合理
