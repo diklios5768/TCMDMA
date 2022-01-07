@@ -32,6 +32,8 @@ def register_errors(app):
             msg = e.description
             error_code = 999
             return APIException(success=False, code=code, error_code=error_code, msg=msg)
+        elif isinstance(e,TypeError):
+            return ServerError(msg=str(e))
         else:
             # 调试模式的时候显示错误信息
             if not app.config['DEBUG']:

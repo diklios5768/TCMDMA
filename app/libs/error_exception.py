@@ -13,7 +13,7 @@
 """
 __auth__ = 'diklios'
 
-from app.libs.error import APIException
+from app.libs.api_exception import APIException
 
 
 # 成功

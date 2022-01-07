@@ -48,19 +48,6 @@ def timeout(seconds):
 #         return wrapper
 
 
-# 运行时间记录
-def log(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.perf_counter()
-        res = func(*args, **kwargs)
-        end = time.perf_counter()
-        print(f'函数 {func.__name__} 耗时 {(end - start) * 1000} ms')
-        return res
-
-    return wrapper
-
-
 # 缓存
 # 使用functools包下的LRU缓存即可
 
@@ -92,6 +79,17 @@ def print_execute_time(function):
 
     return wrapper
 
+# 更精确的运行时间记录
+def print_accurate_execute_time(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        res = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f'函数 {func.__name__} 耗时 {(end - start) * 1000} ms')
+        return res
+
+    return wrapper
 
 # 定时任务
 class TimingTask(object):

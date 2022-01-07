@@ -13,10 +13,16 @@
 """
 __auth__ = 'diklios'
 
+import dataclasses
+import datetime
+import decimal
+import uuid
+
 from flask import Flask as _Flask
 from flask.json import JSONEncoder as _JSONEncoder
+
 from app.libs.error_exception import ServerError
-from datetime import datetime
+from app.utils.time import duration_iso_string
 
 
 # 需要重写Flask和JSONEncoder，从而解决jsonify序列化对象的问题
@@ -25,10 +31,22 @@ class JSONEncoder(_JSONEncoder):
     def default(self, o):
         if hasattr(o, 'keys') and hasattr(o, '__getitem__'):
             return dict(o)
-        elif isinstance(o, datetime):
-            return o.strptime("%a, %d %b %Y %H:%M:%S GMT")
+        elif isinstance(o, datetime.datetime):
+            return o.strftime("%a, %d %b %Y %H:%M:%S GMT")
+        elif isinstance(o, datetime.date):
+            return o.isoformat()
+        elif isinstance(o, datetime.time):
+            if o.utcoffset() is not None:
+                raise ServerError(msg="JSON can't represent timezone-aware times.")
+            r = o.isoformat()
+            if o.microsecond:
+                r = r[:12]
+            return r
+        elif isinstance(o, datetime.timedelta):
+            return duration_iso_string(o)
         else:
-            raise ServerError()
+            return super(JSONEncoder, self).default(o)
+
 
 
 class Flask(_Flask):
