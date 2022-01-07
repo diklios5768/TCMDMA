@@ -16,20 +16,19 @@ class APIException(HTTPException):
     error_code = 999
     msg = ''
     chinese_msg = ''
+    headers = []
 
-    def __init__(self, code=None, success=None, data=None, error_code=None, msg=None, chinese_msg=None, headers=None):
-        if code:
-            self.code = code
-        if success:
-            self.success = success
+    def __init__(self, code: int = 500, success: bool = False, data=None, error_code: int = 999, msg: str = '',
+                 chinese_msg: str = '', headers: list[tuple[str, str]] = None):
+        self.code = code
+        self.success = success
         if data:
             self.data = data
-        if error_code:
-            self.error_code = error_code
-        if msg:
-            self.msg = msg
-        if chinese_msg:
-            self.chinese_msg = chinese_msg
+        self.error_code = error_code
+        self.msg = msg
+        self.chinese_msg = chinese_msg
+        if headers:
+            self.headers = headers
         super(APIException, self).__init__(msg, None)
 
     def get_body(self, environ=None, scope=None):
@@ -47,8 +46,8 @@ class APIException(HTTPException):
         return text
 
     # 强制只使用JSON传递数据
-    def get_headers(self, environ=None, scope=None):
-        return [('Content-Type', 'application/json')]
+    def get_headers(self, environ=None, scope=None) -> list[tuple[str, str]]:
+        return [('Content-Type', 'application/json')] + self.headers
 
     # 无问号后面参数的的url
     @staticmethod
