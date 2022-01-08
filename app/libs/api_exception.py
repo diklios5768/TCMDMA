@@ -15,13 +15,14 @@ class APIException(HTTPException):
     data = None
     # 原为error_code
     status_code = 999
+
     @property
     def error_code(self):
         return self.status_code
+
     msg = ''
     chinese_msg = ''
     headers = []
-
 
     def __init__(self, code: int = 500, success: bool = False, data=None, status_code: int = 999, msg: str = '',
                  chinese_msg: str = '', headers: list[tuple[str, str]] = None):

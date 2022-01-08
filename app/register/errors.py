@@ -12,11 +12,14 @@
 @Motto          :   All our science, measured against reality, is primitive and childlike - and yet it is the most precious thing we have.
 """
 __auth__ = 'diklios'
-from flask import redirect,url_for
+
+import json
+
+from app.libs.api_exception import APIException
+from flask import redirect, url_for
 from werkzeug.exceptions import HTTPException
 
-from app.libs.error import APIException
-from app.libs.error_exception import ServerError,APILimited,NotFound
+from app.libs.error_exception import ServerError, APILimited, NotFound
 
 
 # 注册错误处理函数
@@ -32,7 +35,7 @@ def register_errors(app):
             msg = e.description
             error_code = 999
             return APIException(success=False, code=code, error_code=error_code, msg=msg)
-        elif isinstance(e,TypeError):
+        elif isinstance(e, json.JSONDecodeError):
             return ServerError(msg=str(e))
         else:
             # 调试模式的时候显示错误信息
