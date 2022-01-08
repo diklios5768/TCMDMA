@@ -7,9 +7,19 @@ name = "pypi"
 #url = "https://mirrors.aliyun.com/pypi/simple"
 #verify_ssl = true
 #name = "aliyun"
-#
+
 #[[source]]
-#url = "https://pypi.douban/simple"
+#url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+#verify_ssl = true
+#name = "tsinghua"
+
+#[[source]]
+#url = "https://pypi.mirrors.ustc.edu.cn/simple"
+#verify_ssl = true
+#name = "ustc"
+
+#[[source]]
+#url = "https://pypi.doubanio.com/simple"
 #verify_ssl = true
 #name = "douban"
 
@@ -82,6 +92,11 @@ watchdog = "*"
 pysnooper = "*"
 pytest = "*"
 flask-testing = "*"
+psutil = "*"
 
 [requires]
+#python_version = "3.6"
+#python_version = "3.7"
+#python_version = "3.8"
 python_version = "3.9"
+#python_version = "3.10"
