@@ -36,3 +36,7 @@ def is_email(value: str = ''):
         return True
     else:
         return False
+
+
+def char_index(char, text: str) -> list:
+    return [find_char.start() for find_char in re.finditer(char, text)]

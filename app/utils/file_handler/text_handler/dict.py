@@ -13,6 +13,8 @@
 """
 __auth__ = 'diklios'
 
+from collections import Counter
+
 
 # 递归处理树结构
 def handle_tree(tree):
@@ -23,3 +25,33 @@ def handle_tree(tree):
         node_children = child.get('children', None)
         if node_children is not None:
             handle_tree(node_children)
+
+
+def union_dict_use_counter(dict1, dict2):
+    """
+    字典合并，相同key值相加，但是在循环里尽量不要直接调用此方法，应该创建一个Counter对象之后不断调用
+    """
+    return Counter(dict1) + Counter(dict2)
+
+
+def union_dict_use_set(*objs):
+    """
+    同上，使用集合，速度更快，但最终输出会无序
+    """
+    _keys = set(sum([list(obj.keys()) for obj in objs], []))
+    _total = {}
+    for _key in _keys:
+        _total[_key] = sum([obj.get(_key, 0) for obj in objs])
+    return _total
+
+
+def union_dict_use_for(result, append):
+    """
+    for循环速度最快，注意本函数无返回值，
+    """
+    for key, value in append.items():
+        if result.get(key, None):
+            result[key] += value
+        else:
+            result[key] = value
+    return result

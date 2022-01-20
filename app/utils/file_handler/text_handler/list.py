@@ -77,20 +77,3 @@ def transpose_zip(data):
     return transposed
 
 # 还有numpy和pandas的：https://www.cnblogs.com/MoonYear530/p/13697120.html
-
-# 交集
-def intersection(list1,list2):
-    return list(set(list1)&set(list2))
-
-# 并集
-def union_set(list1,list2):
-    return list(set(list1)|set(list2))
-
-# 差集或者补集
-def difference_set(list1,list2):
-    return list(set(list1)-set(list2))
-
-# 对称差集
-# 项在list1或list2中，但不会同时出现在二者中
-def symmetric_difference_set(list1,list2):
-    return list(set(list1)^set(list2))

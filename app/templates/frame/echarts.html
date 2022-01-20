@@ -1,13 +1,3 @@
-{% extends 'base.html' %}
-{% block content %}
-    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-    <div id="main" style="width:100%;height:600px"></div>
-{% endblock content %}
-
-{% block scripts %}
-        {#    jquery库引入#}
-    <script src="{{ url_for('static',filename='js/jquery/v3.5.1/jquery-3.5.1.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery/v3.5.1/jquery-3.5.1.min.js') }}"></script>
 {#    echarts官方库引入#}
-    <script src="{{ url_for('static',filename='js/plugs/echarts/echarts.min.js') }}"></script>
-{#    china地图库引入#}
-{% endblock scripts %}
+<script src="{{ url_for('static',filename='js/plugs/echarts/echarts.min.js') }}"></script>

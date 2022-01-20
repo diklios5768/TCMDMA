@@ -13,10 +13,13 @@
 @other information
 """
 __auth__ = 'diklios'
+
+from typing import Union
+
 import pandas as pd
 
 
-def table_data_to_dataframe(table_data:list[list[str,...]]=None)->pd.DataFrame|bool:
+def table_data_to_dataframe(table_data: list[list[str, ...]] = None) -> Union[pd.DataFrame, bool]:
     """
     将列表转换为dataframe
     :param table_data:
@@ -27,7 +30,8 @@ def table_data_to_dataframe(table_data:list[list[str,...]]=None)->pd.DataFrame|b
     else:
         return False
 
-def dataframe_to_table_data(dataframe:pd.DataFrame=None):
+
+def dataframe_to_table_data(dataframe: pd.DataFrame = None):
     if dataframe:
         return dataframe.to_numpy().tolist()
     else:
